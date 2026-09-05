@@ -1,0 +1,404 @@
+{% extends "base.html" %}
+
+{% block title %}
+Report a Human Rights Concern | ASOK Foundation
+{% endblock %}
+
+{% block content %}
+
+<section class="bg-slate-950 py-16 sm:py-20">
+
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+
+        <div class="max-w-3xl">
+
+            <span class="text-sm font-bold uppercase tracking-[0.18em] text-emerald-400">
+                Human Rights Reporting
+            </span>
+
+            <h1 class="mt-4 text-4xl font-bold tracking-tight text-white sm:text-5xl">
+                Report a Human Rights Concern
+            </h1>
+
+            <p class="mt-5 text-base leading-8 text-slate-300 sm:text-lg">
+                If you have experienced or witnessed a human rights
+                concern, you can submit information through this form.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<section class="bg-slate-50 py-16 sm:py-20">
+
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+
+        <div class="grid gap-10 lg:grid-cols-[0.75fr_1.25fr]">
+
+
+            <!-- INFORMATION -->
+
+            <div class="space-y-6">
+
+                <div class="rounded-3xl bg-slate-900 p-7 text-white sm:p-8">
+
+                    <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-500/15 text-emerald-400">
+
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke-width="1.8"
+                            stroke="currentColor"
+                            class="h-6 w-6"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M12 9v4m0 4h.01M10.3 3.8 2.9 17a2 2 0 0 0 1.75 3h14.7a2 2 0 0 0 1.75-3L13.7 3.8a2 2 0 0 0-3.4 0z"
+                            />
+                        </svg>
+
+                    </div>
+
+                    <h2 class="mt-6 text-2xl font-bold">
+                        Important Information
+                    </h2>
+
+                    <div class="mt-6 space-y-5 text-sm leading-7 text-slate-300">
+
+                        <p>
+                            Please provide accurate information about
+                            the incident and avoid submitting information
+                            you do not have permission to share.
+                        </p>
+
+                        <p>
+                            If you prefer not to identify yourself,
+                            you may choose anonymous reporting.
+                        </p>
+
+                        <p>
+                            Submitting a complaint does not guarantee
+                            a particular legal or investigative outcome.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="rounded-3xl border border-emerald-200 bg-emerald-50 p-7">
+
+                    <h3 class="font-bold text-emerald-900">
+                        Your Complaint ID
+                    </h3>
+
+                    <p class="mt-2 text-sm leading-6 text-emerald-800">
+                        After submitting your complaint, you will receive
+                        a unique complaint reference number.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- FORM -->
+
+            <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
+
+                <form
+                    method="post"
+                    class="space-y-6"
+                    novalidate
+                >
+
+                    {% csrf_token %}
+
+
+                    <!-- Anonymous -->
+
+                    <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+
+                        <label class="flex cursor-pointer items-start gap-3">
+
+                            <input
+                                type="checkbox"
+                                name="is_anonymous"
+                                id="id_is_anonymous"
+                                {% if form.is_anonymous.value %}
+                                    checked
+                                {% endif %}
+                                class="mt-1 h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500"
+                            >
+
+                            <span>
+
+                                <span class="block font-bold text-slate-900">
+                                    Submit anonymously
+                                </span>
+
+                                <span class="mt-1 block text-sm leading-6 text-slate-600">
+                                    Your name, email and phone number will
+                                    not be stored when anonymous reporting
+                                    is selected.
+                                </span>
+
+                            </span>
+
+                        </label>
+
+                    </div>
+
+
+                    <!-- Name / Email -->
+
+                    <div class="grid gap-6 sm:grid-cols-2">
+
+                        <div>
+
+                            <label
+                                for="{{ form.complainant_name.id_for_label }}"
+                                class="text-sm font-bold text-slate-700"
+                            >
+                                Name
+                            </label>
+
+                            <input
+                                type="text"
+                                name="{{ form.complainant_name.html_name }}"
+                                id="{{ form.complainant_name.id_for_label }}"
+                                value="{{ form.complainant_name.value|default:'' }}"
+                                placeholder="Your name"
+                                class="mt-2 w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10"
+                            >
+
+                            {% for error in form.complainant_name.errors %}
+                                <p class="mt-1 text-sm text-red-600">
+                                    {{ error }}
+                                </p>
+                            {% endfor %}
+
+                        </div>
+
+
+                        <div>
+
+                            <label
+                                for="{{ form.email.id_for_label }}"
+                                class="text-sm font-bold text-slate-700"
+                            >
+                                Email
+                            </label>
+
+                            <input
+                                type="email"
+                                name="{{ form.email.html_name }}"
+                                id="{{ form.email.id_for_label }}"
+                                value="{{ form.email.value|default:'' }}"
+                                placeholder="you@example.com"
+                                class="mt-2 w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10"
+                            >
+
+                            {% for error in form.email.errors %}
+                                <p class="mt-1 text-sm text-red-600">
+                                    {{ error }}
+                                </p>
+                            {% endfor %}
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Phone / Category -->
+
+                    <div class="grid gap-6 sm:grid-cols-2">
+
+                        <div>
+
+                            <label
+                                for="{{ form.phone.id_for_label }}"
+                                class="text-sm font-bold text-slate-700"
+                            >
+                                Phone
+                            </label>
+
+                            <input
+                                type="text"
+                                name="{{ form.phone.html_name }}"
+                                id="{{ form.phone.id_for_label }}"
+                                value="{{ form.phone.value|default:'' }}"
+                                placeholder="+880 1XXXXXXXXX"
+                                class="mt-2 w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10"
+                            >
+
+                        </div>
+
+
+                        <div>
+
+                            <label
+                                for="{{ form.category.id_for_label }}"
+                                class="text-sm font-bold text-slate-700"
+                            >
+                                Category
+                            </label>
+
+                            {{ form.category }}
+
+                            {% for error in form.category.errors %}
+                                <p class="mt-1 text-sm text-red-600">
+                                    {{ error }}
+                                </p>
+                            {% endfor %}
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Subject -->
+
+                    <div>
+
+                        <label
+                            for="{{ form.subject.id_for_label }}"
+                            class="text-sm font-bold text-slate-700"
+                        >
+                            Subject
+                        </label>
+
+                        <input
+                            type="text"
+                            name="{{ form.subject.html_name }}"
+                            id="{{ form.subject.id_for_label }}"
+                            value="{{ form.subject.value|default:'' }}"
+                            placeholder="Brief subject"
+                            class="mt-2 w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10"
+                        >
+
+                        {% for error in form.subject.errors %}
+                            <p class="mt-1 text-sm text-red-600">
+                                {{ error }}
+                            </p>
+                        {% endfor %}
+
+                    </div>
+
+
+                    <!-- Date / Location -->
+
+                    <div class="grid gap-6 sm:grid-cols-2">
+
+                        <div>
+
+                            <label
+                                for="{{ form.incident_date.id_for_label }}"
+                                class="text-sm font-bold text-slate-700"
+                            >
+                                Incident Date
+                            </label>
+
+                            <input
+                                type="date"
+                                name="{{ form.incident_date.html_name }}"
+                                id="{{ form.incident_date.id_for_label }}"
+                                value="{{ form.incident_date.value|default:'' }}"
+                                class="mt-2 w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10"
+                            >
+
+                        </div>
+
+
+                        <div>
+
+                            <label
+                                for="{{ form.location.id_for_label }}"
+                                class="text-sm font-bold text-slate-700"
+                            >
+                                Location
+                            </label>
+
+                            <input
+                                type="text"
+                                name="{{ form.location.html_name }}"
+                                id="{{ form.location.id_for_label }}"
+                                value="{{ form.location.value|default:'' }}"
+                                placeholder="Where did it happen?"
+                                class="mt-2 w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10"
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Description -->
+
+                    <div>
+
+                        <label
+                            for="{{ form.description.id_for_label }}"
+                            class="text-sm font-bold text-slate-700"
+                        >
+                            What Happened?
+                        </label>
+
+                        <textarea
+                            name="{{ form.description.html_name }}"
+                            id="{{ form.description.id_for_label }}"
+                            rows="8"
+                            placeholder="Describe the incident..."
+                            class="mt-2 w-full resize-y rounded-xl border border-slate-300 px-4 py-3 text-sm leading-7 outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10"
+                        >{{ form.description.value|default:'' }}</textarea>
+
+                        {% for error in form.description.errors %}
+                            <p class="mt-1 text-sm text-red-600">
+                                {{ error }}
+                            </p>
+                        {% endfor %}
+
+                    </div>
+
+
+                    <!-- Contact -->
+
+                    <div>
+
+                        <label
+                            for="{{ form.preferred_contact.id_for_label }}"
+                            class="text-sm font-bold text-slate-700"
+                        >
+                            Preferred Contact
+                        </label>
+
+                        {{ form.preferred_contact }}
+
+                    </div>
+
+
+                    <!-- Submit -->
+
+                    <button
+                        type="submit"
+                        class="w-full rounded-xl bg-emerald-600 px-6 py-3.5 text-sm font-bold text-white shadow-lg transition hover:bg-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-500/20"
+                    >
+                        Submit Complaint
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

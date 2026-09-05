@@ -1,0 +1,199 @@
+{% extends "base.html" %}
+
+{% block title %}Check Donation Status | ASOK Foundation{% endblock %}
+
+{% block content %}
+
+<section class="bg-slate-950 py-20 text-white">
+
+    <div class="mx-auto max-w-4xl px-6 text-center lg:px-8">
+
+        <span class="text-sm font-semibold uppercase tracking-wider text-slate-400">
+            Donation Support
+        </span>
+
+        <h1 class="mt-4 text-4xl font-bold sm:text-5xl">
+            Check Donation Status
+        </h1>
+
+        <p class="mx-auto mt-5 max-w-2xl text-lg leading-8 text-slate-300">
+            Enter your donation reference number to check the current
+            status of your submission.
+        </p>
+
+    </div>
+
+</section>
+
+
+<section class="bg-slate-50 py-16">
+
+    <div class="mx-auto max-w-3xl px-6 lg:px-8">
+
+        <!-- Lookup Form -->
+        <div class="rounded-3xl bg-white p-6 shadow-xl ring-1 ring-slate-200 sm:p-10">
+
+            <h2 class="text-2xl font-bold text-slate-950">
+                Find Your Donation
+            </h2>
+
+            <p class="mt-2 text-sm text-slate-500">
+                Use the reference number provided after submitting your donation.
+            </p>
+
+
+            <form method="post" class="mt-8">
+
+                {% csrf_token %}
+
+                <label class="mb-2 block text-sm font-semibold text-slate-700">
+                    Donation Reference Number
+                </label>
+
+                {{ form.reference_number }}
+
+                {% for error in form.reference_number.errors %}
+                    <p class="mt-2 text-sm text-red-600">
+                        {{ error }}
+                    </p>
+                {% endfor %}
+
+
+                <button
+                    type="submit"
+                    class="mt-5 w-full rounded-xl bg-slate-950 px-6 py-4 text-sm font-bold text-white transition hover:bg-slate-800"
+                >
+                    Check Status
+                </button>
+
+            </form>
+
+        </div>
+
+
+        <!-- Result -->
+        {% if donation %}
+
+            <div class="mt-8 overflow-hidden rounded-3xl bg-white shadow-xl ring-1 ring-slate-200">
+
+                <div class="border-b border-slate-200 px-6 py-5">
+
+                    <p class="text-sm text-slate-500">
+                        Donation Reference
+                    </p>
+
+                    <h2 class="mt-1 text-xl font-bold text-slate-950">
+                        {{ donation.reference_number }}
+                    </h2>
+
+                </div>
+
+
+                <div class="grid gap-px bg-slate-200 sm:grid-cols-2">
+
+                    <div class="bg-white p-6">
+                        <p class="text-sm text-slate-500">
+                            Amount
+                        </p>
+
+                        <p class="mt-1 text-xl font-bold text-slate-950">
+                            ৳{{ donation.amount }}
+                        </p>
+                    </div>
+
+
+                    <div class="bg-white p-6">
+                        <p class="text-sm text-slate-500">
+                            Purpose
+                        </p>
+
+                        <p class="mt-1 font-semibold text-slate-900">
+                            {{ donation.get_purpose_display }}
+                        </p>
+                    </div>
+
+
+                    <div class="bg-white p-6">
+                        <p class="text-sm text-slate-500">
+                            Payment Method
+                        </p>
+
+                        <p class="mt-1 font-semibold text-slate-900">
+                            {{ donation.get_payment_method_display }}
+                        </p>
+                    </div>
+
+
+                    <div class="bg-white p-6">
+                        <p class="text-sm text-slate-500">
+                            Submitted
+                        </p>
+
+                        <p class="mt-1 font-semibold text-slate-900">
+                            {{ donation.created_at|date:"d M Y, h:i A" }}
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <div class="border-t border-slate-200 p-6">
+
+                    <p class="text-sm text-slate-500">
+                        Current Status
+                    </p>
+
+
+                    <div class="mt-3">
+
+                        {% if donation.status == "verified" %}
+
+                            <span class="inline-flex rounded-full bg-green-100 px-4 py-2 text-sm font-bold text-green-700">
+                                ✓ Verified
+                            </span>
+
+                        {% elif donation.status == "pending" %}
+
+                            <span class="inline-flex rounded-full bg-amber-100 px-4 py-2 text-sm font-bold text-amber-700">
+                                Pending Verification
+                            </span>
+
+                        {% elif donation.status == "failed" %}
+
+                            <span class="inline-flex rounded-full bg-red-100 px-4 py-2 text-sm font-bold text-red-700">
+                                Failed
+                            </span>
+
+                        {% else %}
+
+                            <span class="inline-flex rounded-full bg-slate-100 px-4 py-2 text-sm font-bold text-slate-700">
+                                Cancelled
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        {% endif %}
+
+
+        <div class="mt-8 text-center">
+
+            <a
+                href="{% url 'donations:home' %}"
+                class="text-sm font-semibold text-slate-700 hover:text-slate-950"
+            >
+                ← Back to Donation Page
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

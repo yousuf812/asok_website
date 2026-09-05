@@ -1,0 +1,295 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Blog & News | ASOK Foundation
+{% endblock %}
+
+{% block content %}
+
+<!-- Hero -->
+<section class="relative overflow-hidden bg-slate-950 py-20 sm:py-24">
+    <div class="absolute inset-0">
+        <div class="absolute left-0 top-0 h-72 w-72 rounded-full bg-emerald-500/10 blur-3xl"></div>
+        <div class="absolute right-0 bottom-0 h-72 w-72 rounded-full bg-cyan-500/10 blur-3xl"></div>
+    </div>
+
+    <div class="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+
+        <div class="max-w-3xl">
+            <span class="inline-flex rounded-full border border-emerald-400/20 bg-emerald-400/10 px-4 py-2 text-sm font-semibold text-emerald-300">
+                Blog & News
+            </span>
+
+            <h1 class="mt-6 text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">
+                Stories, News & Insights
+            </h1>
+
+            <p class="mt-6 max-w-2xl text-base leading-8 text-slate-400 sm:text-lg">
+                Stay informed about our human rights initiatives,
+                legal awareness programs, community activities and
+                organizational updates.
+            </p>
+        </div>
+
+    </div>
+</section>
+
+
+<!-- Blog Content -->
+<section class="bg-slate-50 py-16 sm:py-20">
+
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+
+        <!-- Categories -->
+        {% if categories %}
+
+<div class="mb-10 flex flex-wrap gap-3">
+
+    <a
+        href="{% url 'blog:list' %}"
+        class="rounded-full px-5 py-2.5 text-sm font-semibold transition
+        {% if not selected_category %}
+            bg-slate-900 text-white
+        {% else %}
+            border border-slate-200 bg-white text-slate-600 hover:bg-slate-100
+        {% endif %}"
+    >
+        All Posts
+    </a>
+
+
+    {% for category in categories %}
+
+    <a
+        href="?category={{ category.slug }}"
+        class="rounded-full px-5 py-2.5 text-sm font-semibold transition
+        {% if selected_category == category.slug %}
+            bg-emerald-600 text-white
+        {% else %}
+            border border-slate-200 bg-white text-slate-600 hover:border-emerald-300 hover:text-emerald-600
+        {% endif %}"
+    >
+        {{ category.name }}
+    </a>
+
+    {% endfor %}
+
+</div>
+
+{% endif %}
+
+
+        <!-- Posts -->
+        {% if posts %}
+
+        <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+
+            {% for post in posts %}
+
+            <article class="group overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl">
+
+                <!-- Image -->
+                <div class="relative aspect-[16/10] overflow-hidden bg-slate-200">
+
+                    {% if post.featured_image %}
+                        <img
+                            src="{{ post.featured_image.url }}"
+                            alt="{{ post.title }}"
+                            class="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                        >
+                    {% else %}
+
+                        <div class="flex h-full items-center justify-center bg-slate-900">
+                            <div class="text-center">
+                                <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-400/10 text-emerald-400">
+
+                                    <svg
+                                        class="h-7 w-7"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="1.8"
+                                            d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h7l2 2h5a2 2 0 012 2v10a2 2 0 01-2 2z"
+                                        />
+                                    </svg>
+
+                                </div>
+
+                                <p class="mt-3 text-xs font-medium text-slate-400">
+                                    ASOK Foundation
+                                </p>
+                            </div>
+                        </div>
+
+                    {% endif %}
+
+                    {% if post.is_featured %}
+                    <span class="absolute left-4 top-4 rounded-full bg-emerald-500 px-3 py-1.5 text-xs font-bold text-white shadow">
+                        Featured
+                    </span>
+                    {% endif %}
+
+                </div>
+
+
+                <!-- Content -->
+                <div class="p-6">
+
+                    <div class="flex items-center gap-3 text-xs font-medium text-slate-500">
+
+                        {% if post.category %}
+                        <span class="rounded-full bg-emerald-50 px-3 py-1 text-emerald-700">
+                            {{ post.category.name }}
+                        </span>
+                        {% endif %}
+
+                        {% if post.published_at %}
+                        <span>
+                            {{ post.published_at|date:"M d, Y" }}
+                        </span>
+                        {% endif %}
+
+                    </div>
+
+
+                    <h2 class="mt-4 text-xl font-bold leading-8 text-slate-900 transition group-hover:text-emerald-600">
+                        {{ post.title }}
+                    </h2>
+
+
+                    <p class="mt-3 line-clamp-3 text-sm leading-7 text-slate-600">
+                        {{ post.excerpt }}
+                    </p>
+
+
+                    <div class="mt-6 flex items-center justify-between border-t border-slate-100 pt-5">
+
+                        <span class="text-sm text-slate-500">
+                            By {{ post.author }}
+                        </span>
+
+                        <a
+                            href="{% url 'blog:detail' post.slug %}"
+                            class="inline-flex items-center gap-2 text-sm font-bold text-emerald-600 transition hover:text-emerald-700"
+                        >
+                            Read More
+
+                            <svg
+                                class="h-4 w-4 transition-transform group-hover:translate-x-1"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M5 12h14m-6-6l6 6-6 6"
+                                />
+                            </svg>
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+            {% endfor %}
+
+
+
+        </div>
+
+        {% if page_obj.has_other_pages %}
+
+<div class="mt-14 flex flex-wrap items-center justify-center gap-2">
+
+    {% if page_obj.has_previous %}
+
+    <a
+        href="?{% if selected_category %}category={{ selected_category }}&{% endif %}page={{ page_obj.previous_page_number }}"
+        class="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:border-emerald-300 hover:text-emerald-600"
+    >
+        ← Previous
+    </a>
+
+    {% endif %}
+
+
+    {% for num in page_obj.paginator.page_range %}
+
+    <a
+        href="?{% if selected_category %}category={{ selected_category }}&{% endif %}page={{ num }}"
+        class="rounded-xl px-4 py-2.5 text-sm font-semibold transition
+        {% if page_obj.number == num %}
+            bg-emerald-600 text-white
+        {% else %}
+            border border-slate-200 bg-white text-slate-700 hover:border-emerald-300 hover:text-emerald-600
+        {% endif %}"
+    >
+        {{ num }}
+    </a>
+
+    {% endfor %}
+
+
+    {% if page_obj.has_next %}
+
+    <a
+        href="?{% if selected_category %}category={{ selected_category }}&{% endif %}page={{ page_obj.next_page_number }}"
+        class="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:border-emerald-300 hover:text-emerald-600"
+    >
+        Next →
+    </a>
+
+    {% endif %}
+
+</div>
+
+{% endif %}
+
+        {% else %}
+
+        <!-- Empty State -->
+        <div class="rounded-3xl border border-dashed border-slate-300 bg-white px-6 py-20 text-center">
+
+            <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-100 text-slate-500">
+
+                <svg
+                    class="h-8 w-8"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="1.8"
+                        d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h7l2 2h5a2 2 0 012 2v10a2 2 0 01-2 2z"
+                    />
+                </svg>
+
+            </div>
+
+            <h2 class="mt-5 text-xl font-bold text-slate-900">
+                No posts available yet
+            </h2>
+
+            <p class="mx-auto mt-2 max-w-md text-sm leading-7 text-slate-500">
+                New stories, news and updates will appear here.
+            </p>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</section>
+
+{% endblock %}

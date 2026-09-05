@@ -1,0 +1,333 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {{ image.title }} | Gallery | ASOK Foundation
+{% endblock %}
+
+{% block meta_description %}
+    {{ image.description|default:image.title }}
+{% endblock %}
+
+{% block content %}
+
+<section class="relative overflow-hidden bg-slate-950">
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(14,165,233,0.16),transparent_35%),radial-gradient(circle_at_bottom_left,rgba(20,184,166,0.12),transparent_35%)]"></div>
+
+    <div class="relative mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+        <div class="max-w-3xl">
+
+            <a
+                href="{% url 'gallery:list' %}"
+                class="mb-6 inline-flex items-center gap-2 text-sm font-medium text-slate-300 transition hover:text-white"
+            >
+                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M15 19l-7-7 7-7"
+                    />
+                </svg>
+
+                Back to Gallery
+            </a>
+
+            {% if image.category %}
+                <span class="inline-flex rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-sky-300">
+                    {{ image.category.name }}
+                </span>
+            {% endif %}
+
+            <h1 class="mt-5 text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-5xl">
+                {{ image.title }}
+            </h1>
+
+            <div class="mt-5 flex flex-wrap gap-4 text-sm text-slate-400">
+
+                {% if image.location %}
+                    <span class="inline-flex items-center gap-2">
+                        <svg class="h-4 w-4 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M17.657 16.657L13.414 21l-4.243-4.343a8 8 0 1111.314 0z"
+                            />
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                            />
+                        </svg>
+
+                        {{ image.location }}
+                    </span>
+                {% endif %}
+
+                {% if image.taken_at %}
+                    <span class="inline-flex items-center gap-2">
+                        <svg class="h-4 w-4 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path
+                                stroke="currentColor"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                            />
+                        </svg>
+
+                        {{ image.taken_at|date:"F j, Y" }}
+                    </span>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<section class="bg-white py-14 sm:py-20">
+    <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+
+        <!-- Main Image -->
+        <div class="group relative overflow-hidden rounded-3xl bg-slate-100 shadow-xl">
+
+            <img
+                src="{{ image.image.url }}"
+                alt="{{ image.title }}"
+                class="max-h-[750px] w-full cursor-zoom-in object-contain transition duration-500 group-hover:scale-[1.01]"
+                id="gallery-main-image"
+            >
+
+            <!-- Zoom Button -->
+            <button
+                type="button"
+                id="open-lightbox"
+                class="absolute bottom-5 right-5 inline-flex items-center gap-2 rounded-xl bg-slate-950/85 px-4 py-3 text-sm font-semibold text-white shadow-lg backdrop-blur transition hover:bg-slate-950"
+                aria-label="Open image in fullscreen"
+            >
+                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M4 8V4h4M20 8V4h-4M4 16v4h4M20 16v4h-4"
+                    />
+                </svg>
+
+                View Fullscreen
+            </button>
+
+        </div>
+
+
+        <!-- Image Information -->
+        <div class="mt-10 grid gap-10 lg:grid-cols-[1fr_320px]">
+
+            <!-- Description -->
+            <div>
+                <h2 class="text-2xl font-bold text-slate-900">
+                    About This Image
+                </h2>
+
+                {% if image.description %}
+                    <p class="mt-4 whitespace-pre-line text-base leading-8 text-slate-600">
+                        {{ image.description }}
+                    </p>
+                {% else %}
+                    <p class="mt-4 text-slate-500">
+                        No additional description is available for this image.
+                    </p>
+                {% endif %}
+            </div>
+
+
+            <!-- Details -->
+            <aside class="rounded-2xl border border-slate-200 bg-slate-50 p-6">
+
+                <h3 class="text-lg font-bold text-slate-900">
+                    Image Details
+                </h3>
+
+                <dl class="mt-5 space-y-4">
+
+                    {% if image.category %}
+                        <div>
+                            <dt class="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                                Category
+                            </dt>
+
+                            <dd class="mt-1 font-medium text-slate-700">
+                                {{ image.category.name }}
+                            </dd>
+                        </div>
+                    {% endif %}
+
+                    {% if image.location %}
+                        <div>
+                            <dt class="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                                Location
+                            </dt>
+
+                            <dd class="mt-1 font-medium text-slate-700">
+                                {{ image.location }}
+                            </dd>
+                        </div>
+                    {% endif %}
+
+                    {% if image.taken_at %}
+                        <div>
+                            <dt class="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                                Date
+                            </dt>
+
+                            <dd class="mt-1 font-medium text-slate-700">
+                                {{ image.taken_at|date:"F j, Y" }}
+                            </dd>
+                        </div>
+                    {% endif %}
+
+                </dl>
+
+            </aside>
+
+        </div>
+
+
+        <!-- Back Button -->
+        <div class="mt-12 border-t border-slate-200 pt-8">
+
+            <a
+                href="{% url 'gallery:list' %}"
+                class="inline-flex items-center gap-2 rounded-xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800"
+            >
+                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M15 19l-7-7 7-7"
+                    />
+                </svg>
+
+                Back to Gallery
+            </a>
+
+        </div>
+
+    </div>
+</section>
+
+
+<!-- LIGHTBOX -->
+
+<div
+    id="lightbox"
+    class="fixed inset-0 z-[9999] hidden items-center justify-center bg-black/95 p-4"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Image preview"
+>
+
+    <!-- Close -->
+    <button
+        type="button"
+        id="close-lightbox"
+        class="absolute right-5 top-5 z-10 rounded-full bg-white/10 p-3 text-white backdrop-blur transition hover:bg-white/20"
+        aria-label="Close image preview"
+    >
+        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+            />
+        </svg>
+    </button>
+
+
+    <!-- Fullscreen Image -->
+    <img
+        src="{{ image.image.url }}"
+        alt="{{ image.title }}"
+        id="lightbox-image"
+        class="max-h-[90vh] max-w-[95vw] rounded-xl object-contain shadow-2xl"
+    >
+
+
+    <!-- Caption -->
+    <div class="absolute bottom-5 left-1/2 max-w-xl -translate-x-1/2 text-center">
+
+        <p class="text-sm font-medium text-white">
+            {{ image.title }}
+        </p>
+
+        {% if image.location %}
+            <p class="mt-1 text-xs text-slate-400">
+                {{ image.location }}
+            </p>
+        {% endif %}
+
+    </div>
+
+</div>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+    const lightbox = document.getElementById("lightbox");
+    const openButton = document.getElementById("open-lightbox");
+    const closeButton = document.getElementById("close-lightbox");
+    const mainImage = document.getElementById("gallery-main-image");
+
+    if (!lightbox || !openButton || !closeButton || !mainImage) {
+        return;
+    }
+
+    function openLightbox() {
+        lightbox.classList.remove("hidden");
+        lightbox.classList.add("flex");
+
+        document.body.classList.add("overflow-hidden");
+
+        closeButton.focus();
+    }
+
+    function closeLightbox() {
+        lightbox.classList.add("hidden");
+        lightbox.classList.remove("flex");
+
+        document.body.classList.remove("overflow-hidden");
+
+        openButton.focus();
+    }
+
+    openButton.addEventListener("click", openLightbox);
+
+    mainImage.addEventListener("click", openLightbox);
+
+    closeButton.addEventListener("click", closeLightbox);
+
+    lightbox.addEventListener("click", (event) => {
+
+        if (event.target === lightbox) {
+            closeLightbox();
+        }
+
+    });
+
+    document.addEventListener("keydown", (event) => {
+
+        if (event.key === "Escape" && !lightbox.classList.contains("hidden")) {
+            closeLightbox();
+        }
+
+    });
+
+});
+</script>
+
+{% endblock %}

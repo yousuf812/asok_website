@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+
+{% block title %}
+Terms & Conditions | ASOK Foundation
+{% endblock %}
+
+{% block content %}
+
+<section class="bg-slate-950 py-20 text-white">
+    <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+
+        <p class="text-sm font-semibold uppercase tracking-wider text-white/50">
+            Legal Information
+        </p>
+
+        <h1 class="mt-4 text-4xl font-bold tracking-tight sm:text-5xl">
+            Terms & Conditions
+        </h1>
+
+        <p class="mt-5 text-white/60">
+            Please review these terms before using the ASOK Foundation
+            website and its services.
+        </p>
+
+    </div>
+</section>
+
+
+<section class="bg-white py-16">
+
+    <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+
+        <div class="prose prose-slate max-w-none">
+
+            <h2>Website Use</h2>
+
+            <p>
+                This website is provided to share information about ASOK
+                Foundation, its activities, programs and available services.
+            </p>
+
+
+            <h2>Information Submitted by Users</h2>
+
+            <p>
+                Users are responsible for ensuring that information submitted
+                through forms is accurate and truthful to the best of their
+                knowledge.
+            </p>
+
+
+            <h2>Legal Aid Requests</h2>
+
+            <p>
+                Submitting a legal aid request does not automatically create
+                an attorney-client relationship. Requests may be reviewed
+                according to the organization's available resources and
+                procedures.
+            </p>
+
+
+            <h2>Complaints</h2>
+
+            <p>
+                Information submitted through the complaint system should be
+                provided honestly and responsibly. ASOK Foundation may review
+                submissions according to its internal procedures.
+            </p>
+
+
+            <h2>Donations</h2>
+
+            <p>
+                Donation information must be submitted accurately. Payment
+                verification may be required before a donation is considered
+                confirmed.
+            </p>
+
+
+            <h2>Intellectual Property</h2>
+
+            <p>
+                Website content, branding, graphics and original materials
+                belonging to ASOK Foundation may not be reproduced or
+                redistributed without appropriate permission.
+            </p>
+
+
+            <h2>Changes to These Terms</h2>
+
+            <p>
+                ASOK Foundation may update these terms when necessary.
+                Updated terms will be published on this website.
+            </p>
+
+
+            <h2>Contact</h2>
+
+            <p>
+                For questions regarding these terms, please visit our
+                <a href="{% url 'contacts:home' %}">
+                    contact page
+                </a>.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

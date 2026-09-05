@@ -1,0 +1,406 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Get Legal Help | ASOK Foundation
+{% endblock %}
+
+{% block meta_description %}
+    Request legal assistance from ASOK Foundation for land, family, violence, employment, discrimination and other legal matters.
+{% endblock %}
+
+{% block content %}
+
+<section class="bg-slate-950 py-16 sm:py-20">
+
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+
+        <div class="max-w-3xl">
+
+            <span class="text-sm font-bold uppercase tracking-[0.18em] text-emerald-400">
+                Get Legal Help
+            </span>
+
+            <h1 class="mt-4 text-4xl font-bold tracking-tight text-white sm:text-5xl">
+                Tell Us How We Can Help
+            </h1>
+
+            <p class="mt-5 text-base leading-8 text-slate-300 sm:text-lg">
+                Submit your request for legal information or
+                assistance. Please provide enough detail for our
+                team to understand your situation.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<section class="bg-slate-50 py-16 sm:py-20">
+
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+
+        <div class="grid gap-10 lg:grid-cols-[0.8fr_1.2fr]">
+
+            <!-- Information -->
+
+            <div>
+
+                <div class="rounded-3xl bg-slate-900 p-7 text-white sm:p-8">
+
+                    <h2 class="text-2xl font-bold">
+                        Before You Submit
+                    </h2>
+
+                    <div class="mt-7 space-y-6">
+
+                        <div class="flex gap-4">
+
+                            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-500/15 text-emerald-400">
+                                01
+                            </div>
+
+                            <div>
+                                <h3 class="font-bold">
+                                    Explain Your Situation
+                                </h3>
+
+                                <p class="mt-1 text-sm leading-6 text-slate-400">
+                                    Provide clear and relevant information
+                                    about your concern.
+                                </p>
+                            </div>
+
+                        </div>
+
+
+                        <div class="flex gap-4">
+
+                            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-500/15 text-emerald-400">
+                                02
+                            </div>
+
+                            <div>
+                                <h3 class="font-bold">
+                                    Choose Contact Method
+                                </h3>
+
+                                <p class="mt-1 text-sm leading-6 text-slate-400">
+                                    Let us know whether phone or email is
+                                    preferable.
+                                </p>
+                            </div>
+
+                        </div>
+
+
+                        <div class="flex gap-4">
+
+                            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-500/15 text-emerald-400">
+                                03
+                            </div>
+
+                            <div>
+                                <h3 class="font-bold">
+                                    Keep Your Reference Number
+                                </h3>
+
+                                <p class="mt-1 text-sm leading-6 text-slate-400">
+                                    After submission you will receive a
+                                    unique request reference.
+                                </p>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Form -->
+
+            <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
+
+                {% if messages %}
+
+                    {% for message in messages %}
+
+                        <div class="mb-6 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm font-medium text-emerald-800">
+                            {{ message }}
+                        </div>
+
+                    {% endfor %}
+
+                {% endif %}
+
+
+                <form
+                    method="post"
+                    class="space-y-6"
+                    novalidate
+                >
+
+                    {% csrf_token %}
+
+
+                    <!-- Name / Email -->
+
+                    <div class="grid gap-6 sm:grid-cols-2">
+
+                        <div>
+
+                            <label
+                                for="{{ form.full_name.id_for_label }}"
+                                class="text-sm font-bold text-slate-700"
+                            >
+                                Full Name
+                            </label>
+
+                            <input
+                                type="text"
+                                name="{{ form.full_name.html_name }}"
+                                id="{{ form.full_name.id_for_label }}"
+                                value="{{ form.full_name.value|default:'' }}"
+                                placeholder="Your full name"
+                                autocomplete="name"
+                                class="mt-2 w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10"
+                            >
+
+                            {% for error in form.full_name.errors %}
+                                <p class="mt-1 text-sm text-red-600">
+                                    {{ error }}
+                                </p>
+                            {% endfor %}
+
+                        </div>
+
+
+                        <div>
+
+                            <label
+                                for="{{ form.email.id_for_label }}"
+                                class="text-sm font-bold text-slate-700"
+                            >
+                                Email Address
+                            </label>
+
+                            <input
+                                type="email"
+                                name="{{ form.email.html_name }}"
+                                id="{{ form.email.id_for_label }}"
+                                value="{{ form.email.value|default:'' }}"
+                                placeholder="you@example.com"
+                                autocomplete="email"
+                                class="mt-2 w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10"
+                            >
+
+                            {% for error in form.email.errors %}
+                                <p class="mt-1 text-sm text-red-600">
+                                    {{ error }}
+                                </p>
+                            {% endfor %}
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Phone / Category -->
+
+                    <div class="grid gap-6 sm:grid-cols-2">
+
+                        <div>
+
+                            <label
+                                for="{{ form.phone.id_for_label }}"
+                                class="text-sm font-bold text-slate-700"
+                            >
+                                Phone Number
+                            </label>
+
+                            <input
+                                type="text"
+                                name="{{ form.phone.html_name }}"
+                                id="{{ form.phone.id_for_label }}"
+                                value="{{ form.phone.value|default:'' }}"
+                                placeholder="+880 1XXXXXXXXX"
+                                autocomplete="tel"
+                                class="mt-2 w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10"
+                            >
+
+                            {% for error in form.phone.errors %}
+                                <p class="mt-1 text-sm text-red-600">
+                                    {{ error }}
+                                </p>
+                            {% endfor %}
+
+                        </div>
+
+
+                        <div>
+
+                            <label
+                                for="{{ form.category.id_for_label }}"
+                                class="text-sm font-bold text-slate-700"
+                            >
+                                Legal Issue
+                            </label>
+
+                            <select
+                                name="{{ form.category.html_name }}"
+                                id="{{ form.category.id_for_label }}"
+                                class="mt-2 w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10"
+                            >
+
+                                {% for value, label in form.category.field.choices %}
+
+                                    <option
+                                        value="{{ value }}"
+                                        {% if form.category.value == value %}
+                                            selected
+                                        {% endif %}
+                                    >
+                                        {{ label }}
+                                    </option>
+
+                                {% endfor %}
+
+                            </select>
+
+                            {% for error in form.category.errors %}
+                                <p class="mt-1 text-sm text-red-600">
+                                    {{ error }}
+                                </p>
+                            {% endfor %}
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Subject -->
+
+                    <div>
+
+                        <label
+                            for="{{ form.subject.id_for_label }}"
+                            class="text-sm font-bold text-slate-700"
+                        >
+                            Subject
+                        </label>
+
+                        <input
+                            type="text"
+                            name="{{ form.subject.html_name }}"
+                            id="{{ form.subject.id_for_label }}"
+                            value="{{ form.subject.value|default:'' }}"
+                            placeholder="Briefly describe your legal issue"
+                            class="mt-2 w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10"
+                        >
+
+                        {% for error in form.subject.errors %}
+                            <p class="mt-1 text-sm text-red-600">
+                                {{ error }}
+                            </p>
+                        {% endfor %}
+
+                    </div>
+
+
+                    <!-- Description -->
+
+                    <div>
+
+                        <label
+                            for="{{ form.description.id_for_label }}"
+                            class="text-sm font-bold text-slate-700"
+                        >
+                            Describe Your Situation
+                        </label>
+
+                        <textarea
+                            name="{{ form.description.html_name }}"
+                            id="{{ form.description.id_for_label }}"
+                            rows="7"
+                            placeholder="Please explain your situation..."
+                            class="mt-2 w-full resize-y rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10"
+                        >{{ form.description.value|default:'' }}</textarea>
+
+                        {% for error in form.description.errors %}
+                            <p class="mt-1 text-sm text-red-600">
+                                {{ error }}
+                            </p>
+                        {% endfor %}
+
+                    </div>
+
+
+                    <!-- Contact -->
+
+                    <div>
+
+                        <label
+                            for="{{ form.preferred_contact.id_for_label }}"
+                            class="text-sm font-bold text-slate-700"
+                        >
+                            Preferred Contact Method
+                        </label>
+
+                        <select
+                            name="{{ form.preferred_contact.html_name }}"
+                            id="{{ form.preferred_contact.id_for_label }}"
+                            class="mt-2 w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10"
+                        >
+
+                            {% for value, label in form.preferred_contact.field.choices %}
+
+                                <option
+                                    value="{{ value }}"
+                                    {% if form.preferred_contact.value == value %}
+                                        selected
+                                    {% endif %}
+                                >
+                                    {{ label }}
+                                </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- Submit -->
+
+                    <button
+                        type="submit"
+                        class="inline-flex w-full items-center justify-center rounded-xl bg-emerald-600 px-6 py-3.5 text-sm font-bold text-white shadow-lg transition hover:bg-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-500/20"
+                    >
+                        Submit Legal Assistance Request
+
+                        <span class="ml-2">
+                            →
+                        </span>
+                    </button>
+
+
+                    <p class="text-center text-xs leading-5 text-slate-500">
+                        Please do not submit passwords, payment information,
+                        or other highly sensitive credentials through this form.
+                    </p>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

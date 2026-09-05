@@ -1,0 +1,247 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="ASOK - Human Rights and Social Justice Organization"
+    >
+
+    <link
+    rel="canonical"
+    href="{{ request.build_absolute_uri }}"
+>
+
+    <!-- Open Graph -->
+<meta
+    property="og:type"
+    content="website"
+>
+
+<meta
+    property="og:title"
+    content="{% block og_title %}ASOK Foundation | Human Rights & Justice{% endblock %}"
+>
+
+<meta
+    property="og:description"
+    content="{% block og_description %}ASOK Foundation — Human rights, legal aid, awareness and community support.{% endblock %}"
+>
+
+<meta
+    property="og:image"
+    content="{{ request.scheme }}://{{ request.get_host }}{% static 'images/og-image.jpg' %}"
+>
+
+<meta
+    property="og:image:width"
+    content="1200"
+>
+
+<meta
+    property="og:image:height"
+    content="630"
+>
+
+<meta
+    property="og:image:alt"
+    content="ASOK Foundation — Human Rights, Justice and Dignity"
+>
+
+<meta
+    name="twitter:image"
+    content="{{ request.scheme }}://{{ request.get_host }}{% static 'images/og-image.jpg' %}"
+>
+
+<meta
+    property="og:url"
+    content="{{ request.build_absolute_uri }}"
+>
+
+<meta
+    property="og:site_name"
+    content="ASOK Foundation"
+>
+
+<!-- Twitter / X -->
+<meta
+    name="twitter:card"
+    content="summary_large_image"
+>
+
+<meta
+    name="twitter:title"
+    content="{% block twitter_title %}ASOK Foundation | Human Rights & Justice{% endblock %}"
+>
+
+<meta
+    name="twitter:description"
+    content="{% block twitter_description %}ASOK Foundation — Human rights, legal aid, awareness and community support.{% endblock %}"
+>
+
+    <meta
+        name="theme-color"
+        content="#059669"
+    >
+
+    <title>
+        {% block title %}
+            ASOK | Human Rights & Social Justice
+        {% endblock %}
+    </title>
+
+    <meta
+    name="description"
+    content="{% block meta_description %}ASOK Foundation — Human rights, legal aid, awareness and community support.{% endblock %}"
+>
+
+
+
+
+    <!-- Tailwind CSS -->
+    <link
+        rel="stylesheet"
+        href="{% static 'css/output.css' %}"
+    >
+
+
+
+
+    {% block extra_css %}
+    {% endblock %}
+
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "NGO",
+    "name": "ASOK Foundation",
+    "url": "{{ request.scheme }}://{{ request.get_host }}",
+    "logo": "{{ request.scheme }}://{{ request.get_host }}{% static 'images/og-image.jpg' %}",
+    "description": "ASOK Foundation works to promote human rights, justice and dignity through legal aid, awareness, community support and human rights advocacy.",
+    "email": "{% if organization %}{{ organization.email }}{% else %}info@asok.info{% endif %}",
+    "telephone": "{% if organization %}{{ organization.phone }}{% endif %}",
+    "address": {
+        "@type": "PostalAddress",
+        "addressCountry": "BD"
+    }
+    {% if organization and organization.facebook_url or organization and organization.linkedin_url or organization and organization.youtube_url %},
+    "sameAs": [
+        {% if organization.facebook_url %}
+            "{{ organization.facebook_url }}"
+        {% endif %}
+        {% if organization.linkedin_url %}
+            {% if organization.facebook_url %},{% endif %}
+            "{{ organization.linkedin_url }}"
+        {% endif %}
+        {% if organization.youtube_url %}
+            {% if organization.facebook_url or organization.linkedin_url %},{% endif %}
+            "{{ organization.youtube_url }}"
+        {% endif %}
+    ]
+    {% endif %}
+}
+</script>
+
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "ASOK Foundation",
+    "url": "{{ request.scheme }}://{{ request.get_host }}",
+    "description": "ASOK Foundation — Human rights, justice, legal aid and community support."
+}
+</script>
+
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "{% block schema_page_name %}ASOK Foundation | Human Rights & Justice{% endblock %}",
+    "url": "{{ request.build_absolute_uri }}",
+    "isPartOf": {
+        "@type": "WebSite",
+        "name": "ASOK Foundation",
+        "url": "{{ request.scheme }}://{{ request.get_host }}"
+    }
+}
+</script>
+
+{% include "components/breadcrumb_schema.html" %}
+
+</head>
+
+
+<body
+    class="min-h-screen bg-slate-50
+           text-slate-800 antialiased"
+>
+
+
+    <!-- Header -->
+    {% include "components/header.html" %}
+
+{% if messages %}
+    <div class="fixed left-1/2 top-24 z-50 w-[calc(100%-2rem)] max-w-lg -translate-x-1/2">
+        {% for message in messages %}
+            <div
+                class="rounded-2xl border border-slate-200 bg-white p-4 shadow-2xl"
+                role="alert"
+            >
+                <div class="flex items-start gap-3">
+
+                    <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-slate-100 text-slate-700">
+                        ✓
+                    </div>
+
+                    <div class="min-w-0 flex-1">
+                        <p class="text-sm font-semibold text-slate-900">
+                            {% if message.tags == "success" %}
+                                Success
+                            {% elif message.tags == "error" %}
+                                Error
+                            {% else %}
+                                Notice
+                            {% endif %}
+                        </p>
+
+                        <p class="mt-1 text-sm leading-6 text-slate-600">
+                            {{ message }}
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+    <!-- Main Content -->
+    <main>
+
+        {% block content %}
+        {% endblock %}
+
+    </main>
+
+    {% include "components/footer.html" %}
+
+
+    <!-- JavaScript -->
+    <script src="{% static 'js/main.js' %}"></script>
+
+
+    {% block extra_js %}
+    {% endblock %}
+
+</body>
+
+</html>

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Server Error | ASOK Foundation{% endblock %}
+
+{% block content %}
+<section class="flex min-h-[70vh] items-center justify-center px-6 py-20">
+    <div class="mx-auto max-w-xl text-center">
+        <p class="text-7xl font-bold text-slate-900">500</p>
+
+        <h1 class="mt-6 text-3xl font-bold text-slate-900">
+            Something Went Wrong
+        </h1>
+
+        <p class="mt-4 leading-7 text-slate-600">
+            We are sorry, but something went wrong on our server.
+            Please try again later.
+        </p>
+
+        <a
+            href="{% url 'core:home' %}"
+            class="mt-8 inline-flex rounded-xl bg-slate-900 px-6 py-3 text-sm font-semibold text-white transition hover:bg-slate-700"
+        >
+            Back to Home
+        </a>
+    </div>
+</section>
+{% endblock %}

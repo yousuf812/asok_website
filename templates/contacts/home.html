@@ -1,0 +1,408 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Contact Us | ASOK Foundation
+{% endblock %}
+
+{% block meta_description %}
+    Contact ASOK Foundation for information, support, partnership opportunities and human rights assistance.
+{% endblock %}
+
+{% block content %}
+
+<!-- Hero -->
+<section class="bg-slate-950 py-20 text-white">
+
+    <div class="mx-auto max-w-7xl px-6 lg:px-8">
+
+        <div class="max-w-3xl">
+
+            <span class="inline-flex rounded-full border border-white/20 px-4 py-2 text-sm font-medium text-slate-300">
+                Get In Touch
+            </span>
+
+            <h1 class="mt-6 text-4xl font-bold tracking-tight sm:text-5xl">
+                We're Here to Listen
+            </h1>
+
+            <p class="mt-6 text-lg leading-8 text-slate-300">
+                Have a question, need information, or want to learn more
+                about our work? Send us a message and our team will get
+                back to you.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- Contact Section -->
+<section class="bg-slate-50 py-16">
+
+    <div class="mx-auto max-w-7xl px-6 lg:px-8">
+
+        <div class="grid gap-10 lg:grid-cols-3">
+
+
+            <!-- Contact Information -->
+            <div>
+
+                <div class="rounded-3xl bg-slate-950 p-8 text-white shadow-xl">
+
+                    <h2 class="text-2xl font-bold">
+                        Contact Information
+                    </h2>
+
+                    <p class="mt-4 leading-7 text-slate-300">
+                        You can reach ASOK Foundation through the
+                        information below.
+                    </p>
+
+
+                    <div class="mt-8 space-y-7">
+
+                        <!-- Email -->
+                        <div class="flex gap-4">
+
+                            <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white/10">
+
+                                <svg
+                                    class="h-5 w-5"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M3 8l9 6 9-6M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                                    />
+                                </svg>
+
+                            </div>
+
+                            <div>
+                                <p class="text-sm text-slate-400">
+                                    Email
+                                </p>
+
+                                <p class="mt-1 font-semibold">
+                                    info@asok.info
+                                </p>
+                            </div>
+
+                        </div>
+
+
+                        <!-- Phone -->
+                        <div class="flex gap-4">
+
+                            <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white/10">
+
+                                <svg
+                                    class="h-5 w-5"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M3 5a2 2 0 012-2h2.28a2 2 0 011.94 1.52l.55 2.2a2 2 0 01-.45 1.86L8.3 9.6a16 16 0 006.1 6.1l1.02-1.02a2 2 0 011.86-.45l2.2.55A2 2 0 0121 16.72V19a2 2 0 01-2 2h-1C9.72 21 3 14.28 3 6V5z"
+                                    />
+                                </svg>
+
+                            </div>
+
+                            <div>
+                                <p class="text-sm text-slate-400">
+                                    Phone
+                                </p>
+
+                                <p class="mt-1 font-semibold">
+                                    +880 1XXXXXXXXX
+                                </p>
+                            </div>
+
+                        </div>
+
+
+                        <!-- Location -->
+                        <div class="flex gap-4">
+
+                            <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white/10">
+
+                                <svg
+                                    class="h-5 w-5"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M12 21s7-5.2 7-11a7 7 0 10-14 0c0 5.8 7 11 7 11z"
+                                    />
+
+                                    <circle
+                                        cx="12"
+                                        cy="10"
+                                        r="2"
+                                    />
+                                </svg>
+
+                            </div>
+
+                            <div>
+                                <p class="text-sm text-slate-400">
+                                    Location
+                                </p>
+
+                                <p class="mt-1 font-semibold">
+                                    Bangladesh
+                                </p>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Help CTA -->
+                    <div class="mt-10 border-t border-white/10 pt-7">
+
+                        <p class="text-sm leading-6 text-slate-400">
+                            If you need legal assistance or want to report
+                            a human rights violation, please use our
+                            dedicated support forms.
+                        </p>
+
+                        <div class="mt-5 flex flex-col gap-3">
+
+                            <a
+                                href="{% url 'legal_aid:home' %}"
+                                class="rounded-xl bg-white px-5 py-3 text-center text-sm font-bold text-slate-950 transition hover:bg-slate-100"
+                            >
+                                Get Legal Help
+                            </a>
+
+                            <a
+                                href="{% url 'complaints:home' %}"
+                                class="rounded-xl border border-white/20 px-5 py-3 text-center text-sm font-semibold text-white transition hover:bg-white/10"
+                            >
+                                Report a Violation
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Form -->
+            <div class="lg:col-span-2">
+
+                <div class="rounded-3xl bg-white p-6 shadow-xl ring-1 ring-slate-200 sm:p-10">
+
+                    <div class="mb-8">
+
+                        <h2 class="text-2xl font-bold text-slate-950">
+                            Send Us a Message
+                        </h2>
+
+                        <p class="mt-2 text-sm text-slate-500">
+                            Complete the form below and we'll get back
+                            to you as soon as possible.
+                        </p>
+
+                    </div>
+
+
+                    {% if messages %}
+
+                        {% for message in messages %}
+
+                            <div class="mb-6 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700">
+                                {{ message }}
+                            </div>
+
+                        {% endfor %}
+
+                    {% endif %}
+
+
+                    {% if form.non_field_errors %}
+
+                        <div class="mb-6 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+                            {{ form.non_field_errors }}
+                        </div>
+
+                    {% endif %}
+
+
+                    <form method="post" class="space-y-6">
+
+                        {% csrf_token %}
+
+
+                        <div class="grid gap-6 md:grid-cols-2">
+
+
+                            <!-- Full Name -->
+                            <div>
+
+                                <label
+                                    for="{{ form.full_name.id_for_label }}"
+                                    class="mb-2 block text-sm font-semibold text-slate-700"
+                                >
+                                    Full Name
+                                </label>
+
+                                {{ form.full_name }}
+
+                                {% for error in form.full_name.errors %}
+
+                                    <p class="mt-2 text-sm text-red-600">
+                                        {{ error }}
+                                    </p>
+
+                                {% endfor %}
+
+                            </div>
+
+
+                            <!-- Email -->
+                            <div>
+
+                                <label
+                                    for="{{ form.email.id_for_label }}"
+                                    class="mb-2 block text-sm font-semibold text-slate-700"
+                                >
+                                    Email Address
+                                </label>
+
+                                {{ form.email }}
+
+                                {% for error in form.email.errors %}
+
+                                    <p class="mt-2 text-sm text-red-600">
+                                        {{ error }}
+                                    </p>
+
+                                {% endfor %}
+
+                            </div>
+
+
+                            <!-- Phone -->
+                            <div>
+
+                                <label
+                                    for="{{ form.phone.id_for_label }}"
+                                    class="mb-2 block text-sm font-semibold text-slate-700"
+                                >
+                                    Phone Number
+                                    <span class="font-normal text-slate-400">
+                                        (Optional)
+                                    </span>
+                                </label>
+
+                                {{ form.phone }}
+
+                                {% for error in form.phone.errors %}
+
+                                    <p class="mt-2 text-sm text-red-600">
+                                        {{ error }}
+                                    </p>
+
+                                {% endfor %}
+
+                            </div>
+
+
+                            <!-- Subject -->
+                            <div>
+
+                                <label
+                                    for="{{ form.subject.id_for_label }}"
+                                    class="mb-2 block text-sm font-semibold text-slate-700"
+                                >
+                                    Subject
+                                </label>
+
+                                {{ form.subject }}
+
+                                {% for error in form.subject.errors %}
+
+                                    <p class="mt-2 text-sm text-red-600">
+                                        {{ error }}
+                                    </p>
+
+                                {% endfor %}
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Message -->
+                        <div>
+
+                            <label
+                                for="{{ form.message.id_for_label }}"
+                                class="mb-2 block text-sm font-semibold text-slate-700"
+                            >
+                                Message
+                            </label>
+
+                            {{ form.message }}
+
+                            {% for error in form.message.errors %}
+
+                                <p class="mt-2 text-sm text-red-600">
+                                    {{ error }}
+                                </p>
+
+                            {% endfor %}
+
+                        </div>
+
+
+                        <!-- Submit -->
+                        <div class="border-t border-slate-200 pt-6">
+
+                            <button
+                                type="submit"
+                                class="w-full rounded-xl bg-slate-950 px-6 py-4 text-sm font-bold text-white transition hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:ring-offset-2"
+                            >
+                                Send Message
+                            </button>
+
+                            <p class="mt-3 text-center text-xs text-slate-500">
+                                Please do not include passwords, payment
+                                information or other highly sensitive data.
+                            </p>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

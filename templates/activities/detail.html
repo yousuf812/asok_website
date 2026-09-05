@@ -1,0 +1,191 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<!-- Hero -->
+<section class="bg-slate-950 py-16 sm:py-20">
+
+    <div class="mx-auto max-w-5xl px-6 lg:px-8">
+
+        <a
+            href="{% url 'activities:list' %}"
+            class="inline-flex items-center gap-2 text-sm font-semibold text-emerald-400 hover:text-emerald-300"
+        >
+            ← Back to Activities
+        </a>
+
+
+        <div class="mt-8">
+
+            <span class="inline-flex rounded-full bg-emerald-500/10 px-4 py-1.5 text-sm font-semibold text-emerald-300">
+                {{ activity.get_category_display }}
+            </span>
+
+            <h1 class="mt-5 text-4xl font-bold tracking-tight text-white sm:text-5xl">
+                {{ activity.title }}
+            </h1>
+
+            <p class="mt-5 max-w-3xl text-lg leading-8 text-slate-300">
+                {{ activity.short_description }}
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- Content -->
+<section class="bg-white py-16 sm:py-20">
+
+    <div class="mx-auto max-w-5xl px-6 lg:px-8">
+
+        {% if activity.image %}
+
+        <div class="overflow-hidden rounded-3xl shadow-lg">
+
+            <img
+                src="{{ activity.image.url }}"
+                alt="{{ activity.title }}"
+                class="w-full object-cover"
+            >
+
+        </div>
+
+        {% endif %}
+
+
+        <!-- Project Info -->
+        <div class="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+
+            <div class="rounded-2xl bg-slate-50 p-5">
+                <p class="text-xs font-bold uppercase tracking-wider text-slate-500">
+                    Status
+                </p>
+
+                <p class="mt-2 font-bold text-slate-900">
+                    {{ activity.get_status_display }}
+                </p>
+            </div>
+
+
+            <div class="rounded-2xl bg-slate-50 p-5">
+                <p class="text-xs font-bold uppercase tracking-wider text-slate-500">
+                    Location
+                </p>
+
+                <p class="mt-2 font-bold text-slate-900">
+                    {% if activity.location %}
+                        {{ activity.location }}
+                    {% else %}
+                        Not specified
+                    {% endif %}
+                </p>
+            </div>
+
+
+            <div class="rounded-2xl bg-slate-50 p-5">
+                <p class="text-xs font-bold uppercase tracking-wider text-slate-500">
+                    Start Date
+                </p>
+
+                <p class="mt-2 font-bold text-slate-900">
+                    {% if activity.start_date %}
+                        {{ activity.start_date|date:"d M Y" }}
+                    {% else %}
+                        Not specified
+                    {% endif %}
+                </p>
+            </div>
+
+
+            <div class="rounded-2xl bg-slate-50 p-5">
+                <p class="text-xs font-bold uppercase tracking-wider text-slate-500">
+                    Beneficiaries
+                </p>
+
+                <p class="mt-2 font-bold text-slate-900">
+                    {{ activity.beneficiaries }}+
+                </p>
+            </div>
+
+        </div>
+
+
+        <!-- Description -->
+        <div class="mx-auto mt-14 max-w-3xl">
+
+            <h2 class="text-2xl font-bold text-slate-900 sm:text-3xl">
+                About This Activity
+            </h2>
+
+            <div class="mt-6 whitespace-pre-line text-base leading-8 text-slate-600">
+                {{ activity.description }}
+            </div>
+
+        </div>
+
+
+        <!-- Dates -->
+        {% if activity.start_date or activity.end_date %}
+
+        <div class="mx-auto mt-12 max-w-3xl rounded-3xl border border-emerald-100 bg-emerald-50 p-7">
+
+            <h3 class="font-bold text-slate-900">
+                Project Timeline
+            </h3>
+
+            <div class="mt-4 flex flex-wrap gap-x-8 gap-y-3 text-sm text-slate-600">
+
+                {% if activity.start_date %}
+                    <span>
+                        <strong>Started:</strong>
+                        {{ activity.start_date|date:"d M Y" }}
+                    </span>
+                {% endif %}
+
+                {% if activity.end_date %}
+                    <span>
+                        <strong>Ended:</strong>
+                        {{ activity.end_date|date:"d M Y" }}
+                    </span>
+                {% endif %}
+
+            </div>
+
+        </div>
+
+        {% endif %}
+
+
+        <!-- CTA -->
+        <div class="mt-14 rounded-3xl bg-slate-950 p-8 text-center sm:p-10">
+
+            <h2 class="text-2xl font-bold text-white">
+                Need Support?
+            </h2>
+
+            <p class="mx-auto mt-3 max-w-2xl text-slate-300">
+                If you or your community need legal assistance or
+                human rights support, we are here to help.
+            </p>
+
+            <div class="mt-7">
+
+                <a
+                    href="{% url 'legal_aid:home' %}"
+                    class="inline-flex items-center justify-center rounded-xl bg-emerald-500 px-6 py-3 text-sm font-bold text-white transition hover:bg-emerald-400"
+                >
+                    Get Legal Help
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

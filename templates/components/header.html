@@ -1,0 +1,393 @@
+<header
+    id="site-header"
+    class="sticky top-0 z-50 border-b border-slate-200/80
+           bg-white/95 backdrop-blur-md"
+>
+
+    <!-- Main Navigation -->
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+
+        <div class="flex h-20 items-center justify-between">
+
+            <!-- Logo -->
+            <a
+                href="{% url 'core:home' %}"
+                class="group flex items-center gap-3"
+                aria-label="ASOK Home"
+            >
+
+                <!-- Logo Mark -->
+              
+<div class="flex items-center gap-3">
+
+    <!-- Real Logo -->
+    <div
+        class="flex h-11 w-11 items-center justify-center
+               overflow-hidden rounded-xl
+               transition duration-300
+               group-hover:scale-105"
+    >
+        <img
+            src="{% static 'images/logo.png' %}"
+            alt="ASOK Foundation Logo"
+            class="h-full w-full object-contain"
+        >
+    </div>
+
+    
+
+</div>
+
+            </a>
+
+
+            <!-- Desktop Navigation -->
+            <nav
+                class="hidden items-center gap-1 lg:flex"
+                aria-label="Primary Navigation"
+            >
+
+                <a
+                    href="{% url 'core:home' %}"
+                    class="rounded-lg px-3 py-2 text-sm font-medium
+                           text-slate-700 transition
+                           hover:bg-emerald-50
+                           hover:text-emerald-700"
+                >
+                    Home
+                </a>
+
+
+                <a
+                    href="#about"
+                    class="rounded-lg px-3 py-2 text-sm font-medium
+                           text-slate-700 transition
+                           hover:bg-emerald-50
+                           hover:text-emerald-700"
+                >
+                    About
+                </a>
+
+
+                <a
+                     href="{% url 'human_rights:home' %}"
+                    class="rounded-lg px-3 py-2 text-sm font-medium
+                           text-slate-700 transition
+                           hover:bg-emerald-50
+                           hover:text-emerald-700"
+                >
+                    Human Rights
+                </a>
+
+
+                <a
+                    href="{% url 'legal_aid:home' %}"
+                    class="rounded-lg px-3 py-2 text-sm font-medium
+                           text-slate-700 transition
+                           hover:bg-emerald-50
+                           hover:text-emerald-700"
+                >
+                    Legal Aid
+                </a>
+
+
+                <a
+                     href="{% url 'activities:list' %}"  class="rounded-lg px-3 py-2 text-sm font-medium
+                           text-slate-700 transition
+                           hover:bg-emerald-50
+                           hover:text-emerald-700">
+                   
+                
+                    Activities
+                </a>
+
+
+                <a
+                    href="{% url 'blog:list' %}"
+                    class="rounded-lg px-3 py-2 text-sm font-medium
+                           text-slate-700 transition
+                           hover:bg-emerald-50
+                           hover:text-emerald-700"
+                >
+                    Blog
+                </a>
+
+
+                <a
+                    href="{% url 'gallery:list' %}"
+                    class="rounded-lg px-3 py-2 text-sm font-medium
+                           text-slate-700 transition
+                           hover:bg-emerald-50
+                           hover:text-emerald-700"
+                >
+                    Gallery
+                </a>
+
+                <a href="#team" class="rounded-lg px-3 py-2 text-sm font-medium
+                           text-slate-700 transition
+                           hover:bg-emerald-50
+                           hover:text-emerald-700">
+                    
+    Our Team
+</a>
+
+
+                <a
+                    href="{% url 'contacts:home' %}"
+                    class="rounded-lg px-3 py-2 text-sm font-medium
+                           text-slate-700 transition
+                           hover:bg-emerald-50
+                           hover:text-emerald-700"
+                >
+                    Contact
+                </a>
+
+            </nav>
+
+
+            <!-- Desktop CTA -->
+            <div class="hidden items-center gap-3 lg:flex">
+
+                <a
+                    href="{% url 'legal_aid:home' %}"
+                    class="rounded-xl border border-emerald-600
+                           px-4 py-2.5 text-sm font-semibold
+                           text-emerald-700 transition
+                           hover:bg-emerald-50"
+                >
+                    Get Help
+                </a>
+
+                <a
+    href="{% url 'complaints:home' %}"
+   class="rounded-xl border border-emerald-600
+                           px-4 py-2.5 text-sm font-semibold
+                           text-emerald-700 transition
+                           hover:bg-emerald-50"
+>
+    Report Concern
+</a>
+
+
+                <a
+                    href="{% url 'donations:home' %}"
+                    class="rounded-xl bg-emerald-600
+                           px-5 py-2.5 text-sm font-semibold
+                           text-white shadow-lg
+                           shadow-emerald-600/20
+                           transition duration-300
+                           hover:-translate-y-0.5
+                           hover:bg-emerald-700
+                           hover:shadow-xl"
+                >
+                    Donate
+                </a>
+
+            </div>
+
+
+            <!-- Mobile Menu Button -->
+            <button
+                id="mobile-menu-button"
+                type="button"
+                class="inline-flex h-11 w-11 items-center
+                       justify-center rounded-xl
+                       border border-slate-200
+                       text-slate-700 transition
+                       hover:border-emerald-500
+                       hover:text-emerald-600
+                       lg:hidden"
+                aria-label="Open navigation menu"
+                aria-expanded="false"
+                aria-controls="mobile-menu"
+            >
+
+                <!-- Menu Icon -->
+                <svg
+                    id="menu-open-icon"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="2"
+                    stroke="currentColor"
+                    class="h-6 w-6"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M4 6h16M4 12h16M4 18h16"
+                    />
+                </svg>
+
+
+                <!-- Close Icon -->
+                <svg
+                    id="menu-close-icon"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="2"
+                    stroke="currentColor"
+                    class="hidden h-6 w-6"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M6 18 18 6M6 6l12 12"
+                    />
+                </svg>
+
+            </button>
+
+        </div>
+
+
+        <!-- Mobile Navigation -->
+        <div
+            id="mobile-menu"
+            class="hidden border-t border-slate-100 py-5 lg:hidden"
+        >
+
+            <nav
+                class="flex flex-col gap-1"
+                aria-label="Mobile Navigation"
+            >
+
+                <a
+                    href="{% url 'core:home' %}"
+                    class="mobile-nav-link rounded-lg px-4 py-3
+                           text-sm font-medium text-slate-700
+                           transition hover:bg-emerald-50
+                           hover:text-emerald-700"
+                >
+                    Home
+                </a>
+
+
+                <a
+                    href="#about"
+                    class="mobile-nav-link rounded-lg px-4 py-3
+                           text-sm font-medium text-slate-700
+                           transition hover:bg-emerald-50
+                           hover:text-emerald-700"
+                >
+                    About
+                </a>
+
+
+                <a
+                    href="{% url 'human_rights:home' %}"
+                    class="mobile-nav-link rounded-lg px-4 py-3
+                           text-sm font-medium text-slate-700
+                           transition hover:bg-emerald-50
+                           hover:text-emerald-700"
+                >
+                    Human Rights
+                </a>
+
+
+                <a
+                    href="{% url 'legal_aid:home' %}"
+                    class="mobile-nav-link rounded-lg px-4 py-3
+                           text-sm font-medium text-slate-700
+                           transition hover:bg-emerald-50
+                           hover:text-emerald-700"
+                >
+                    Legal Aid
+                </a>
+
+
+                <a
+                    href="{% url 'activities:list' %}"
+                    class="mobile-nav-link rounded-lg px-4 py-3
+                           text-sm font-medium text-slate-700
+                           transition hover:bg-emerald-50
+                           hover:text-emerald-700"
+                >
+                    Activities
+                </a>
+
+
+                <a
+                    href="{% url 'blog:list' %}"
+                    class="mobile-nav-link rounded-lg px-4 py-3
+                           text-sm font-medium text-slate-700
+                           transition hover:bg-emerald-50
+                           hover:text-emerald-700"
+                >
+                    Blog
+                </a>
+
+
+                <a
+                     href="{% url 'gallery:list' %}"
+                    class="mobile-nav-link rounded-lg px-4 py-3
+                           text-sm font-medium text-slate-700
+                           transition hover:bg-emerald-50
+                           hover:text-emerald-700"
+                >
+                    Gallery
+                </a>
+
+                <a href="#team" class="mobile-nav-link rounded-lg px-4 py-3
+                           text-sm font-medium text-slate-700
+                           transition hover:bg-emerald-50
+                           hover:text-emerald-700">
+    Our Team
+</a>
+
+
+                <a
+                    href="{% url 'contacts:home' %}"
+                    class="mobile-nav-link rounded-lg px-4 py-3
+                           text-sm font-medium text-slate-700
+                           transition hover:bg-emerald-50
+                           hover:text-emerald-700"
+                >
+                    Contact
+                </a>
+
+            </nav>
+
+
+            <!-- Mobile CTA -->
+            <div class="mt-4 grid grid-cols-2 gap-3">
+
+                <a
+                    href="{% url 'legal_aid:home' %}"
+                    class="mobile-nav-link rounded-xl border border-emerald-600
+                           px-4 py-3 text-center text-sm
+                           font-semibold text-emerald-700
+                           transition hover:bg-emerald-50"
+                >
+                    Get Help
+                </a>
+
+                <a
+    href="{% url 'complaints:home' %}"
+    class="mobile-nav-link rounded-xl border border-emerald-600
+                           px-4 py-3 text-center text-sm
+                           font-semibold text-emerald-700
+                           transition hover:bg-emerald-50"
+>
+    Report Concern
+</a>
+
+
+                <a
+                    href="{% url 'donations:home' %}"
+                    class="rounded-xl bg-emerald-600
+                           px-4 py-3 text-center text-sm
+                           font-semibold text-white
+                           transition hover:bg-emerald-700"
+                >
+                    Donate
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</header>

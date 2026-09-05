@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}Message Sent | ASOK Foundation{% endblock %}
+
+{% block content %}
+
+<section class="flex min-h-[75vh] items-center justify-center bg-slate-50 px-6 py-20">
+
+    <div class="w-full max-w-2xl text-center">
+
+        <div class="rounded-3xl bg-white p-8 shadow-xl ring-1 ring-slate-200 sm:p-12">
+
+            <div class="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-green-100">
+
+                <svg
+                    class="h-10 w-10 text-green-600"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M5 13l4 4L19 7"
+                    />
+                </svg>
+
+            </div>
+
+
+            <h1 class="mt-8 text-3xl font-bold text-slate-900 sm:text-4xl">
+                Message Sent Successfully
+            </h1>
+
+
+            <p class="mx-auto mt-4 max-w-xl leading-7 text-slate-600">
+                Thank you for contacting ASOK Foundation.
+                Your message has been received and our team will
+                get back to you as soon as possible.
+            </p>
+
+
+            <div class="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
+
+                <a
+                    href="/"
+                    class="rounded-xl bg-slate-950 px-6 py-3 text-sm font-semibold text-white transition hover:bg-slate-800"
+                >
+                    Back to Home
+                </a>
+
+                <a
+                    href="{% url 'contacts:home' %}"
+                    class="rounded-xl border border-slate-300 px-6 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
+                >
+                    Send Another Message
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Newsletter | ASOK Foundation
+{% endblock %}
+
+{% block meta_description %}
+    Subscribe to ASOK Foundation newsletter for human rights updates, legal awareness, activities and organizational news.
+{% endblock %}
+
+{% block content %}
+
+<section class="relative overflow-hidden bg-slate-950 py-20 text-white">
+
+    <div class="absolute inset-0 opacity-10">
+        <div class="absolute -right-20 -top-20 h-72 w-72 rounded-full bg-white blur-3xl"></div>
+        <div class="absolute -bottom-20 -left-20 h-72 w-72 rounded-full bg-white blur-3xl"></div>
+    </div>
+
+    <div class="relative mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
+
+        <span class="inline-flex rounded-full border border-white/20 px-4 py-2 text-sm font-medium text-white/80">
+            Stay Connected
+        </span>
+
+        <h1 class="mt-6 text-4xl font-bold tracking-tight sm:text-5xl">
+            Subscribe to Our Newsletter
+        </h1>
+
+        <p class="mx-auto mt-5 max-w-2xl text-lg leading-8 text-white/70">
+            Get the latest human rights updates, legal awareness,
+            activities, campaigns and news from ASOK Foundation.
+        </p>
+
+    </div>
+
+</section>
+
+
+<section class="bg-slate-50 py-16">
+
+    <div class="mx-auto max-w-2xl px-4 sm:px-6 lg:px-8">
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="mb-6 rounded-2xl border border-green-200 bg-green-50 p-4 text-green-800">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+
+        <div class="rounded-3xl bg-white p-6 shadow-xl ring-1 ring-slate-200 sm:p-10">
+
+            <div class="mb-8 text-center">
+
+                <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-900 text-white">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="h-7 w-7"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="1.8"
+                            d="M3 8l9 6 9-6M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                        />
+                    </svg>
+                </div>
+
+                <h2 class="mt-5 text-2xl font-bold text-slate-900">
+                    Join Our Mailing List
+                </h2>
+
+                <p class="mt-2 text-slate-600">
+                    Enter your email address to receive updates from ASOK Foundation.
+                </p>
+
+            </div>
+
+
+            <form method="post" class="space-y-6">
+
+                {% csrf_token %}
+
+                <div>
+
+                    <label
+                        for="{{ form.email.id_for_label }}"
+                        class="mb-2 block text-sm font-semibold text-slate-800"
+                    >
+                        {{ form.email.label }}
+                    </label>
+
+                    {{ form.email }}
+
+                    {% if form.email.errors %}
+                        <div class="mt-2 text-sm text-red-600">
+                            {{ form.email.errors }}
+                        </div>
+                    {% endif %}
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="w-full rounded-xl bg-slate-900 px-6 py-3.5 text-sm font-semibold text-white shadow-lg transition hover:-translate-y-0.5 hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:ring-offset-2"
+                >
+                    Subscribe to Newsletter
+                </button>
+
+            </form>
+
+
+            <p class="mt-6 text-center text-xs leading-5 text-slate-500">
+                We respect your privacy. You can unsubscribe from our
+                newsletter at any time.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

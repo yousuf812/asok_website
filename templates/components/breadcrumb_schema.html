@@ -1,0 +1,24 @@
+{% if breadcrumb_items %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+        {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "{{ request.scheme }}://{{ request.get_host }}{% url 'core:home' %}"
+        }
+        {% for item in breadcrumb_items %}
+        ,{
+            "@type": "ListItem",
+            "position": {{ forloop.counter|add:"1" }},
+            "name": "{{ item.name|escapejs }}",
+            "item": "{{ request.scheme }}://{{ request.get_host }}{{ item.url }}"
+        }
+        {% endfor %}
+    ]
+}
+</script>
+{% endif %}

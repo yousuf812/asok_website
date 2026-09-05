@@ -1,0 +1,413 @@
+{% extends "base.html" %}
+
+{% block title %}Donate | ASOK Foundation{% endblock %}
+
+{% block content %}
+
+<section class="bg-slate-950 py-20 text-white">
+    <div class="mx-auto max-w-7xl px-6 lg:px-8">
+
+        <div class="max-w-3xl">
+            <span class="inline-flex rounded-full border border-white/20 px-4 py-2 text-sm font-medium text-slate-300">
+                Support Our Mission
+            </span>
+
+            <h1 class="mt-6 text-4xl font-bold tracking-tight sm:text-5xl">
+                Your Support Can Make a Difference
+            </h1>
+
+            <p class="mt-6 text-lg leading-8 text-slate-300">
+                Your contribution helps us promote human rights, provide
+                legal assistance, raise awareness and support communities.
+            </p>
+        </div>
+
+    </div>
+</section>
+
+
+<section class="bg-slate-50 py-16">
+    <div class="mx-auto max-w-7xl px-6 lg:px-8">
+
+        <div class="grid gap-10 lg:grid-cols-3">
+
+            <!-- Information -->
+            <div class="lg:col-span-1">
+
+                <div class="rounded-3xl bg-slate-950 p-8 text-white shadow-xl">
+
+                    <h2 class="text-2xl font-bold">
+                        Why Donate?
+                    </h2>
+
+                    <p class="mt-4 leading-7 text-slate-300">
+                        Every contribution helps ASOK Foundation continue
+                        its work for justice, dignity and human rights.
+                    </p>
+
+                    <div class="mt-8 space-y-5">
+
+                        <div class="flex gap-4">
+                            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/10">
+                                ⚖️
+                            </div>
+
+                            <div>
+                                <h3 class="font-semibold">
+                                    Legal Aid
+                                </h3>
+
+                                <p class="mt-1 text-sm text-slate-400">
+                                    Support people who need access to legal assistance.
+                                </p>
+                            </div>
+                        </div>
+
+
+                        <div class="flex gap-4">
+                            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/10">
+                                🛡️
+                            </div>
+
+                            <div>
+                                <h3 class="font-semibold">
+                                    Human Rights
+                                </h3>
+
+                                <p class="mt-1 text-sm text-slate-400">
+                                    Help us promote and protect human rights.
+                                </p>
+                            </div>
+                        </div>
+
+
+                        <div class="flex gap-4">
+                            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/10">
+                                🤝
+                            </div>
+
+                            <div>
+                                <h3 class="font-semibold">
+                                    Community Support
+                                </h3>
+
+                                <p class="mt-1 text-sm text-slate-400">
+                                    Support community-based programs and initiatives.
+                                </p>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Donation Form -->
+            <div class="lg:col-span-2">
+
+                <div class="rounded-3xl bg-white p-6 shadow-xl ring-1 ring-slate-200 sm:p-10">
+
+                    <div class="mb-8">
+                        <h2 class="text-2xl font-bold text-slate-900">
+                            Make a Donation
+                        </h2>
+
+                        <p class="mt-2 text-sm text-slate-500">
+                            Fill in the information below to submit your donation.
+                        </p>
+                    </div>
+
+
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="mb-6 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+
+
+                    {% if form.non_field_errors %}
+                        <div class="mb-6 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+                            {{ form.non_field_errors }}
+                        </div>
+                    {% endif %}
+
+
+                    <form method="post" class="space-y-6">
+
+                        {% csrf_token %}
+
+
+                        <div class="grid gap-6 md:grid-cols-2">
+
+                            <!-- Donor Name -->
+                            <div>
+                                <label class="mb-2 block text-sm font-semibold text-slate-700">
+                                    Donor Name
+                                </label>
+
+                                {{ form.donor_name }}
+
+                                {% for error in form.donor_name.errors %}
+                                    <p class="mt-2 text-sm text-red-600">
+                                        {{ error }}
+                                    </p>
+                                {% endfor %}
+                            </div>
+
+
+                            <!-- Email -->
+                            <div>
+                                <label class="mb-2 block text-sm font-semibold text-slate-700">
+                                    Email Address
+                                </label>
+
+                                {{ form.email }}
+
+                                {% for error in form.email.errors %}
+                                    <p class="mt-2 text-sm text-red-600">
+                                        {{ error }}
+                                    </p>
+                                {% endfor %}
+                            </div>
+
+
+                            <!-- Phone -->
+                            <div>
+                                <label class="mb-2 block text-sm font-semibold text-slate-700">
+                                    Phone Number
+                                </label>
+
+                                {{ form.phone }}
+
+                                {% for error in form.phone.errors %}
+                                    <p class="mt-2 text-sm text-red-600">
+                                        {{ error }}
+                                    </p>
+                                {% endfor %}
+                            </div>
+
+
+                            <!-- Amount -->
+                            <div>
+                                <label class="mb-2 block text-sm font-semibold text-slate-700">
+                                    Donation Amount
+                                </label>
+
+                                {{ form.amount }}
+
+                                {% for error in form.amount.errors %}
+                                    <p class="mt-2 text-sm text-red-600">
+                                        {{ error }}
+                                    </p>
+                                {% endfor %}
+                            </div>
+
+
+                            <!-- Purpose -->
+                            <div>
+                                <label class="mb-2 block text-sm font-semibold text-slate-700">
+                                    Donation Purpose
+                                </label>
+
+                                {{ form.purpose }}
+
+                                {% for error in form.purpose.errors %}
+                                    <p class="mt-2 text-sm text-red-600">
+                                        {{ error }}
+                                    </p>
+                                {% endfor %}
+                            </div>
+
+
+                            <!-- Payment Method -->
+                            <div>
+                                <label class="mb-2 block text-sm font-semibold text-slate-700">
+                                    Payment Method
+                                </label>
+
+                                {{ form.payment_method }}
+
+                                {% for error in form.payment_method.errors %}
+                                    <p class="mt-2 text-sm text-red-600">
+                                        {{ error }}
+                                    </p>
+                                {% endfor %}
+                            </div>
+
+                        </div>
+
+                        <!-- Payment Instructions -->
+
+                        {{ form.payment_method }}
+<div
+    id="payment-instructions"
+    class="hidden rounded-2xl border border-slate-200 bg-slate-50 p-5"
+>
+    <h3 class="font-bold text-slate-900">
+        Payment Instructions
+    </h3>
+
+    <div id="instruction-bank" class="mt-4 hidden">
+        <p class="text-sm leading-6 text-slate-600">
+            Please transfer your donation to the ASOK Foundation bank account.
+            After completing the transfer, enter the transaction/reference
+            number below.
+        </p>
+
+        <div class="mt-4 rounded-xl bg-white p-4 ring-1 ring-slate-200">
+            <p class="text-sm text-slate-500">Bank Account</p>
+            <p class="mt-1 font-semibold text-slate-900">
+                ASOK Foundation
+            </p>
+
+            <p class="mt-3 text-sm text-slate-500">Account Number</p>
+            <p class="mt-1 font-semibold text-slate-900">
+                XXXX-XXXX-XXXX
+            </p>
+
+            <p class="mt-3 text-sm text-slate-500">Bank</p>
+            <p class="mt-1 font-semibold text-slate-900">
+                Your Bank Name
+            </p>
+        </div>
+    </div>
+
+
+    <div id="instruction-bkash" class="mt-4 hidden">
+        <p class="text-sm leading-6 text-slate-600">
+            Send your donation through bKash using the official ASOK
+            Foundation number. After payment, enter the transaction ID.
+        </p>
+
+        <div class="mt-4 rounded-xl bg-white p-4 ring-1 ring-slate-200">
+            <p class="text-sm text-slate-500">
+                bKash Number
+            </p>
+
+            <p class="mt-1 text-lg font-bold text-slate-900">
+                01XXXXXXXXX
+            </p>
+
+            <p class="mt-2 text-xs text-slate-500">
+                Please replace this placeholder with your official
+                organization payment number.
+            </p>
+        </div>
+    </div>
+
+
+    <div id="instruction-nagad" class="mt-4 hidden">
+        <p class="text-sm leading-6 text-slate-600">
+            Send your donation through Nagad using the official ASOK
+            Foundation number. After payment, enter the transaction ID.
+        </p>
+
+        <div class="mt-4 rounded-xl bg-white p-4 ring-1 ring-slate-200">
+            <p class="text-sm text-slate-500">
+                Nagad Number
+            </p>
+
+            <p class="mt-1 text-lg font-bold text-slate-900">
+                01XXXXXXXXX
+            </p>
+
+            <p class="mt-2 text-xs text-slate-500">
+                Please replace this placeholder with your official
+                organization payment number.
+            </p>
+        </div>
+    </div>
+
+
+    <div id="instruction-cash" class="mt-4 hidden">
+        <p class="text-sm leading-6 text-slate-600">
+            For cash donations, please contact the ASOK Foundation team
+            to arrange the donation.
+        </p>
+    </div>
+
+
+    <div id="instruction-other" class="mt-4 hidden">
+        <p class="text-sm leading-6 text-slate-600">
+            Please contact our team for alternative donation methods.
+        </p>
+    </div>
+</div>
+
+
+
+
+                        <!-- Transaction ID -->
+                        <div>
+                            <label class="mb-2 block text-sm font-semibold text-slate-700">
+                                Transaction ID
+                                <span class="font-normal text-slate-400">
+                                    (Optional)
+                                </span>
+                            </label>
+
+                            {{ form.transaction_id }}
+
+                            <p class="mt-2 text-xs text-slate-500">
+                                Enter your transaction ID if you have already completed the payment.
+                            </p>
+
+                            {% for error in form.transaction_id.errors %}
+                                <p class="mt-2 text-sm text-red-600">
+                                    {{ error }}
+                                </p>
+                            {% endfor %}
+                        </div>
+
+
+                        <!-- Message -->
+                        <div>
+                            <label class="mb-2 block text-sm font-semibold text-slate-700">
+                                Message
+                                <span class="font-normal text-slate-400">
+                                    (Optional)
+                                </span>
+                            </label>
+
+                            {{ form.message }}
+
+                            {% for error in form.message.errors %}
+                                <p class="mt-2 text-sm text-red-600">
+                                    {{ error }}
+                                </p>
+                            {% endfor %}
+                        </div>
+
+
+                        <!-- Submit -->
+                        <div class="border-t border-slate-200 pt-6">
+
+                            <button
+                                type="submit"
+                                class="w-full rounded-xl bg-slate-950 px-6 py-4 text-sm font-bold text-white transition hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:ring-offset-2"
+                            >
+                                Submit Donation
+                            </button>
+
+                            <p class="mt-3 text-center text-xs text-slate-500">
+                                Your donation information will be reviewed by our team.
+                            </p>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}
