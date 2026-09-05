@@ -14,21 +14,14 @@ def activity_list(request):
     )
 
     context = {
-    "activity": activity,
-    "breadcrumb_items": [
-        {
-            "name": "Activities",
-            "url": reverse("activities:list"),
-        },
-        {
-            "name": activity.title,
-            "url": reverse(
-                "activities:detail",
-                kwargs={"slug": activity.slug},
-            ),
-        },
-    ],
-}
+        "activities": activities,
+        "breadcrumb_items": [
+            {
+                "name": "Activities",
+                "url": reverse("activities:list"),
+            },
+        ],
+    }
 
     return render(
         request,

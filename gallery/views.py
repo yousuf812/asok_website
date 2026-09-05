@@ -24,28 +24,22 @@ def gallery_list(request):
         )
 
     context = {
-    "image": image,
-    "breadcrumb_items": [
-        {
-            "name": "Gallery",
-            "url": reverse("gallery:list"),
-        },
-        {
-            "name": image.title,
-            "url": reverse(
-                "gallery:detail",
-                kwargs={"slug": image.slug},
-            ),
-        },
-    ],
-}
+        "images": images,
+        "categories": categories,
+        "selected_category": selected_category,
+        "breadcrumb_items": [
+            {
+                "name": "Gallery",
+                "url": reverse("gallery:list"),
+            },
+        ],
+    }
 
     return render(
         request,
         "gallery/list.html",
         context
     )
-
 
 def gallery_detail(request, slug):
 
