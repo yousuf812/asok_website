@@ -1,0 +1,49 @@
+[
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1500000$vNF7LoSSavhsvlhrNVp4xc$d0EJJb5J9YYuqYa/yqDCiQK14oKzjLZtOiJtjy5+CHA=",
+    "last_login": "2026-09-11T15:08:37.017Z",
+    "is_superuser": true,
+    "username": "admin",
+    "first_name": "",
+    "last_name": "",
+    "email": "admin@gmail.com",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2026-09-02T16:19:27.605Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "c3r6dg3o3jkytdbu3v8txurovpt2b5w4",
+  "fields": {
+    "session_data": ".eJxdjEsOgjAUAO_y1tq0pR_KTkzcGOLCA5Dy-hBUiimwMt7dkLDR7cxk3jDQ0FCauv5VJ2opUUSCAg7Xy3lf7dWRl-bEBeyg9svc1ctEqe4DFPDHGo8PiqsIdx9vI8Mxzqlv2JqwzU6sGgM9y639GXR-6qAAq21G0iFq01ifZw4xQzLCySARuXJcC2q1R9mGzHlldJ5b6wUpmTslAny-m-dESA:1x52rl:O0wGlHPFN7VMcVLbVIcg2iGdPAp_hKo994GIfmK4ypA",
+    "expire_date": "2026-09-11T16:08:37.029Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "o4tbhoroic4myk5o2rgb5md6ehvz7oy8",
+  "fields": {
+    "session_data": ".eJxVjMsKwjAQAP9lzxKad9Kjd78hbDZbU5UUmvYk_rsUetDrzDBvSLhvNe2d1zQXGEHC5ZdlpCe3Q5QHtvsiaGnbOmdxJOK0XdyWwq_r2f4NKvYKI3jrNatIZF32GHQk0sRORlUU0WDiYCVPFklNRUc0zobgPUo2KkQjC3y-3bc3hQ:1x4gCo:Nkz5pFElapo2evy0u2PaMrnmEbU_SIoC3yRl8aMfsco",
+    "expire_date": "2026-09-10T15:56:50.706Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "quqm69qnn5fxgertlkfrfpdv7iaoojjj",
+  "fields": {
+    "session_data": ".eJxVj8tugzAQRf9l1oCMMWCzaxpWUdRFPwCNZ4ZAG0xkYBX136s8Fsn2nqMj3St0uK1Dty0Su5GhgRyS180j_Uq4Af7BcJozmsMaR5_dlOxJl-w4s5x3T_ctMOAyQAPaSFkzeUuOpGCjtDUlUZVTzdSLeOsKU2DVOySuUNDUhnNNSquyZOUggUkmL3EZxksXpZcogQQa-Pj-OqTHVFtrtGv3kADN0-WMY1gfj-7CZ1q1uzo3ag9__9Y9Ts8:1x2TkX:Cp0_dOZ2GWDHIl8qE7mnCb8U_HwN0OSaj8nPFuzrjdY",
+    "expire_date": "2026-09-18T13:14:33.769Z"
+  }
+},
+{
+  "model": "core.organizationinfo",
+  "pk": 1,
+  "fields": {
+    "title": "About ASOK",
+    "short_description": "ASOK is committed to promoting human rights, justice, equality and dignity for every person.",
+    "full_description": 

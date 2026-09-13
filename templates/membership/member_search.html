@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block title %}
+Member ID Verification | ASOK Foundation
+{% endblock %}
+
+{% block content %}
+
+<section class="min-h-[70vh] bg-slate-50 px-4 py-16 sm:px-6 lg:px-8">
+
+    <div class="mx-auto max-w-2xl">
+
+        <!-- Heading -->
+
+        <div class="text-center">
+
+            <div
+                class="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-emerald-950 text-3xl text-white shadow-lg"
+            >
+                🔎
+            </div>
+
+            <h1 class="mt-6 text-3xl font-black text-slate-900 sm:text-4xl">
+                Verify Member
+            </h1>
+
+            <p class="mx-auto mt-3 max-w-xl text-sm leading-6 text-slate-600 sm:text-base">
+                Enter an ASOK Foundation Member ID to verify
+                membership status.
+            </p>
+
+        </div>
+
+
+        <!-- Search Card -->
+
+        <div
+            class="mt-10 rounded-3xl border border-slate-200 bg-white p-6 shadow-xl sm:p-8"
+        >
+
+            <form
+                method="get"
+                action="{% url 'membership:member_search' %}"
+                class="space-y-5"
+            >
+
+                <div>
+
+                    <label
+                        for="member_id"
+                        class="mb-2 block text-sm font-bold text-slate-800"
+                    >
+                        Member ID
+                    </label>
+
+                    <input
+                        type="text"
+                        id="member_id"
+                        name="member_id"
+                        value="{{ member_id|default:'' }}"
+                        placeholder="ASOK-000000001"
+                        autocomplete="off"
+                        required
+                        class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm font-semibold text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-emerald-700 focus:ring-4 focus:ring-emerald-100"
+                    >
+
+                </div>
+
+
+                {% if error %}
+
+                    <div
+                        class="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-700"
+                    >
+                        {{ error }}
+                    </div>
+
+                {% endif %}
+
+
+                <button
+                    type="submit"
+                    class="flex w-full items-center justify-center rounded-xl bg-emerald-950 px-6 py-3.5 text-sm font-black text-white shadow-lg transition hover:bg-emerald-900"
+                >
+                    🔎 Verify Membership
+                </button>
+
+            </form>
+
+
+            <!-- Example -->
+
+            <div class="mt-6 rounded-xl bg-emerald-50 px-4 py-3 text-center">
+
+                <p class="text-xs text-emerald-800">
+                    Example:
+                    <strong>ASOK-000000001</strong>
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

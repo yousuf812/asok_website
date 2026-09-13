@@ -7,6 +7,7 @@ from activities.models import Activity, ImpactStatistic
 from blog.models import BlogPost
 from gallery.models import GalleryImage
 from django.http import HttpResponse
+from projects.models import Project
 
 
 def home(request):
@@ -56,6 +57,14 @@ def home(request):
         "-created_at"
     )[:3]
 
+
+    latest_projects = Project.objects.filter(
+    is_active=True
+).order_by(
+    "-published_date",
+    "-created_at",
+)[:3]
+
     featured_gallery = GalleryImage.objects.filter(
     is_active=True,
     is_featured=True,
@@ -76,6 +85,7 @@ def home(request):
         "impact_stats": impact_stats,
         "latest_posts": latest_posts,
         "featured_gallery": featured_gallery,
+        "latest_projects": latest_projects,
     }
 
     return render(
@@ -104,3 +114,4 @@ Sitemap: /sitemap.xml
         content,
         content_type="text/plain"
     )
+

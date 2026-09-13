@@ -33,6 +33,8 @@ urlpatterns = [
      path("donate/", include("donations.urls")),
       path("contact/", include("contacts.urls")),
       path("newsletter/",include("newsletter.urls")),
+      path( "projects/", include("projects.urls"),
+),
       path(
     "sitemap.xml",
     sitemap,

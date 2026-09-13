@@ -18,4 +18,22 @@ urlpatterns = [
         views.membership_success,
         name="success",
     ),
+
+    path(
+        "verify/",
+        views.member_search,
+        name="member_search",
+    ),
+
+    path(
+        "verify/<str:member_id>/",
+        views.member_verify,
+        name="verify",
+    ),
+
+    path(
+        "card/<str:member_id>/",
+        views.member_card,
+        name="card",
+    ),
 ]

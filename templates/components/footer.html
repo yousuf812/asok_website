@@ -25,7 +25,7 @@
                group-hover:scale-105"
     >
         <img
-            src="{% static 'images/logo.png' %}"
+            src="{% static 'images/asoklogo.png' %}"
             alt="ASOK Foundation Logo"
             class="h-full w-full object-contain"
         >
@@ -320,6 +320,39 @@
                         </div>
 
                     </div>
+
+     <!-- Facebook -->
+        <div class="flex gap-3">
+
+            <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white/5 text-white/60 transition group-hover:bg-blue-600">
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    class="h-5 w-5"
+                >
+                    <path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073c0 6.019 4.388 11.009 10.125 11.927v-8.438H7.078v-3.489h3.047V9.412c0-3.017 1.792-4.687 4.533-4.687 1.313 0 2.686.236 2.686.236v2.973h-1.515c-1.491 0-1.954.93-1.954 1.885v2.254h3.328l-.532 3.489h-2.796V24C19.612 23.082 24 18.092 24 12.073z"/>
+                </svg>
+            </div>
+
+            <div>
+                <p class="text-xs text-white/40">
+                    Facebook
+                </p>
+
+                {% if organization and organization.facebook_url %}
+                    <a
+                        href="{{ organization.facebook_url }}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="mt-1 block text-sm text-white/70 transition hover:text-white"
+                    >
+                        Follow us on Facebook →
+                    </a>
+                {% endif %}
+            </div>
+
+        </div>
 
 
                     <!-- Location -->

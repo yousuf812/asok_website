@@ -1,0 +1,648 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+Member ID Card | {{ member.member_id }}
+{% endblock %}
+
+{% block content %}
+
+<style>
+
+    /* =========================================
+       ID CARD BASE
+    ========================================= */
+
+    .id-card {
+        width: 100%;
+        max-width: 520px;
+        margin-left: auto;
+        margin-right: auto;
+
+        /* Do NOT force height */
+        height: auto;
+        min-height: 0;
+
+        overflow: hidden;
+    }
+
+
+    /* =========================================
+       PRINT
+    ========================================= */
+
+    @media print {
+
+        @page {
+            size: A4 landscape;
+            margin: 8mm;
+        }
+
+        html,
+        body {
+            background: white !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+
+
+        /* Website header/footer hide during printing */
+        body > header,
+        body > footer,
+        nav {
+            display: none !important;
+        }
+
+
+        .no-print {
+            display: none !important;
+        }
+
+
+        .card-page {
+            min-height: auto !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            background: white !important;
+        }
+
+
+        .print-heading {
+            display: none !important;
+        }
+
+
+        /* Two cards side by side */
+        .cards-wrapper {
+            display: flex !important;
+            flex-direction: row !important;
+            justify-content: center !important;
+            align-items: flex-start !important;
+            gap: 8mm !important;
+
+            width: 100% !important;
+        }
+
+
+        /* Actual ID-card print size */
+        .id-card {
+            width: 86mm !important;
+            max-width: 86mm !important;
+
+            /*
+                IMPORTANT:
+                Do not use fixed height.
+                Content will determine the height.
+            */
+
+            height: auto !important;
+            min-height: 54mm !important;
+
+            margin: 0 !important;
+
+            border-radius: 4mm !important;
+
+            box-shadow: none !important;
+
+            overflow: hidden !important;
+
+            break-inside: avoid !important;
+            page-break-inside: avoid !important;
+        }
+
+
+        /* Keep logo visible */
+        .id-card img {
+            print-color-adjust: exact;
+            -webkit-print-color-adjust: exact;
+        }
+
+
+        /* Keep backgrounds when printing */
+        .id-card,
+        .id-card * {
+            print-color-adjust: exact;
+            -webkit-print-color-adjust: exact;
+        }
+
+    }
+
+</style>
+
+
+<section class="card-page min-h-screen bg-slate-100 px-4 py-10 sm:px-6 lg:px-8">
+
+    <div class="mx-auto max-w-6xl">
+
+
+        <!-- =========================================
+             PAGE HEADING
+        ========================================= -->
+
+        <div class="print-heading mb-8 text-center">
+
+            <h1 class="text-2xl font-extrabold text-slate-900 sm:text-3xl">
+                ASOK Foundation Member ID Card
+            </h1>
+
+            <p class="mt-2 text-sm text-slate-600">
+                Digital Membership Card
+            </p>
+
+        </div>
+
+
+        <!-- =========================================
+             FRONT + BACK
+        ========================================= -->
+
+        <div class="cards-wrapper grid gap-8 lg:grid-cols-2">
+
+
+            <!-- =====================================================
+                 FRONT CARD
+            ====================================================== -->
+
+            <div
+    class="id-card mx-auto w-full max-w-[520px] overflow-hidden rounded-[24px] bg-white shadow-2xl"
+>
+
+                <!-- HEADER -->
+                <div class="relative bg-emerald-950 px-5 py-4 text-white">
+
+                    <div class="flex items-center gap-3">
+
+                        <!-- ASOK LOGO -->
+                        <div
+                            class="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-white p-1 shadow-md"
+                        >
+
+                            <img
+                                src="{% static 'images/asoklogo.png' %}"
+                                alt="ASOK Foundation Logo"
+                                class="h-12 w-12 object-contain"
+                            >
+
+                        </div>
+
+
+                        <!-- ORGANIZATION -->
+                        <div class="min-w-0">
+
+                            <h2 class="truncate text-lg font-black tracking-wide sm:text-xl">
+                                ASOK FOUNDATION
+                            </h2>
+
+                            <p class="text-xs font-bold text-yellow-300 sm:text-sm">
+                                International Human Rights
+                            </p>
+
+                            <p class="mt-0.5 text-[9px] text-emerald-100 sm:text-[10px]">
+                                Human Rights & Community Development
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- YELLOW LINE -->
+                <div class="h-1.5 bg-yellow-400"></div>
+
+
+                <!-- MAIN FRONT -->
+                <div class="flex flex-col bg-white">
+
+
+                    <!-- PHOTO + NAME -->
+                    <div class="px-5 pt-5 text-center">
+
+                        <!-- MEMBER PHOTO -->
+
+                        <div
+                            class="mx-auto h-28 w-28 overflow-hidden rounded-full border-[5px] border-emerald-900 bg-slate-100 shadow-lg sm:h-32 sm:w-32"
+                        >
+
+                            {% if member.application.photo %}
+
+                                <img
+                                    src="{{ member.application.photo.url }}"
+                                    alt="{{ member.application.full_name }}"
+                                    class="h-full w-full object-cover"
+                                >
+
+                            {% else %}
+
+                                <div
+                                    class="flex h-full w-full items-center justify-center text-xs font-semibold text-slate-400"
+                                >
+                                    No Photo
+                                </div>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- NAME -->
+
+                        <h3
+                            class="mt-3 truncate text-xl font-black text-emerald-950 sm:text-2xl"
+                        >
+                            {{ member.application.full_name }}
+                        </h3>
+
+
+                        <!-- DESIGNATION -->
+
+                        <p class="mt-1 text-sm font-bold text-emerald-700">
+
+                            {% if promotion %}
+                                {{ promotion.designation }}
+                            {% else %}
+                                Member
+                            {% endif %}
+
+                        </p>
+
+                    </div>
+
+
+                    <!-- =========================================
+                         INFORMATION AREA
+                    ========================================== -->
+
+                    <div class="relative mt-4 overflow-hidden bg-emerald-950 px-5 py-4 text-white">
+
+
+                        <!-- INFORMATION -->
+
+                        <div class="space-y-2.5">
+
+
+                            <!-- MEMBER ID -->
+
+                            <div class="flex items-center gap-3">
+
+                                <span class="w-24 shrink-0 text-xs font-semibold text-emerald-200">
+                                    Member ID
+                                </span>
+
+                                <span class="text-xs font-extrabold sm:text-sm">
+                                    : {{ member.member_id }}
+                                </span>
+
+                            </div>
+
+
+                            <!-- JOIN DATE -->
+
+                            <div class="flex items-center gap-3">
+
+                                <span class="w-24 shrink-0 text-xs font-semibold text-emerald-200">
+                                    Join Date
+                                </span>
+
+                                <span class="text-xs font-bold sm:text-sm">
+
+                                    :
+
+                                    {% if member.activation_date %}
+                                        {{ member.activation_date|date:"d M Y" }}
+                                    {% else %}
+                                        Pending
+                                    {% endif %}
+
+                                </span>
+
+                            </div>
+
+
+                            <!-- MEMBERSHIP -->
+
+                            <div class="flex items-center gap-3">
+
+                                <span class="w-24 shrink-0 text-xs font-semibold text-emerald-200">
+                                    Membership
+                                </span>
+
+                                <span class="text-xs font-bold sm:text-sm">
+                                    : {{ member.application.get_membership_type_display }}
+                                </span>
+
+                            </div>
+
+
+                            <!-- STATUS -->
+
+                            <div class="flex items-center gap-3">
+
+                                <span class="w-24 shrink-0 text-xs font-semibold text-emerald-200">
+                                    Status
+                                </span>
+
+                                <span class="text-xs font-bold">
+
+                                    :
+
+                                    {% if member.status == "active" %}
+
+                                        <span
+                                            class="ml-1 inline-flex rounded-full bg-lime-400 px-3 py-1 text-[10px] font-black text-emerald-950"
+                                        >
+                                            ACTIVE
+                                        </span>
+
+                                    {% else %}
+
+                                        <span
+                                            class="ml-1 inline-flex rounded-full bg-red-400 px-3 py-1 text-[10px] font-black text-red-950"
+                                        >
+                                            INACTIVE
+                                        </span>
+
+                                    {% endif %}
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- =====================================
+                             FRONT QR
+                        ====================================== -->
+
+                        <div class="absolute bottom-4 right-4 hidden sm:block">
+
+                            <div class="rounded-lg bg-white p-1.5 shadow-lg">
+
+                                <img
+                                    src="data:image/png;base64,{{ qr_code }}"
+                                    alt="Membership QR Code"
+                                    class="h-16 w-16"
+                                >
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+
+                    <!-- =========================================
+                         YELLOW BOTTOM
+                    ========================================== -->
+
+                    <div class="relative h-8 overflow-hidden bg-yellow-400">
+
+                        <div
+                            class="absolute -bottom-7 -right-8 h-16 w-72 rotate-[-7deg] rounded-full bg-emerald-950"
+                        ></div>
+
+                        <div
+                            class="absolute -bottom-9 -right-16 h-16 w-72 rotate-[-7deg] rounded-full bg-yellow-400"
+                        ></div>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =====================================================
+                 BACK CARD
+            ====================================================== -->
+
+            <div
+                class="id-card mx-auto flex w-full max-w-[520px] flex-col overflow-hidden rounded-[24px] bg-white shadow-2xl"
+            >
+
+
+                <!-- BACK HEADER -->
+
+                <div class="bg-emerald-950 px-5 py-4 text-white">
+
+                    <div class="flex items-center gap-3">
+
+
+                        <!-- LOGO -->
+
+                        <div
+                            class="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-white p-1 shadow-md"
+                        >
+
+                            <img
+                                src="{% static 'images/asoklogo.png' %}"
+                                alt="ASOK Foundation Logo"
+                                class="h-12 w-12 object-contain"
+                            >
+
+                        </div>
+
+
+                        <div>
+
+                            <h2 class="text-lg font-black tracking-wide sm:text-xl">
+                                ASOK FOUNDATION
+                            </h2>
+
+                            <p class="text-xs font-bold text-yellow-300 sm:text-sm">
+                                International Human Rights
+                            </p>
+
+                            <p class="mt-0.5 text-[9px] text-emerald-100 sm:text-[10px]">
+                                Human Rights & Community Development
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- YELLOW LINE -->
+
+                <div class="h-1.5 bg-yellow-400"></div>
+
+
+                <!-- BACK BODY -->
+
+                <div class="flex flex-1 flex-col bg-white px-5 py-5">
+
+
+                    <!-- TITLE -->
+
+                    <div class="text-center">
+
+                        <h3 class="text-xl font-black text-emerald-950">
+                            Membership Verification
+                        </h3>
+
+                        <p class="mt-1 text-xs leading-5 text-slate-600">
+                            Scan the QR code below to verify
+                            this membership.
+                        </p>
+
+                    </div>
+
+
+                    <!-- QR CODE -->
+
+                    <div
+                        class="mx-auto mt-4 rounded-xl border-4 border-emerald-900 bg-white p-2 shadow-md"
+                    >
+
+                        <img
+                            src="data:image/png;base64,{{ qr_code }}"
+                            alt="Member verification QR code"
+                            class="h-32 w-32"
+                        >
+
+                    </div>
+
+
+                    <!-- MEMBER ID -->
+
+                    <div class="mt-3 text-center">
+
+                        <p class="text-[9px] font-semibold uppercase tracking-[0.2em] text-slate-500">
+                            Member ID
+                        </p>
+
+                        <p class="mt-0.5 text-lg font-black text-emerald-950">
+                            {{ member.member_id }}
+                        </p>
+
+                    </div>
+
+
+                    <!-- VERIFICATION MESSAGE -->
+
+                    <div
+                        class="mt-3 rounded-xl border border-emerald-100 bg-emerald-50 px-4 py-2.5 text-center"
+                    >
+
+                        <p class="text-[10px] leading-4 text-emerald-950">
+                            This card is officially issued by
+                            <strong>ASOK Foundation</strong>.
+                            Membership validity can be verified
+                            through the official verification page.
+                        </p>
+
+                    </div>
+
+
+                    <!-- ORGANIZATION INFORMATION -->
+
+                    <div class="mt-3 border-t border-slate-200 pt-3 text-center">
+
+                        <p class="text-xs font-black text-emerald-950">
+                            ASOK FOUNDATION
+                        </p>
+
+
+                        {% if organization %}
+
+                            {% if organization.address %}
+
+                                <p class="mt-1 text-[9px] text-slate-600">
+                                    {{ organization.address }}
+                                </p>
+
+                            {% endif %}
+
+
+                            {% if organization.email %}
+
+                                <p class="mt-0.5 text-[9px] text-slate-600">
+                                    {{ organization.email }}
+                                </p>
+
+                            {% endif %}
+
+
+                            {% if organization.phone %}
+
+                                <p class="mt-0.5 text-[9px] text-slate-600">
+                                    {{ organization.phone }}
+                                </p>
+
+                            {% endif %}
+
+                        {% endif %}
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- =========================================
+                     BACK FOOTER
+                ========================================== -->
+
+                <div class="relative h-8 overflow-hidden bg-yellow-400">
+
+                    <div
+                        class="absolute -bottom-7 -left-8 h-16 w-72 rotate-[7deg] rounded-full bg-emerald-950"
+                    ></div>
+
+                    <div
+                        class="absolute -bottom-9 -left-16 h-16 w-72 rotate-[7deg] rounded-full bg-yellow-400"
+                    ></div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =========================================
+             ACTION BUTTONS
+        ========================================== -->
+
+        <div class="no-print mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+
+
+            <!-- VERIFY -->
+
+            <a
+                href="{% url 'membership:verify' member.member_id %}"
+                class="inline-flex w-full items-center justify-center rounded-xl bg-emerald-950 px-6 py-3 text-sm font-bold text-white shadow-lg transition hover:bg-emerald-900 sm:w-auto"
+            >
+                ✓ Verify Membership
+            </a>
+
+
+            <!-- PRINT -->
+
+            <button
+                type="button"
+                onclick="window.print()"
+                class="inline-flex w-full items-center justify-center rounded-xl bg-yellow-400 px-6 py-3 text-sm font-black text-emerald-950 shadow-lg transition hover:bg-yellow-300 sm:w-auto"
+            >
+                🖨 Print ID Card
+            </button>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+
+{% endblock %}

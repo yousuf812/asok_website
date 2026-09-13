@@ -186,7 +186,11 @@
                 {% endif %}
 
 
-                <form method="post" class="space-y-6">
+                <form
+    method="post"
+    enctype="multipart/form-data"
+    class="space-y-6"
+>
 
                     {% csrf_token %}
 
@@ -310,6 +314,115 @@
                             </p>
                         {% endfor %}
                     </div>
+
+                    <!-- Identity Information -->
+<div class="rounded-2xl border border-slate-200 bg-slate-50 p-5 sm:p-6">
+
+    <div class="mb-5">
+
+        <h3 class="text-base font-bold text-slate-900">
+            Identity Information
+        </h3>
+
+        <p class="mt-1 text-sm leading-6 text-slate-500">
+            Please provide either your NID number or Birth Registration number.
+            A recent photo is also required.
+        </p>
+
+    </div>
+
+
+    <!-- NID + Birth Registration -->
+    <div class="grid gap-6 sm:grid-cols-2">
+
+        <!-- NID -->
+        <div>
+
+            <label
+                for="{{ form.nid_number.id_for_label }}"
+                class="form-label"
+            >
+                NID Number
+            </label>
+
+            {{ form.nid_number }}
+
+            {% for error in form.nid_number.errors %}
+                <p class="mt-1 text-xs text-red-600">
+                    {{ error }}
+                </p>
+            {% endfor %}
+
+        </div>
+
+
+        <!-- Birth Registration -->
+        <div>
+
+            <label
+                for="{{ form.birth_registration_number.id_for_label }}"
+                class="form-label"
+            >
+                Birth Registration Number
+            </label>
+
+            {{ form.birth_registration_number }}
+
+            {% for error in form.birth_registration_number.errors %}
+                <p class="mt-1 text-xs text-red-600">
+                    {{ error }}
+                </p>
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+
+    <!-- Information Note -->
+    <div
+        class="mt-4 rounded-xl
+               border border-amber-200
+               bg-amber-50
+               p-4"
+    >
+
+        <p class="text-xs leading-5 text-amber-800">
+            <strong>Note:</strong>
+            You only need to provide one of these:
+            NID Number or Birth Registration Number.
+        </p>
+
+    </div>
+
+
+    <!-- Photo -->
+    <div class="mt-6">
+
+        <label
+            for="{{ form.photo.id_for_label }}"
+            class="form-label"
+        >
+            Member Photo
+            <span class="text-red-500">*</span>
+        </label>
+
+        {{ form.photo }}
+
+        <p class="mt-2 text-xs leading-5 text-slate-400">
+            Upload a recent clear photo. JPG, PNG or WebP.
+            Maximum file size: 5 MB.
+        </p>
+
+        {% for error in form.photo.errors %}
+            <p class="mt-1 text-xs text-red-600">
+                {{ error }}
+            </p>
+        {% endfor %}
+
+    </div>
+
+</div>
 
 
                     <!-- Motivation -->

@@ -1,0 +1,204 @@
+{% extends "base.html" %}
+
+{% block title %}
+Member Verification | ASOK Foundation
+{% endblock %}
+
+{% block meta_description %}
+Verify an ASOK Foundation membership ID.
+{% endblock %}
+
+{% block content %}
+
+<section class="min-h-[70vh] bg-slate-50 py-16 sm:py-20">
+
+    <div class="mx-auto max-w-2xl px-4 sm:px-6 lg:px-8">
+
+        <div class="overflow-hidden rounded-3xl bg-white shadow-xl ring-1 ring-slate-200">
+
+            <!-- Header -->
+            <div class="bg-emerald-900 px-6 py-8 text-center text-white sm:px-10">
+
+                {% if organization and organization.image %}
+
+                    <img
+                        src="{{ organization.image.url }}"
+                        alt="ASOK Foundation"
+                        class="mx-auto mb-4 h-20 w-20 rounded-full object-contain bg-white p-2"
+                    >
+
+                {% endif %}
+
+                <h1 class="text-2xl font-bold sm:text-3xl">
+                    ASOK Foundation
+                </h1>
+
+                <p class="mt-2 text-sm text-emerald-100">
+                    International Human Rights
+                </p>
+
+            </div>
+
+
+            <!-- Verification Status -->
+            <div class="px-6 py-8 sm:px-10">
+
+                <div class="mb-8 text-center">
+
+                    {% if member.status == "active" %}
+
+                        <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100">
+                            <span class="text-3xl text-emerald-600">
+                                ✓
+                            </span>
+                        </div>
+
+                        <h2 class="mt-4 text-2xl font-bold text-emerald-700">
+                            Valid Member
+                        </h2>
+
+                        <p class="mt-2 text-slate-600">
+                            This membership is currently active.
+                        </p>
+
+                    {% else %}
+
+                        <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-red-100">
+                            <span class="text-3xl text-red-600">
+                                !
+                            </span>
+                        </div>
+
+                        <h2 class="mt-4 text-2xl font-bold text-red-700">
+                            Membership Inactive
+                        </h2>
+
+                        <p class="mt-2 text-slate-600">
+                            This membership is not currently active.
+                        </p>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- Member Information -->
+                <div class="divide-y divide-slate-200 rounded-2xl border border-slate-200">
+
+                    <div class="flex justify-between gap-6 px-5 py-4">
+                        <span class="text-sm text-slate-500">
+                            Member ID
+                        </span>
+
+                        <span class="text-right font-bold text-slate-900">
+                            {{ member.member_id }}
+                        </span>
+                    </div>
+
+
+                    <div class="flex justify-between gap-6 px-5 py-4">
+                        <span class="text-sm text-slate-500">
+                            Member Name
+                        </span>
+
+                        <span class="text-right font-semibold text-slate-900">
+                            {{ member.application.full_name }}
+                        </span>
+                    </div>
+
+
+                    {% if promotion %}
+
+                        <div class="flex justify-between gap-6 px-5 py-4">
+                            <span class="text-sm text-slate-500">
+                                Designation
+                            </span>
+
+                            <span class="text-right font-semibold text-slate-900">
+                                {{ promotion.designation }}
+                            </span>
+                        </div>
+
+                    {% endif %}
+
+
+                    <div class="flex justify-between gap-6 px-5 py-4">
+                        <span class="text-sm text-slate-500">
+                            Activation Date
+                        </span>
+
+                        <span class="text-right font-semibold text-slate-900">
+
+                            {% if member.activation_date %}
+                                {{ member.activation_date|date:"d M Y" }}
+                            {% else %}
+                                Not Activated
+                            {% endif %}
+
+                        </span>
+                    </div>
+
+
+                    <div class="flex justify-between gap-6 px-5 py-4">
+                        <span class="text-sm text-slate-500">
+                            Status
+                        </span>
+
+                        <span
+                            class="font-bold
+                            {% if member.status == 'active' %}
+                                text-emerald-600
+                            {% else %}
+                                text-red-600
+                            {% endif %}"
+                        >
+                            {{ member.get_status_display }}
+                        </span>
+                    </div>
+
+                </div>
+
+
+                <!-- QR Verification -->
+<div class="mt-8 text-center">
+
+    <h3 class="text-lg font-bold text-slate-900">
+        Verification QR Code
+    </h3>
+
+    <p class="mt-2 text-sm text-slate-500">
+        Scan this QR code to verify this membership.
+    </p>
+
+    <div class="mx-auto mt-5 flex h-52 w-52 items-center justify-center rounded-2xl border-4 border-emerald-900 bg-white p-3 shadow-sm">
+
+        <img
+            src="data:image/png;base64,{{ qr_code }}"
+            alt="Membership verification QR code"
+            class="h-full w-full"
+        >
+
+    </div>
+
+</div>
+
+
+                <!-- Security Notice -->
+                <div class="mt-6 rounded-xl bg-slate-50 p-4 text-center">
+
+                    <p class="text-xs leading-5 text-slate-500">
+                        This page is provided for membership verification.
+                        Sensitive identity information is not displayed.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}
