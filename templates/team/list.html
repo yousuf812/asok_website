@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+
+{% block title %}Our Team | ASOK Foundation{% endblock %}
+
+{% block content %}
+
+<section class="bg-slate-50 py-16 lg:py-24">
+
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+
+        <!-- Heading -->
+        <div class="mx-auto mb-14 max-w-3xl text-center">
+
+            <span class="inline-flex rounded-full bg-red-50 px-4 py-2 text-sm font-semibold text-red-600">
+                আমাদের টিম
+            </span>
+
+            <h1 class="mt-5 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl lg:text-5xl">
+                Our Team
+            </h1>
+
+            <p class="mt-5 text-base leading-8 text-slate-600 sm:text-lg">
+                মানবাধিকার সুরক্ষা, আইনি সহায়তা এবং সামাজিক ন্যায়বিচারের
+                লক্ষ্যে ASOK Foundation-এর টিম কাজ করে যাচ্ছে।
+            </p>
+
+        </div>
+
+
+        {% if members %}
+
+            <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+
+                {% for member in members %}
+
+                    <article
+                        class="group overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-slate-200 transition duration-300 hover:-translate-y-2 hover:shadow-xl"
+                    >
+
+                        <!-- Photo -->
+                        <div class="relative aspect-[4/4.5] overflow-hidden bg-slate-100">
+
+                            {% if member.photo %}
+
+                                <img
+                                    src="{{ member.photo.url }}"
+                                    alt="{{ member.name }}"
+                                    class="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                                >
+
+                            {% else %}
+
+                                <div class="flex h-full w-full items-center justify-center bg-slate-200">
+                                    <svg
+                                        class="h-24 w-24 text-slate-400"
+                                        fill="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10Zm0 2c-5 0-9 2.5-9 5.5V22h18v-2.5C21 16.5 17 14 12 14Z"/>
+                                    </svg>
+                                </div>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- Content -->
+                        <div class="p-6 text-center">
+
+                            <h2 class="text-xl font-bold text-slate-900">
+                                {{ member.name }}
+                            </h2>
+
+                            <p class="mt-2 text-sm font-semibold text-red-600">
+                                {{ member.get_designation_display }}
+                            </p>
+
+                            {% if member.bio %}
+
+                                <p class="mt-4 line-clamp-3 text-sm leading-6 text-slate-600">
+                                    {{ member.bio }}
+                                </p>
+
+                            {% endif %}
+
+
+                            <a
+                                href="{% url 'team:detail' member.slug %}"
+                                class="mt-6 inline-flex items-center gap-2 rounded-lg bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-red-600"
+                            >
+                                View Profile
+
+                                <svg
+                                    class="h-4 w-4"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M9 5l7 7-7 7"
+                                    />
+                                </svg>
+
+                            </a>
+
+                        </div>
+
+                    </article>
+
+                {% endfor %}
+
+            </div>
+
+        {% else %}
+
+            <div class="rounded-2xl bg-white px-6 py-16 text-center shadow-sm ring-1 ring-slate-200">
+
+                <h2 class="text-2xl font-bold text-slate-900">
+                    Team information coming soon
+                </h2>
+
+                <p class="mt-3 text-slate-600">
+                    আমাদের টিমের সদস্যদের তথ্য শীঘ্রই প্রকাশ করা হবে।
+                </p>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</section>
+
+{% endblock %}

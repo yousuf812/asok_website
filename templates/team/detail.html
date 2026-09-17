@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+
+{% block title %}{{ member.name }} | ASOK Foundation{% endblock %}
+
+{% block content %}
+
+<section class="bg-slate-50 py-16 lg:py-24">
+
+    <div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+
+        <div class="overflow-hidden rounded-3xl bg-white shadow-xl ring-1 ring-slate-200">
+
+            <div class="grid lg:grid-cols-2">
+
+                <!-- Photo -->
+                <div class="bg-slate-100">
+
+                    {% if member.photo %}
+
+                        <img
+                            src="{{ member.photo.url }}"
+                            alt="{{ member.name }}"
+                            class="h-full min-h-[420px] w-full object-cover"
+                        >
+
+                    {% else %}
+
+                        <div class="flex min-h-[420px] items-center justify-center bg-slate-200">
+
+                            <svg
+                                class="h-32 w-32 text-slate-400"
+                                fill="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10Zm0 2c-5 0-9 2.5-9 5.5V22h18v-2.5C21 16.5 17 14 12 14Z"/>
+                            </svg>
+
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- Information -->
+                <div class="flex flex-col justify-center p-8 sm:p-10 lg:p-12">
+
+                    <span class="w-fit rounded-full bg-red-50 px-4 py-2 text-sm font-semibold text-red-600">
+                        {{ member.get_designation_display }}
+                    </span>
+
+                    <h1 class="mt-5 text-3xl font-bold text-slate-900 sm:text-4xl">
+                        {{ member.name }}
+                    </h1>
+
+
+                    {% if member.bio %}
+
+                        <div class="mt-6 text-base leading-8 text-slate-600">
+                            {{ member.bio|linebreaks }}
+                        </div>
+
+                    {% endif %}
+
+
+                    <!-- Social / Contact -->
+                    <div class="mt-8 flex flex-wrap gap-3">
+
+                        {% if member.facebook_url %}
+                            <a
+                                href="{{ member.facebook_url }}"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="rounded-lg bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-blue-50 hover:text-blue-600"
+                            >
+                                Facebook
+                            </a>
+                        {% endif %}
+
+
+                        {% if member.linkedin_url %}
+                            <a
+                                href="{{ member.linkedin_url }}"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="rounded-lg bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-blue-50 hover:text-blue-600"
+                            >
+                                LinkedIn
+                            </a>
+                        {% endif %}
+
+
+                        {% if member.email %}
+                            <a
+                                href="mailto:{{ member.email }}"
+                                class="rounded-lg bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-red-50 hover:text-red-600"
+                            >
+                                Email
+                            </a>
+                        {% endif %}
+
+                    </div>
+
+
+                    <div class="mt-10">
+
+                        <a
+                            href="{% url 'team:list' %}"
+                            class="inline-flex items-center gap-2 rounded-lg bg-slate-900 px-6 py-3 text-sm font-semibold text-white transition hover:bg-red-600"
+                        >
+
+                            <svg
+                                class="h-4 w-4"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M15 19l-7-7 7-7"
+                                />
+                            </svg>
+
+                            Back to Our Team
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}
