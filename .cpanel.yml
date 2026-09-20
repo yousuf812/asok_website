@@ -1,0 +1,23 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/safinter/asok-website/asok_website/
+    - /bin/cp -R manage.py $DEPLOYPATH
+    - /bin/cp -R config $DEPLOYPATH
+    - /bin/cp -R activities $DEPLOYPATH
+    - /bin/cp -R blog $DEPLOYPATH
+    - /bin/cp -R complaints $DEPLOYPATH
+    - /bin/cp -R contacts $DEPLOYPATH
+    - /bin/cp -R core $DEPLOYPATH
+    - /bin/cp -R donations $DEPLOYPATH
+    - /bin/cp -R gallery $DEPLOYPATH
+    - /bin/cp -R human_rights $DEPLOYPATH
+    - /bin/cp -R legal_aid $DEPLOYPATH
+    - /bin/cp -R membership $DEPLOYPATH
+    - /bin/cp -R newsletter $DEPLOYPATH
+    - /bin/cp -R projects $DEPLOYPATH
+    - /bin/cp -R services $DEPLOYPATH
+    - /bin/cp -R team $DEPLOYPATH
+    - /bin/cp -R templates $DEPLOYPATH
+    - /bin/cp -R static $DEPLOYPATH
+    - /bin/cp -R requirements.txt $DEPLOYPATH
