@@ -34,3 +34,5 @@ django_errors.log
 staticfiles/
 
 backup.json
+
+.env
