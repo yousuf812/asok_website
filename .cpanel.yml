@@ -1,7 +1,11 @@
 ---
 deployment:
   tasks:
+
+    # Live Django application directory
     - export DEPLOYPATH=/home/safinter/asok-website/asok_website/
+
+    # Copy project files
     - /bin/cp -R manage.py $DEPLOYPATH
     - /bin/cp -R config $DEPLOYPATH
     - /bin/cp -R activities $DEPLOYPATH
@@ -21,3 +25,16 @@ deployment:
     - /bin/cp -R templates $DEPLOYPATH
     - /bin/cp -R static $DEPLOYPATH
     - /bin/cp -R requirements.txt $DEPLOYPATH
+
+    # Install Python dependencies
+    - /home/safinter/virtualenv/asok-website/3.13/bin/pip install -r $DEPLOYPATH/requirements.txt
+
+    # Apply database migrations
+    - /home/safinter/virtualenv/asok-website/3.13/bin/python $DEPLOYPATH/manage.py migrate --noinput
+
+    # Collect static files
+    - /home/safinter/virtualenv/asok-website/3.13/bin/python $DEPLOYPATH/manage.py collectstatic --noinput
+
+    # Restart Passenger
+    - /bin/mkdir -p $DEPLOYPATH/tmp
+    - /usr/bin/touch $DEPLOYPATH/tmp/restart.txt
