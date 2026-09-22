@@ -92,7 +92,7 @@ class HumanRightsArticleSitemap(Sitemap):
 
     def items(self):
         return HumanRightsArticle.objects.filter(
-            is_published=True
+            is_active=True
         ).order_by("-created_at")
 
     def lastmod(self, obj):
@@ -100,6 +100,6 @@ class HumanRightsArticleSitemap(Sitemap):
 
     def location(self, obj):
         return reverse(
-            "human_rights:article_detail",
+            "human_rights:article",
             kwargs={"slug": obj.slug},
         )
