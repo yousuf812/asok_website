@@ -3,7 +3,7 @@ deployment:
   tasks:
 
     # Live Django application directory
-    - export DEPLOYPATH=/home/safinter/asok-website/asok_website/
+    - export DEPLOYPATH=/home/safinter/asok-website/
 
     # Copy project files
     - /bin/cp -R manage.py $DEPLOYPATH
