@@ -25,7 +25,7 @@ class Activity(models.Model):
     )
 
     slug = models.SlugField(
-        max_length=280,
+        max_length=255,
         unique=True,
         blank=True
     )

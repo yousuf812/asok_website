@@ -107,12 +107,14 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.1/ref/settings/#databases
 
+DB_ENGINE = os.getenv(
+    "DB_ENGINE",
+    "django.db.backends.sqlite3",
+)
+
 DATABASES = {
     "default": {
-        "ENGINE": os.getenv(
-            "DB_ENGINE",
-            "django.db.backends.sqlite3",
-        ),
+        "ENGINE": DB_ENGINE,
         "NAME": os.getenv("DB_NAME"),
         "USER": os.getenv("DB_USER"),
         "PASSWORD": os.getenv("DB_PASSWORD"),
@@ -120,6 +122,11 @@ DATABASES = {
         "PORT": os.getenv("DB_PORT", "5432"),
     }
 }
+
+if DB_ENGINE == "django.db.backends.mysql":
+    DATABASES["default"]["OPTIONS"] = {
+        "init_command": "SET sql_mode='STRICT_TRANS_TABLES'",
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/6.1/ref/settings/#auth-password-validators
