@@ -14,6 +14,7 @@ from django.urls import reverse
 from .models import Member
 
 
+
 def membership_home(request):
 
     if request.method == "POST":
@@ -46,6 +47,8 @@ def membership_home(request):
                 ),
                 message=(
                     f"Name: {application.full_name}\n"
+                    f"Father's Name: {application.father_name}\n"
+                    f"Mother's Name: {application.mother_name}\n"
                     f"Email: {application.email}\n"
                     f"Phone: {application.phone}\n"
                     f"Membership Type: "
@@ -54,6 +57,8 @@ def membership_home(request):
                     f"{application.nid_number or 'Not provided'}\n"
                     f"Birth Registration: "
                     f"{application.birth_registration_number or 'Not provided'}\n\n"
+                    f"Membership Type: "
+                    f"{application.get_membership_type_display()}\n"
                     f"Message:\n"
                     f"{application.motivation}"
                 ),
@@ -98,9 +103,7 @@ def membership_success(request):
     )
 
 
-from django.shortcuts import get_object_or_404, render
 
-from .models import Member
 
 
 def member_verify(request, member_id):

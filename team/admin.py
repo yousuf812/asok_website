@@ -1,10 +1,20 @@
 from django.contrib import admin
-from .models import TeamMember
+from django.core.exceptions import ValidationError
+
+from .models import (
+    TeamMember,
+    CommitteeMember,
+    Division,
+    District,
+    Upazila,
+    Municipality,
+    UnionWard,
+)
+from membership.models import Member
 
 
 @admin.register(TeamMember)
 class TeamMemberAdmin(admin.ModelAdmin):
-
     list_display = [
         "name",
         "designation",
@@ -29,7 +39,7 @@ class TeamMemberAdmin(admin.ModelAdmin):
     ]
 
     prepopulated_fields = {
-        "slug": ("name",)
+        "slug": ("name",),
     }
 
     list_editable = [
@@ -56,7 +66,6 @@ class TeamMemberAdmin(admin.ModelAdmin):
                 )
             },
         ),
-
         (
             "Contact Information",
             {
@@ -66,7 +75,6 @@ class TeamMemberAdmin(admin.ModelAdmin):
                 )
             },
         ),
-
         (
             "Social Links",
             {
@@ -77,7 +85,6 @@ class TeamMemberAdmin(admin.ModelAdmin):
                 )
             },
         ),
-
         (
             "Display Settings",
             {
@@ -88,7 +95,6 @@ class TeamMemberAdmin(admin.ModelAdmin):
                 )
             },
         ),
-
         (
             "Timestamps",
             {
@@ -100,7 +106,209 @@ class TeamMemberAdmin(admin.ModelAdmin):
         ),
     )
 
+    ordering = ["order", "name"]
+
+
+@admin.register(CommitteeMember)
+class CommitteeMemberAdmin(admin.ModelAdmin):
+    list_display = [
+        "member_id_display",
+        "member_name",
+        "committee_type",
+        "member_type",
+        "designation",
+        "district",
+        "thana_upazila",
+        "effective_date",
+        "is_active",
+    ]
+
+    list_filter = [
+        "committee_type",
+        "member_type",
+        "designation",
+        "division",
+        "district",
+        "is_active",
+    ]
+
+    search_fields = [
+        "member__member_id",
+        "member__application__full_name",
+        "designation",
+        "division",
+        "district",
+        "thana_upazila",
+        "municipality",
+        "union_ward",
+    ]
+
+    list_editable = [
+        "is_active",
+    ]
+
+    readonly_fields = [
+        "created_at",
+        "updated_at",
+    ]
+
+    autocomplete_fields = [
+        "member",
+    ]
+
+    date_hierarchy = "effective_date"
+
+    fieldsets = (
+        (
+            "Member & Committee",
+            {
+                "fields": (
+                    "member",
+                    "committee_type",
+                    "member_type",
+                    "designation",
+                    "effective_date",
+                    "is_active",
+                )
+            },
+        ),
+        (
+            "Location",
+            {
+                "fields": (
+                    "division",
+                    "district",
+                    "thana_upazila",
+                    "municipality",
+                    "union_ward",
+                    "village",
+                    "post_office",
+                )
+            },
+        ),
+        (
+            "Additional Information",
+            {
+                "fields": (
+                    "notes",
+                )
+            },
+        ),
+        (
+            "Timestamps",
+            {
+                "fields": (
+                    "created_at",
+                    "updated_at",
+                )
+            },
+        ),
+    )
+
+    def member_id_display(self, obj):
+        return obj.member.member_id
+
+    member_id_display.short_description = "Member ID"
+    member_id_display.admin_order_field = "member__member_id"
+
+    def member_name(self, obj):
+        return obj.member.application.full_name
+
+    member_name.short_description = "Member Name"
+    member_name.admin_order_field = "member__application__full_name"
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == "member":
+            kwargs["queryset"] = (
+                Member.objects
+                .filter(status="active")
+                .select_related("application")
+                .order_by("member_id")
+            )
+
+        return super().formfield_for_foreignkey(
+            db_field,
+            request,
+            **kwargs,
+        )
+
+    def save_model(self, request, obj, form, change):
+        if obj.member.status != "active":
+            raise ValidationError(
+                "শুধুমাত্র Active সদস্যকে কমিটিতে যুক্ত করা যাবে।"
+            )
+
+        super().save_model(request, obj, form, change)
+
+
+@admin.register(Division)
+class DivisionAdmin(admin.ModelAdmin):
+    list_display = ["name"]
+    search_fields = ["name"]
+    ordering = ["name"]
+
+
+@admin.register(District)
+class DistrictAdmin(admin.ModelAdmin):
+    list_display = ["name", "division"]
+    list_filter = ["division"]
+    search_fields = ["name", "division__name"]
+    ordering = ["division__name", "name"]
+
+
+@admin.register(Upazila)
+class UpazilaAdmin(admin.ModelAdmin):
+    list_display = ["name", "district"]
+    list_filter = ["district__division", "district"]
+    search_fields = [
+        "name",
+        "district__name",
+        "district__division__name",
+    ]
     ordering = [
-        "order",
+        "district__division__name",
+        "district__name",
+        "name",
+    ]
+
+
+@admin.register(Municipality)
+class MunicipalityAdmin(admin.ModelAdmin):
+    list_display = ["name", "upazila"]
+    list_filter = [
+        "upazila__district__division",
+        "upazila__district",
+        "upazila",
+    ]
+    search_fields = [
+        "name",
+        "upazila__name",
+        "upazila__district__name",
+    ]
+    ordering = [
+        "upazila__district__division__name",
+        "upazila__district__name",
+        "upazila__name",
+        "name",
+    ]
+
+
+@admin.register(UnionWard)
+class UnionWardAdmin(admin.ModelAdmin):
+    list_display = ["name", "upazila"]
+    list_filter = [
+        "upazila__district__division",
+        "upazila__district",
+        "upazila",
+    ]
+    search_fields = [
+        "name",
+        "upazila__name",
+        "upazila__district__name",
+    ]
+    ordering = [
+        "upazila__district__division__name",
+        "upazila__district__name",
+        "upazila__name",
         "name",
     ]
