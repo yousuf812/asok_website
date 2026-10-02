@@ -10,6 +10,8 @@ class MembershipApplicationForm(forms.ModelForm):
 
         fields = [
             "full_name",
+            "father_name",
+            "mother_name",
             "email",
             "phone",
             "membership_type",
@@ -18,6 +20,7 @@ class MembershipApplicationForm(forms.ModelForm):
             "nid_number",
             "birth_registration_number",
             "photo",
+            "identity_document",
             "area_of_interest",
             "motivation",
         ]
@@ -25,142 +28,163 @@ class MembershipApplicationForm(forms.ModelForm):
         widgets = {
             "full_name": forms.TextInput(
                 attrs={
-                    "class": "form-input",
-                    "placeholder": "Enter your full name",
+                    "class": "w-full rounded-lg border border-gray-300 px-4 py-3",
+                    "placeholder": "Full Name",
+                }
+            ),
+
+            "father_name": forms.TextInput(
+                attrs={
+                    "class": "w-full rounded-lg border border-gray-300 px-4 py-3",
+                    "placeholder": "Father's Name",
+                }
+            ),
+
+            "mother_name": forms.TextInput(
+                attrs={
+                    "class": "w-full rounded-lg border border-gray-300 px-4 py-3",
+                    "placeholder": "Mother's Name",
                 }
             ),
 
             "email": forms.EmailInput(
                 attrs={
-                    "class": "form-input",
-                    "placeholder": "you@example.com",
+                    "class": "w-full rounded-lg border border-gray-300 px-4 py-3",
+                    "placeholder": "Email Address",
                 }
             ),
 
             "phone": forms.TextInput(
                 attrs={
-                    "class": "form-input",
-                    "placeholder": "+880 1XXXXXXXXX",
+                    "class": "w-full rounded-lg border border-gray-300 px-4 py-3",
+                    "placeholder": "Phone Number",
                 }
             ),
 
             "membership_type": forms.Select(
                 attrs={
-                    "class": "form-input",
+                    "class": "w-full rounded-lg border border-gray-300 px-4 py-3"
                 }
             ),
 
             "profession": forms.TextInput(
                 attrs={
-                    "class": "form-input",
-                    "placeholder": "Student, Teacher, Lawyer, Business etc.",
+                    "class": "w-full rounded-lg border border-gray-300 px-4 py-3",
+                    "placeholder": "Profession",
                 }
             ),
 
             "address": forms.TextInput(
                 attrs={
-                    "class": "form-input",
-                    "placeholder": "Your current address",
+                    "class": "w-full rounded-lg border border-gray-300 px-4 py-3",
+                    "placeholder": "Full Address",
                 }
             ),
 
             "nid_number": forms.TextInput(
                 attrs={
-                    "class": "form-input",
-                    "placeholder": "Enter your NID number",
+                    "class": "w-full rounded-lg border border-gray-300 px-4 py-3",
+                    "placeholder": "NID Number",
                 }
             ),
 
             "birth_registration_number": forms.TextInput(
                 attrs={
-                    "class": "form-input",
-                    "placeholder": "Enter your Birth Registration number",
+                    "class": "w-full rounded-lg border border-gray-300 px-4 py-3",
+                    "placeholder": "Birth Registration Number",
                 }
             ),
 
             "photo": forms.ClearableFileInput(
                 attrs={
-                    "class": "form-input",
+                    "class": "w-full rounded-lg border border-gray-300 px-4 py-3",
+                    "accept": "image/jpeg,image/png,image/webp",
+                }
+            ),
+
+            "identity_document": forms.ClearableFileInput(
+                attrs={
+                    "class": "w-full rounded-lg border border-gray-300 px-4 py-3",
                     "accept": "image/jpeg,image/png,image/webp",
                 }
             ),
 
             "area_of_interest": forms.Select(
                 attrs={
-                    "class": "form-input",
+                    "class": "w-full rounded-lg border border-gray-300 px-4 py-3"
                 }
             ),
 
             "motivation": forms.Textarea(
                 attrs={
-                    "class": "form-input",
-                    "rows": 6,
-                    "placeholder": (
-                        "Tell us why you want to join ASOK Foundation..."
-                    ),
+                    "class": "w-full rounded-lg border border-gray-300 px-4 py-3",
+                    "rows": 5,
+                    "placeholder": "Why do you want to join ASOK Foundation?",
                 }
             ),
         }
 
-        labels = {
-            "full_name": "Full Name",
-            "email": "Email Address",
-            "phone": "Phone Number",
-            "membership_type": "Membership Type",
-            "profession": "Profession",
-            "address": "Address",
-            "nid_number": "NID Number",
-            "birth_registration_number": "Birth Registration Number",
-            "photo": "Member Photo",
-            "area_of_interest": "Area of Interest",
-            "motivation": "Why do you want to join?",
-        }
+    def clean(self):
+        cleaned_data = super().clean()
+
+        nid_number = cleaned_data.get("nid_number")
+        birth_registration_number = cleaned_data.get(
+            "birth_registration_number"
+        )
+
+        if not nid_number and not birth_registration_number:
+            raise forms.ValidationError(
+                "Please provide either NID Number or Birth Registration Number."
+            )
+
+        return cleaned_data
 
     def clean_full_name(self):
-        full_name = self.cleaned_data["full_name"].strip()
+        full_name = self.cleaned_data.get("full_name", "").strip()
 
-        if len(full_name) < 3:
+        if not full_name:
             raise forms.ValidationError(
-                "Please enter your full name."
+                "Full name is required."
             )
 
         return full_name
 
-    def clean_phone(self):
-        phone = self.cleaned_data["phone"].strip()
+    def clean_father_name(self):
+        father_name = self.cleaned_data.get("father_name", "").strip()
 
-        if len(phone) < 8:
+        if not father_name:
             raise forms.ValidationError(
-                "Please enter a valid phone number."
+                "Father's name is required."
+            )
+
+        return father_name
+
+    def clean_mother_name(self):
+        mother_name = self.cleaned_data.get("mother_name", "").strip()
+
+        if not mother_name:
+            raise forms.ValidationError(
+                "Mother's name is required."
+            )
+
+        return mother_name
+
+    def clean_phone(self):
+        phone = self.cleaned_data.get("phone", "").strip()
+
+        if not phone:
+            raise forms.ValidationError(
+                "Phone number is required."
             )
 
         return phone
-
-    def clean(self):
-        cleaned_data = super().clean()
-
-        nid_number = (
-            cleaned_data.get("nid_number") or ""
-        ).strip()
-
-        birth_registration_number = (
-            cleaned_data.get("birth_registration_number") or ""
-        ).strip()
-
-        if not nid_number and not birth_registration_number:
-            raise forms.ValidationError(
-                "Please provide either your NID number "
-                "or Birth Registration number."
-            )
-
-        return cleaned_data
 
     def clean_photo(self):
         photo = self.cleaned_data.get("photo")
 
         if not photo:
             raise forms.ValidationError(
-                "Please upload your recent photo."
+                "Member photo is required."
             )
 
         allowed_types = [
@@ -171,7 +195,7 @@ class MembershipApplicationForm(forms.ModelForm):
 
         if photo.content_type not in allowed_types:
             raise forms.ValidationError(
-                "Please upload a JPG, PNG, or WebP image."
+                "Only JPG, PNG or WEBP images are allowed."
             )
 
         if photo.size > 5 * 1024 * 1024:
@@ -181,13 +205,28 @@ class MembershipApplicationForm(forms.ModelForm):
 
         return photo
 
-    def clean_motivation(self):
-        motivation = self.cleaned_data["motivation"].strip()
+    def clean_identity_document(self):
+        document = self.cleaned_data.get("identity_document")
 
-        if len(motivation) < 20:
+        if not document:
             raise forms.ValidationError(
-                "Please provide at least 20 characters "
-                "explaining your motivation."
+                "NID or Birth Registration document image is required."
             )
 
-        return motivation
+        allowed_types = [
+            "image/jpeg",
+            "image/png",
+            "image/webp",
+        ]
+
+        if document.content_type not in allowed_types:
+            raise forms.ValidationError(
+                "Only JPG, PNG or WEBP images are allowed."
+            )
+
+        if document.size > 5 * 1024 * 1024:
+            raise forms.ValidationError(
+                "Identity document image size must not exceed 5 MB."
+            )
+
+        return document

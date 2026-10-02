@@ -39,6 +39,20 @@ class MembershipApplication(models.Model):
         max_length=150,
     )
 
+    father_name = models.CharField(
+    max_length=150,
+    blank=True,
+    default="",
+    verbose_name="Father's Name",
+    )
+
+    mother_name = models.CharField(
+    max_length=150,
+    blank=True,
+    default="",
+    verbose_name="Mother's Name",
+    )
+
     email = models.EmailField()
 
     phone = models.CharField(
@@ -74,6 +88,14 @@ class MembershipApplication(models.Model):
         max_length=30,
         blank=True,
         help_text="Birth Registration number.",
+    )
+
+    identity_document = models.ImageField(
+    upload_to="membership/identity_documents/",
+    blank=True,
+    null=True,
+    verbose_name="NID / Birth Registration Image",
+    help_text="Upload a clear image of NID or Birth Registration document.",
     )
 
     photo = models.ImageField(
