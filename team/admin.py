@@ -1,6 +1,9 @@
 from django.contrib import admin
 from django.core.exceptions import ValidationError
 
+from membership.models import Member
+
+from .forms import CommitteeMemberAdminForm
 from .models import (
     TeamMember,
     CommitteeMember,
@@ -10,7 +13,6 @@ from .models import (
     Municipality,
     UnionWard,
 )
-from membership.models import Member
 
 
 @admin.register(TeamMember)
@@ -106,11 +108,17 @@ class TeamMemberAdmin(admin.ModelAdmin):
         ),
     )
 
-    ordering = ["order", "name"]
+    ordering = [
+        "order",
+        "name",
+    ]
 
 
 @admin.register(CommitteeMember)
 class CommitteeMemberAdmin(admin.ModelAdmin):
+
+    form = CommitteeMemberAdminForm
+
     list_display = [
         "member_id_display",
         "member_name",
@@ -136,11 +144,11 @@ class CommitteeMemberAdmin(admin.ModelAdmin):
         "member__member_id",
         "member__application__full_name",
         "designation",
-        "division",
-        "district",
-        "thana_upazila",
-        "municipality",
-        "union_ward",
+        "division__name",
+        "district__name",
+        "thana_upazila__name",
+        "municipality__name",
+        "union_ward__name",
     ]
 
     list_editable = [
@@ -205,6 +213,12 @@ class CommitteeMemberAdmin(admin.ModelAdmin):
         ),
     )
 
+    ordering = [
+        "committee_type",
+        "designation",
+        "member__application__full_name",
+    ]
+
     def member_id_display(self, obj):
         return obj.member.member_id
 
@@ -243,28 +257,59 @@ class CommitteeMemberAdmin(admin.ModelAdmin):
 
 @admin.register(Division)
 class DivisionAdmin(admin.ModelAdmin):
-    list_display = ["name"]
-    search_fields = ["name"]
-    ordering = ["name"]
+    list_display = [
+        "name",
+    ]
+
+    search_fields = [
+        "name",
+    ]
+
+    ordering = [
+        "name",
+    ]
 
 
 @admin.register(District)
 class DistrictAdmin(admin.ModelAdmin):
-    list_display = ["name", "division"]
-    list_filter = ["division"]
-    search_fields = ["name", "division__name"]
-    ordering = ["division__name", "name"]
+    list_display = [
+        "name",
+        "division",
+    ]
+
+    list_filter = [
+        "division",
+    ]
+
+    search_fields = [
+        "name",
+        "division__name",
+    ]
+
+    ordering = [
+        "division__name",
+        "name",
+    ]
 
 
 @admin.register(Upazila)
 class UpazilaAdmin(admin.ModelAdmin):
-    list_display = ["name", "district"]
-    list_filter = ["district__division", "district"]
+    list_display = [
+        "name",
+        "district",
+    ]
+
+    list_filter = [
+        "district__division",
+        "district",
+    ]
+
     search_fields = [
         "name",
         "district__name",
         "district__division__name",
     ]
+
     ordering = [
         "district__division__name",
         "district__name",
@@ -274,17 +319,23 @@ class UpazilaAdmin(admin.ModelAdmin):
 
 @admin.register(Municipality)
 class MunicipalityAdmin(admin.ModelAdmin):
-    list_display = ["name", "upazila"]
+    list_display = [
+        "name",
+        "upazila",
+    ]
+
     list_filter = [
         "upazila__district__division",
         "upazila__district",
         "upazila",
     ]
+
     search_fields = [
         "name",
         "upazila__name",
         "upazila__district__name",
     ]
+
     ordering = [
         "upazila__district__division__name",
         "upazila__district__name",
@@ -295,17 +346,23 @@ class MunicipalityAdmin(admin.ModelAdmin):
 
 @admin.register(UnionWard)
 class UnionWardAdmin(admin.ModelAdmin):
-    list_display = ["name", "upazila"]
+    list_display = [
+        "name",
+        "upazila",
+    ]
+
     list_filter = [
         "upazila__district__division",
         "upazila__district",
         "upazila",
     ]
+
     search_fields = [
         "name",
         "upazila__name",
         "upazila__district__name",
     ]
+
     ordering = [
         "upazila__district__division__name",
         "upazila__district__name",

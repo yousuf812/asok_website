@@ -285,29 +285,44 @@ class CommitteeMember(models.Model):
         default=CommitteeDesignation.MEMBER,
     )
 
-    division = models.CharField(
-        max_length=100,
-        blank=True,
+    division = models.ForeignKey(
+    "Division",
+    on_delete=models.SET_NULL,
+    null=True,
+    blank=True,
+    related_name="committee_members",
     )
 
-    district = models.CharField(
-        max_length=100,
-        blank=True,
+    district = models.ForeignKey(
+    "District",
+    on_delete=models.SET_NULL,
+    null=True,
+    blank=True,
+    related_name="committee_members",
     )
 
-    thana_upazila = models.CharField(
-        max_length=100,
-        blank=True,
+    thana_upazila = models.ForeignKey(
+    "Upazila",
+    on_delete=models.SET_NULL,
+    null=True,
+    blank=True,
+    related_name="committee_members",
     )
 
-    municipality = models.CharField(
-        max_length=100,
-        blank=True,
+    municipality = models.ForeignKey(
+    "Municipality",
+    on_delete=models.SET_NULL,
+    null=True,
+    blank=True,
+    related_name="committee_members",
     )
 
-    union_ward = models.CharField(
-        max_length=100,
-        blank=True,
+    union_ward = models.ForeignKey(
+    "UnionWard",
+    on_delete=models.SET_NULL,
+    null=True,
+    blank=True,
+    related_name="committee_members",
     )
 
     village = models.CharField(
