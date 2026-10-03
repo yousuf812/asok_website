@@ -258,10 +258,6 @@ class CommitteeDesignation(models.TextChoices):
 
 
 class CommitteeMember(models.Model):
-    """
-    Connects an active ASOK Member with an organizational committee.
-    """
-
     member = models.ForeignKey(
         "membership.Member",
         on_delete=models.CASCADE,
@@ -285,44 +281,45 @@ class CommitteeMember(models.Model):
         default=CommitteeDesignation.MEMBER,
     )
 
+    # Bangladesh Location
     division = models.ForeignKey(
-    "Division",
-    on_delete=models.SET_NULL,
-    null=True,
-    blank=True,
-    related_name="committee_members",
+        "Division",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="committee_members",
     )
 
     district = models.ForeignKey(
-    "District",
-    on_delete=models.SET_NULL,
-    null=True,
-    blank=True,
-    related_name="committee_members",
+        "District",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="committee_members",
     )
 
     thana_upazila = models.ForeignKey(
-    "Upazila",
-    on_delete=models.SET_NULL,
-    null=True,
-    blank=True,
-    related_name="committee_members",
+        "Upazila",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="committee_members",
     )
 
     municipality = models.ForeignKey(
-    "Municipality",
-    on_delete=models.SET_NULL,
-    null=True,
-    blank=True,
-    related_name="committee_members",
+        "Municipality",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="committee_members",
     )
 
     union_ward = models.ForeignKey(
-    "UnionWard",
-    on_delete=models.SET_NULL,
-    null=True,
-    blank=True,
-    related_name="committee_members",
+        "UnionWard",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="committee_members",
     )
 
     village = models.CharField(
@@ -359,6 +356,7 @@ class CommitteeMember(models.Model):
             "designation",
             "member__application__full_name",
         ]
+
         verbose_name = "Committee Member"
         verbose_name_plural = "Committee Members"
 
@@ -372,6 +370,31 @@ class CommitteeMember(models.Model):
             raise ValidationError(
                 "Only an active member can be assigned to a committee."
             )
+
+    def save(self, *args, **kwargs):
+        """
+        একজন সদস্য একই ধরনের কমিটিতে একাধিক Active position
+        রাখতে পারবে না।
+
+        নতুন designation দিলে আগের active position
+        automatically inactive হবে।
+        """
+
+        if self.is_active and self.member_id:
+
+            existing_positions = CommitteeMember.objects.filter(
+                member_id=self.member_id,
+                committee_type=self.committee_type,
+                is_active=True,
+            ).exclude(
+                pk=self.pk
+            )
+
+            existing_positions.update(
+                is_active=False
+            )
+
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return (

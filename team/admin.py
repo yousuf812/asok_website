@@ -119,6 +119,11 @@ class CommitteeMemberAdmin(admin.ModelAdmin):
 
     form = CommitteeMemberAdminForm
 
+    class Media:
+        js = (
+            "team/js/committee_location.js",
+        )
+
     list_display = [
         "member_id_display",
         "member_name",
