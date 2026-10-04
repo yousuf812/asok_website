@@ -498,3 +498,35 @@ class UnionWard(models.Model):
 
     def __str__(self):
         return f"{self.name} - {self.upazila.name}"
+
+
+class CommitteeMinimum(models.Model):
+    committee_type = models.CharField(
+        max_length=30,
+        choices=CommitteeType.choices,
+        unique=True,
+    )
+
+    minimum_members = models.PositiveIntegerField(
+        default=0,
+        help_text="Minimum number of members required for this committee.",
+    )
+
+    class Meta:
+        ordering = ["committee_type"]
+        verbose_name = "Committee Minimum"
+        verbose_name_plural = "Committee Minimums"
+
+    @property
+    def committee_minimum(self):
+        requirement = CommitteeMinimum.objects.filter(
+            committee_type=self.committee_type
+        ).first()
+
+        return requirement.minimum_members if requirement else 0
+
+    def __str__(self):
+        return (
+            f"{self.get_committee_type_display()} - "
+            f"{self.minimum_members} members"
+        )

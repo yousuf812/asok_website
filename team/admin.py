@@ -7,6 +7,7 @@ from .forms import CommitteeMemberAdminForm
 from .models import (
     TeamMember,
     CommitteeMember,
+    CommitteeMinimum,
     Division,
     District,
     Upazila,
@@ -130,8 +131,9 @@ class CommitteeMemberAdmin(admin.ModelAdmin):
         "committee_type",
         "member_type",
         "designation",
-        "district",
-        "thana_upazila",
+        "committee_member_count",
+        "committee_minimum_required",
+        "committee_status",
         "effective_date",
         "is_active",
     ]
@@ -223,6 +225,76 @@ class CommitteeMemberAdmin(admin.ModelAdmin):
         "designation",
         "member__application__full_name",
     ]
+
+    def committee_member_count(self, obj):
+        queryset = CommitteeMember.objects.filter(
+            committee_type=obj.committee_type,
+            is_active=True,
+        )
+
+        if obj.committee_type != "central":
+            if obj.division_id:
+                queryset = queryset.filter(
+                    division_id=obj.division_id
+                )
+
+            if obj.district_id:
+                queryset = queryset.filter(
+                    district_id=obj.district_id
+                )
+
+            if obj.thana_upazila_id:
+                queryset = queryset.filter(
+                    thana_upazila_id=obj.thana_upazila_id
+                )
+
+            if obj.municipality_id:
+                queryset = queryset.filter(
+                    municipality_id=obj.municipality_id
+                )
+
+            if obj.union_ward_id:
+                queryset = queryset.filter(
+                    union_ward_id=obj.union_ward_id
+                )
+
+        return queryset.count()
+
+    committee_member_count.short_description = "Active Members"
+
+    def committee_minimum_required(self, obj):
+        requirement = CommitteeMinimum.objects.filter(
+            committee_type=obj.committee_type
+        ).first()
+
+        if requirement:
+            return requirement.minimum_members
+
+        return 0
+
+    committee_minimum_required.short_description = "Minimum"
+
+    def committee_status(self, obj):
+        requirement = CommitteeMinimum.objects.filter(
+            committee_type=obj.committee_type
+        ).first()
+
+        if not requirement:
+            return "No Requirement"
+
+        minimum = requirement.minimum_members
+
+        if minimum == 0:
+            return "Not Required"
+
+        count = self.committee_member_count(obj)
+
+        if count >= minimum:
+            return "✓ Minimum Reached"
+
+        return f"⚠ Need {minimum - count} More"
+
+    committee_status.short_description = "Committee Status"
 
     def member_id_display(self, obj):
         return obj.member.member_id
