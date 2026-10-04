@@ -153,3 +153,94 @@ def ajax_union_wards(request):
             "results": results,
         }
     )
+
+
+
+
+
+from .models import (
+    TeamMember,
+    CommitteeMember,
+    CommitteeMinimum,
+    CommitteeType,
+)
+
+
+def committee_list(request):
+    """
+    Display all active committees grouped by committee type.
+    """
+
+    committees = (
+        CommitteeMember.objects
+        .filter(is_active=True)
+        .select_related(
+            "member",
+            "member__application",
+            "division",
+            "district",
+            "thana_upazila",
+            "municipality",
+            "union_ward",
+        )
+        .order_by(
+            "committee_type",
+            "member_type",
+            "designation",
+            "member__application__full_name",
+        )
+    )
+
+    committee_data = []
+
+    for committee_type, committee_name in CommitteeType.choices:
+
+        members = committees.filter(
+            committee_type=committee_type,
+            member_type="member",
+        )
+
+        advisors = committees.filter(
+            committee_type=committee_type,
+            member_type="advisor",
+        )
+
+        minimum = (
+            CommitteeMinimum.objects
+            .filter(committee_type=committee_type)
+            .first()
+        )
+
+        minimum_required = (
+            minimum.minimum_members
+            if minimum
+            else 0
+        )
+
+        member_count = members.count()
+
+        if minimum_required == 0:
+            status = "not_required"
+        elif member_count >= minimum_required:
+            status = "reached"
+        else:
+            status = "pending"
+
+        committee_data.append({
+            "type": committee_type,
+            "name": committee_name,
+            "members": members,
+            "advisors": advisors,
+            "member_count": member_count,
+            "advisor_count": advisors.count(),
+            "minimum": minimum_required,
+            "status": status,
+        })
+
+    return render(
+        request,
+        "team/committee_list.html",
+        {
+            "committee_data": committee_data,
+        },
+    )

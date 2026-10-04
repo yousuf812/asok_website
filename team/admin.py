@@ -144,18 +144,23 @@ class CommitteeMemberAdmin(admin.ModelAdmin):
         "designation",
         "division",
         "district",
+        "thana_upazila",
+        "municipality",
+        "union_ward",
         "is_active",
     ]
 
     search_fields = [
-        "member__member_id",
-        "member__application__full_name",
-        "designation",
-        "division__name",
-        "district__name",
-        "thana_upazila__name",
-        "municipality__name",
-        "union_ward__name",
+         "member__member_id",
+         "member__application__full_name",
+         "designation",
+         "division__name",
+         "district__name",
+         "thana_upazila__name",
+         "municipality__name",
+         "union_ward__name",
+         "village",
+         "post_office",
     ]
 
     list_editable = [
