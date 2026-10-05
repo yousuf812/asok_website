@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404, render
-
+from django.db.models import Q
 from .models import TeamMember
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
@@ -168,8 +168,14 @@ from .models import (
 
 def committee_list(request):
     """
-    Display all active committees grouped by committee type.
+    Display active committee members with location filters.
     """
+
+    division_id = request.GET.get("division")
+    district_id = request.GET.get("district")
+    upazila_id = request.GET.get("upazila")
+    municipality_id = request.GET.get("municipality")
+    union_ward_id = request.GET.get("union_ward")
 
     committees = (
         CommitteeMember.objects
@@ -183,12 +189,39 @@ def committee_list(request):
             "municipality",
             "union_ward",
         )
-        .order_by(
-            "committee_type",
-            "member_type",
-            "designation",
-            "member__application__full_name",
+    )
+
+    # Location filters
+    if division_id:
+        committees = committees.filter(
+            division_id=division_id
         )
+
+    if district_id:
+        committees = committees.filter(
+            district_id=district_id
+        )
+
+    if upazila_id:
+        committees = committees.filter(
+            thana_upazila_id=upazila_id
+        )
+
+    if municipality_id:
+        committees = committees.filter(
+            municipality_id=municipality_id
+        )
+
+    if union_ward_id:
+        committees = committees.filter(
+            union_ward_id=union_ward_id
+        )
+
+    committees = committees.order_by(
+        "committee_type",
+        "member_type",
+        "designation",
+        "member__application__full_name",
     )
 
     committee_data = []
@@ -221,8 +254,10 @@ def committee_list(request):
 
         if minimum_required == 0:
             status = "not_required"
+
         elif member_count >= minimum_required:
             status = "reached"
+
         else:
             status = "pending"
 
@@ -242,5 +277,82 @@ def committee_list(request):
         "team/committee_list.html",
         {
             "committee_data": committee_data,
+            "selected_division": division_id,
+            "selected_district": district_id,
+            "selected_upazila": upazila_id,
+            "selected_municipality": municipality_id,
+            "selected_union_ward": union_ward_id,
+        },
+    )
+
+
+def committee_member_detail(request, pk):
+    committee_member = get_object_or_404(
+        CommitteeMember.objects.select_related(
+            "member",
+            "member__application",
+            "division",
+            "district",
+            "thana_upazila",
+            "municipality",
+            "union_ward",
+        ),
+        pk=pk,
+        is_active=True,
+    )
+
+    promotions = (
+        committee_member.member.promotions
+        .order_by("-effective_date", "-created_at")
+    )
+
+    return render(
+        request,
+        "team/committee_member_detail.html",
+        {
+            "committee_member": committee_member,
+            "promotions": promotions,
+        },
+    )
+
+
+def committee_search(request):
+    query = request.GET.get("q", "").strip()
+
+    members = CommitteeMember.objects.none()
+
+    if query:
+        members = (
+            CommitteeMember.objects
+            .filter(
+                is_active=True
+            )
+            .filter(
+                Q(member__member_id__icontains=query)
+                | Q(member__application__full_name__icontains=query)
+                | Q(designation__icontains=query)
+            )
+            .select_related(
+                "member",
+                "member__application",
+                "division",
+                "district",
+                "thana_upazila",
+                "municipality",
+                "union_ward",
+            )
+            .order_by(
+                "committee_type",
+                "designation",
+                "member__application__full_name",
+            )
+        )
+
+    return render(
+        request,
+        "team/committee_search.html",
+        {
+            "query": query,
+            "members": members,
         },
     )

@@ -1,0 +1,314 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ committee_member.member.application.full_name }} | Committee | ASOK Foundation
+{% endblock %}
+
+
+{% block content %}
+
+<section class="bg-gradient-to-br from-green-950 via-green-900 to-green-800 py-16">
+    <div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+
+        <div class="flex flex-col items-center text-center">
+
+            {% if committee_member.member.application.photo %}
+
+            <img
+                src="{{ committee_member.member.application.photo.url }}"
+                alt="{{ committee_member.member.application.full_name }}"
+                class="h-32 w-32 rounded-full object-cover ring-4 ring-yellow-400 shadow-xl"
+            >
+
+            {% else %}
+
+            <div class="flex h-32 w-32 items-center justify-center rounded-full bg-yellow-400 text-4xl font-extrabold text-green-950 ring-4 ring-white/30">
+                {{ committee_member.member.application.full_name|first }}
+            </div>
+
+            {% endif %}
+
+
+            <h1 class="mt-6 text-3xl font-extrabold text-white sm:text-4xl">
+                {{ committee_member.member.application.full_name }}
+            </h1>
+
+            <p class="mt-2 text-lg font-semibold text-yellow-300">
+                {{ committee_member.get_designation_display }}
+            </p>
+
+            <div class="mt-4 flex flex-wrap justify-center gap-2">
+
+                <span class="rounded-full bg-white/10 px-4 py-2 text-sm text-white">
+                    {{ committee_member.member.member_id }}
+                </span>
+
+                {% if committee_member.member_type == "advisor" %}
+
+                <span class="rounded-full bg-yellow-400 px-4 py-2 text-sm font-bold text-green-950">
+                    Advisory Council
+                </span>
+
+                {% else %}
+
+                <span class="rounded-full bg-green-500 px-4 py-2 text-sm font-bold text-white">
+                    Committee Member
+                </span>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+
+<section class="bg-gray-50 py-12 sm:py-16">
+
+    <div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+
+        <div class="grid gap-8 lg:grid-cols-2">
+
+
+            <!-- Committee Information -->
+            <div class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gray-200">
+
+                <h2 class="border-b border-gray-200 pb-4 text-xl font-bold text-gray-900">
+                    Committee Information
+                </h2>
+
+                <dl class="mt-5 space-y-4">
+
+                    <div>
+                        <dt class="text-sm text-gray-500">
+                            Committee
+                        </dt>
+
+                        <dd class="mt-1 font-semibold text-gray-900">
+                            {{ committee_member.get_committee_type_display }}
+                        </dd>
+                    </div>
+
+
+                    <div>
+                        <dt class="text-sm text-gray-500">
+                            Designation
+                        </dt>
+
+                        <dd class="mt-1 font-semibold text-green-700">
+                            {{ committee_member.get_designation_display }}
+                        </dd>
+                    </div>
+
+
+                    <div>
+                        <dt class="text-sm text-gray-500">
+                            Member Type
+                        </dt>
+
+                        <dd class="mt-1 font-semibold text-gray-900">
+                            {{ committee_member.get_member_type_display }}
+                        </dd>
+                    </div>
+
+
+                    <div>
+                        <dt class="text-sm text-gray-500">
+                            Effective Date
+                        </dt>
+
+                        <dd class="mt-1 font-semibold text-gray-900">
+                            {{ committee_member.effective_date|date:"d F Y" }}
+                        </dd>
+                    </div>
+
+
+                    <div>
+                        <dt class="text-sm text-gray-500">
+                            Member ID
+                        </dt>
+
+                        <dd class="mt-1 font-semibold text-gray-900">
+                            {{ committee_member.member.member_id }}
+                        </dd>
+                    </div>
+
+                </dl>
+
+            </div>
+
+
+            <!-- Location -->
+            <div class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gray-200">
+
+                <h2 class="border-b border-gray-200 pb-4 text-xl font-bold text-gray-900">
+                    Location
+                </h2>
+
+                <dl class="mt-5 space-y-4">
+
+                    {% if committee_member.division %}
+                    <div>
+                        <dt class="text-sm text-gray-500">
+                            Division
+                        </dt>
+
+                        <dd class="mt-1 font-semibold text-gray-900">
+                            {{ committee_member.division.name }}
+                        </dd>
+                    </div>
+                    {% endif %}
+
+
+                    {% if committee_member.district %}
+                    <div>
+                        <dt class="text-sm text-gray-500">
+                            District
+                        </dt>
+
+                        <dd class="mt-1 font-semibold text-gray-900">
+                            {{ committee_member.district.name }}
+                        </dd>
+                    </div>
+                    {% endif %}
+
+
+                    {% if committee_member.thana_upazila %}
+                    <div>
+                        <dt class="text-sm text-gray-500">
+                            Thana / Upazila
+                        </dt>
+
+                        <dd class="mt-1 font-semibold text-gray-900">
+                            {{ committee_member.thana_upazila.name }}
+                        </dd>
+                    </div>
+                    {% endif %}
+
+
+                    {% if committee_member.municipality %}
+                    <div>
+                        <dt class="text-sm text-gray-500">
+                            Municipality
+                        </dt>
+
+                        <dd class="mt-1 font-semibold text-gray-900">
+                            {{ committee_member.municipality.name }}
+                        </dd>
+                    </div>
+                    {% endif %}
+
+
+                    {% if committee_member.union_ward %}
+                    <div>
+                        <dt class="text-sm text-gray-500">
+                            Union / Ward
+                        </dt>
+
+                        <dd class="mt-1 font-semibold text-gray-900">
+                            {{ committee_member.union_ward.name }}
+                        </dd>
+                    </div>
+                    {% endif %}
+
+
+                    {% if committee_member.village %}
+                    <div>
+                        <dt class="text-sm text-gray-500">
+                            Village
+                        </dt>
+
+                        <dd class="mt-1 font-semibold text-gray-900">
+                            {{ committee_member.village }}
+                        </dd>
+                    </div>
+                    {% endif %}
+
+
+                    {% if committee_member.post_office %}
+                    <div>
+                        <dt class="text-sm text-gray-500">
+                            Post Office
+                        </dt>
+
+                        <dd class="mt-1 font-semibold text-gray-900">
+                            {{ committee_member.post_office }}
+                        </dd>
+                    </div>
+                    {% endif %}
+
+                </dl>
+
+            </div>
+
+
+            <!-- Promotion History -->
+            <div class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gray-200 lg:col-span-2">
+
+                <h2 class="border-b border-gray-200 pb-4 text-xl font-bold text-gray-900">
+                    Position History
+                </h2>
+
+                {% if promotions %}
+
+                <div class="mt-5 space-y-3">
+
+                    {% for promotion in promotions %}
+
+                    <div class="flex flex-col gap-2 rounded-xl border border-gray-100 bg-gray-50 p-4 sm:flex-row sm:items-center sm:justify-between">
+
+                        <div>
+                            <p class="font-bold text-gray-900">
+                                {{ promotion.designation }}
+                            </p>
+
+                            {% if promotion.notes %}
+                            <p class="mt-1 text-sm text-gray-600">
+                                {{ promotion.notes }}
+                            </p>
+                            {% endif %}
+                        </div>
+
+                        <span class="text-sm font-medium text-green-700">
+                            {{ promotion.effective_date|date:"d F Y" }}
+                        </span>
+
+                    </div>
+
+                    {% endfor %}
+
+                </div>
+
+                {% else %}
+
+                <p class="mt-5 text-gray-500">
+                    No previous position history available.
+                </p>
+
+                {% endif %}
+
+            </div>
+
+
+        </div>
+
+
+        <!-- Back -->
+        <div class="mt-8 text-center">
+
+            <a
+                href="{% url 'team:committee_list' %}"
+                class="inline-flex items-center rounded-xl bg-green-800 px-6 py-3 font-semibold text-white transition hover:bg-green-900"
+            >
+                ← Back to Committees
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

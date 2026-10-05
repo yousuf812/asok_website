@@ -159,17 +159,23 @@ Committee | ASOK Foundation
 
                                 <div class="min-w-0 flex-1">
 
-                                    <h4 class="font-bold text-gray-900">
-                                        {{ item.member.application.full_name }}
-                                    </h4>
+                                <a
+                                    href="{% url 'team:committee_member_detail' item.pk %}"
+                                    class="font-bold text-gray-900 transition hover:text-green-700"
+                                >
+                                    {{ item.member.application.full_name }}
+                                </a>
 
                                     <p class="mt-1 text-sm font-medium text-green-700">
                                         {{ item.get_designation_display }}
                                     </p>
 
-                                    <p class="mt-1 text-xs text-gray-500">
+                                    <a
+                                        href="{% url 'team:committee_member_detail' item.pk %}"
+                                        class="mt-1 block text-xs text-gray-500 hover:text-green-700"
+                                    >
                                         {{ item.member.member_id }}
-                                    </p>
+                                    </a>
 
                                 </div>
 
