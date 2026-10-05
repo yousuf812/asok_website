@@ -1,6 +1,7 @@
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.text import slugify
+from django.utils import timezone
 
 
 class TeamMember(models.Model):
@@ -359,6 +360,34 @@ class CommitteeMember(models.Model):
 
         verbose_name = "Committee Member"
         verbose_name_plural = "Committee Members"
+
+    @property
+    def effective_status(self):
+        """
+        Return the member's actual status based on
+        the current month's payment.
+        """
+        if self.status != "active":
+            return self.status
+
+        today = timezone.localdate()
+
+        has_paid_current_month = self.application.payments.filter(
+            payment_type="monthly",
+            status="paid",
+            payment_month__year=today.year,
+            payment_month__month=today.month,
+        ).exists()
+
+        if not has_paid_current_month:
+            return "inactive"
+
+        return "active"
+
+    @property
+    def effective_status_display(self):
+        status_labels = dict(self.STATUS_CHOICES)
+        return status_labels.get(self.effective_status, self.effective_status)
 
     def clean(self):
         if not self.member_id:

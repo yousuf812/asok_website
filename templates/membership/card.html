@@ -156,7 +156,7 @@ Member ID Card | {{ member.member_id }}
              FRONT + BACK
         ========================================= -->
 
-        <div class="cards-wrapper grid gap-8 lg:grid-cols-2">
+        <div  id="id-card-container" class="cards-wrapper grid gap-8 lg:grid-cols-2">
 
 
             <!-- =====================================================
@@ -347,24 +347,23 @@ Member ID Card | {{ member.member_id }}
 
                                     :
 
-                                    {% if member.status == "active" %}
-
-                                        <span
-                                            class="ml-1 inline-flex rounded-full bg-lime-400 px-3 py-1 text-[10px] font-black text-emerald-950"
-                                        >
-                                            ACTIVE
-                                        </span>
-
-                                    {% else %}
-
-                                        <span
-                                            class="ml-1 inline-flex rounded-full bg-red-400 px-3 py-1 text-[10px] font-black text-red-950"
-                                        >
-                                            INACTIVE
-                                        </span>
-
-                                    {% endif %}
-
+                                    {% if effective_status == "active" %}
+                                    <span class="inline-flex items-center rounded-full bg-green-100 px-4 py-2 text-sm font-bold text-green-700">
+                                        ● ACTIVE
+                                    </span>
+                                {% elif effective_status == "inactive" %}
+                                    <span class="inline-flex items-center rounded-full bg-red-100 px-4 py-2 text-sm font-bold text-red-700">
+                                        ● INACTIVE
+                                    </span>
+                                {% elif effective_status == "suspended" %}
+                                    <span class="inline-flex items-center rounded-full bg-orange-100 px-4 py-2 text-sm font-bold text-orange-700">
+                                        ● SUSPENDED
+                                    </span>
+                                {% else %}
+                                    <span class="inline-flex items-center rounded-full bg-gray-100 px-4 py-2 text-sm font-bold text-gray-700">
+                                        ● {{ effective_status_display|upper }}
+                                    </span>
+                                {% endif %}
                                 </span>
 
                             </div>
@@ -636,12 +635,61 @@ Member ID Card | {{ member.member_id }}
                 🖨 Print ID Card
             </button>
 
+            <button
+                type="button"
+                onclick="downloadIDCard()"
+                class="inline-flex w-full items-center justify-center rounded-xl bg-emerald-700 px-6 py-3 text-sm font-black text-white shadow-lg transition hover:bg-emerald-800 sm:w-auto"
+            >
+                ⬇ Download ID Card
+            </button>
+
         </div>
 
 
     </div>
 
 </section>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<script>
+async function downloadIDCard() {
+    const card = document.getElementById("id-card-container");
+
+    if (!card) {
+        alert("ID Card container not found.");
+        return;
+    }
+
+    const button = event.currentTarget;
+    const originalText = button.innerHTML;
+
+    button.disabled = true;
+    button.innerHTML = "⏳ Preparing...";
+
+    try {
+        const canvas = await html2canvas(card, {
+            scale: 3,
+            useCORS: true,
+            backgroundColor: "#ffffff"
+        });
+
+        const link = document.createElement("a");
+
+        link.download = "ASOK-ID-Card-{{ member.member_id }}.png";
+        link.href = canvas.toDataURL("image/png");
+
+        link.click();
+
+    } catch (error) {
+        console.error("ID Card download error:", error);
+        alert("Unable to download the ID Card. Please try again.");
+    }
+
+    button.disabled = false;
+    button.innerHTML = originalText;
+}
+</script>
 
 
 

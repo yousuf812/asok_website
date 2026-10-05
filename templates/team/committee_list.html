@@ -31,6 +31,141 @@ Committee | ASOK Foundation
 
 <section class="bg-gray-50 py-12 sm:py-16">
 
+    <!-- Committee Location Filter -->
+<div class="mb-10 rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gray-200">
+
+    <div class="mb-5">
+        <h2 class="text-xl font-bold text-gray-900">
+            Find Committee by Location
+        </h2>
+
+        <p class="mt-1 text-sm text-gray-500">
+            Select your administrative area to view relevant committee members.
+        </p>
+    </div>
+
+    <form
+        method="get"
+        action="{% url 'team:committee_list' %}"
+        class="grid gap-4 sm:grid-cols-2 lg:grid-cols-5"
+    >
+
+        <!-- Division -->
+        <div>
+            <label class="mb-2 block text-sm font-semibold text-gray-700">
+                Division
+            </label>
+
+            <select
+                id="committee-division"
+                name="division"
+                data-selected-district="{{ selected_district|default:'' }}"
+                data-selected-upazila="{{ selected_upazila|default:'' }}"
+                data-selected-municipality="{{ selected_municipality|default:'' }}"
+                data-selected-union-ward="{{ selected_union_ward|default:'' }}"
+                class="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm focus:border-green-600 focus:ring-green-600"
+            >
+                <option value="">All Divisions</option>
+
+                {% for division in divisions %}
+                <option
+                    value="{{ division.id }}"
+                    {% if selected_division == division.id|stringformat:"s" %}selected{% endif %}
+                >
+                    {{ division.name }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+
+
+        <!-- District -->
+        <div>
+            <label class="mb-2 block text-sm font-semibold text-gray-700">
+                District
+            </label>
+
+            <select
+                id="committee-district"
+                name="district"
+                class="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm focus:border-green-600 focus:ring-green-600"
+            >
+                <option value="">All Districts</option>
+            </select>
+        </div>
+
+
+        <!-- Upazila -->
+        <div>
+            <label class="mb-2 block text-sm font-semibold text-gray-700">
+                Thana / Upazila
+            </label>
+
+            <select
+                id="committee-upazila"
+                name="upazila"
+                class="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm focus:border-green-600 focus:ring-green-600"
+            >
+                <option value="">All Upazilas</option>
+            </select>
+        </div>
+
+
+        <!-- Municipality -->
+        <div>
+            <label class="mb-2 block text-sm font-semibold text-gray-700">
+                Municipality
+            </label>
+
+            <select
+                id="committee-municipality"
+                name="municipality"
+                class="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm focus:border-green-600 focus:ring-green-600"
+            >
+                <option value="">All Municipalities</option>
+            </select>
+        </div>
+
+
+        <!-- Union / Ward -->
+        <div>
+            <label class="mb-2 block text-sm font-semibold text-gray-700">
+                Union / Ward
+            </label>
+
+            <select
+                id="committee-union-ward"
+                name="union_ward"
+                class="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm focus:border-green-600 focus:ring-green-600"
+            >
+                <option value="">All Union / Wards</option>
+            </select>
+        </div>
+
+
+        <!-- Buttons -->
+        <div class="flex gap-3 sm:col-span-2 lg:col-span-5">
+
+            <button
+                type="submit"
+                class="rounded-xl bg-green-800 px-6 py-3 font-semibold text-white transition hover:bg-green-900"
+            >
+                Filter Committee
+            </button>
+
+            <a
+                href="{% url 'team:committee_list' %}"
+                class="rounded-xl border border-gray-300 px-6 py-3 font-semibold text-gray-700 transition hover:bg-gray-50"
+            >
+                Reset
+            </a>
+
+        </div>
+
+    </form>
+
+</div>
+
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 
         <div class="grid gap-8 lg:grid-cols-2">
@@ -292,5 +427,7 @@ Committee | ASOK Foundation
     </div>
 
 </section>
+
+<script src="{% static 'team/js/committee_filter.js' %}"></script>
 
 {% endblock %}

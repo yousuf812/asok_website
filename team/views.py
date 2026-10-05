@@ -163,6 +163,7 @@ from .models import (
     CommitteeMember,
     CommitteeMinimum,
     CommitteeType,
+     Division,
 )
 
 
@@ -282,6 +283,7 @@ def committee_list(request):
             "selected_upazila": upazila_id,
             "selected_municipality": municipality_id,
             "selected_union_ward": union_ward_id,
+            "divisions": Division.objects.all().order_by("name"),
         },
     )
 

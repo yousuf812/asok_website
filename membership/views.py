@@ -166,6 +166,8 @@ def member_verify(request, member_id):
         "promotion": promotion,
         "verification_url": verification_url,
         "qr_code": qr_code,
+        "effective_status": member.effective_status,
+        "effective_status_display": member.effective_status_display,
     }
 
     return render(
@@ -236,6 +238,8 @@ def member_card(request, member_id):
         "promotion": promotion,
         "qr_code": qr_code,
         "verification_url": verification_url,
+        "effective_status": member.effective_status,
+        "effective_status_display": member.effective_status_display,
     }
 
     return render(
