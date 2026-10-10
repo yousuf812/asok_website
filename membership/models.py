@@ -1,7 +1,7 @@
 import uuid
-
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.contrib.auth.models import User
 
 
 class MembershipApplication(models.Model):
@@ -232,9 +232,21 @@ class MembershipPayment(models.Model):
     )
 
     class Meta:
-        ordering = ["-created_at"]
-        verbose_name = "Membership Payment"
-        verbose_name_plural = "Membership Payments"
+        ordering = ["-payment_month", "-created_at"]
+
+    constraints = [
+        models.UniqueConstraint(
+            fields=[
+                "application",
+                "payment_type",
+                "payment_month",
+            ],
+            condition=models.Q(
+                payment_type="monthly",
+            ),
+            name="unique_monthly_payment_per_application",
+        ),
+    ]
 
     def __str__(self):
         return (
@@ -289,10 +301,31 @@ class Member(models.Model):
         ("suspended", "Suspended"),
     ]
 
+    activation_token = models.UUIDField(
+    default=uuid.uuid4,
+    unique=True,
+    editable=False,
+    null=True,
+    blank=True,
+    )
+
+    activation_token_created_at = models.DateTimeField(
+        null=True,
+        blank=True,
+    )
+
     application = models.OneToOneField(
         MembershipApplication,
         on_delete=models.CASCADE,
         related_name="member",
+    )
+
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        related_name="member_profile",
+        blank=True,
+        null=True,
     )
 
     member_id = models.CharField(

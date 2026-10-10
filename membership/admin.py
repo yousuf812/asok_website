@@ -1,4 +1,8 @@
 from django.contrib import admin
+from django.utils import timezone
+from django.contrib import messages
+from django.contrib.auth.models import User
+
 from .models import (
     MembershipApplication,
     MembershipPayment,
@@ -155,41 +159,44 @@ class MembershipApplicationAdmin(admin.ModelAdmin):
 
 @admin.register(MembershipPayment)
 class MembershipPaymentAdmin(admin.ModelAdmin):
+
     list_display = [
         "id",
-        "application",
+        "member_id",
+        "member_name",
         "payment_type",
         "amount",
-        "payment_method",
         "payment_month",
+        "payment_method",
         "status",
+        "transaction_id",
         "paid_at",
         "created_at",
     ]
 
     list_filter = [
         "payment_type",
-        "payment_method",
         "status",
+        "payment_method",
         "payment_month",
         "created_at",
     ]
 
     search_fields = [
-        "application__reference_number",
+        "application__member__member_id",
         "application__full_name",
         "application__email",
-        "application__phone",
         "transaction_id",
     ]
 
-    list_editable = [
-        "status",
-    ]
-
     readonly_fields = [
+        "paid_at",
         "created_at",
         "updated_at",
+    ]
+
+    autocomplete_fields = [
+        "application",
     ]
 
     date_hierarchy = "created_at"
@@ -200,23 +207,23 @@ class MembershipPaymentAdmin(admin.ModelAdmin):
 
     fieldsets = (
         (
-            "Member / Application",
+            "Payment Information",
             {
                 "fields": (
                     "application",
+                    "payment_type",
+                    "amount",
+                    "payment_month",
                 )
             },
         ),
         (
-            "Payment Information",
+            "Payment Details",
             {
                 "fields": (
-                    "payment_type",
-                    "amount",
                     "payment_method",
-                    "payment_month",
-                    "status",
                     "transaction_id",
+                    "status",
                     "paid_at",
                 )
             },
@@ -240,6 +247,33 @@ class MembershipPaymentAdmin(admin.ModelAdmin):
         ),
     )
 
+    @admin.display(
+        description="Member ID",
+        ordering="application__member__member_id",
+    )
+    def member_id(self, obj):
+        if hasattr(obj.application, "member"):
+            return obj.application.member.member_id
+
+        return "-"
+
+    @admin.display(
+        description="Member Name",
+        ordering="application__full_name",
+    )
+    def member_name(self, obj):
+        return obj.application.full_name
+
+    def save_model(self, request, obj, form, change):
+
+        if obj.status == "paid":
+            if not obj.paid_at:
+                obj.paid_at = timezone.now()
+
+        else:
+            obj.paid_at = None
+
+        super().save_model(request, obj, form, change)
 
 @admin.register(MembershipFeeSettings)
 class MembershipFeeSettingsAdmin(admin.ModelAdmin):
@@ -287,19 +321,18 @@ def save_model(self, request, obj, form, change):
 
 @admin.register(Member)
 class MemberAdmin(admin.ModelAdmin):
-
     list_display = [
         "member_id",
-        "get_full_name",
-        "get_membership_type",
+        "member_name",
         "status",
+        "effective_status_display",
         "activation_date",
+        "user",
         "joined_at",
     ]
 
     list_filter = [
         "status",
-        "application__membership_type",
         "activation_date",
         "joined_at",
     ]
@@ -309,36 +342,44 @@ class MemberAdmin(admin.ModelAdmin):
         "application__full_name",
         "application__email",
         "application__phone",
-        "application__reference_number",
-        "application__nid_number",
-        "application__birth_registration_number",
-    ]
-
-    list_editable = [
-        "status",
     ]
 
     readonly_fields = [
         "member_id",
         "joined_at",
         "updated_at",
+        "activation_token",
+        "activation_token_created_at",
     ]
 
-    ordering = [
-        "-joined_at",
+    autocomplete_fields = [
+        "application",
+        "user",
     ]
 
-    date_hierarchy = "joined_at"
+    actions = [
+        "create_member_accounts",
+    ]
 
     fieldsets = (
         (
             "Member Information",
             {
                 "fields": (
-                    "member_id",
                     "application",
+                    "member_id",
                     "status",
                     "activation_date",
+                )
+            },
+        ),
+        (
+            "Login Account",
+            {
+                "fields": (
+                    "user",
+                    "activation_token",
+                    "activation_token_created_at",
                 )
             },
         ),
@@ -357,27 +398,93 @@ class MemberAdmin(admin.ModelAdmin):
         description="Member Name",
         ordering="application__full_name",
     )
-    def get_full_name(self, obj):
+    def member_name(self, obj):
         return obj.application.full_name
 
     @admin.display(
-        description="Membership Type",
-        ordering="application__membership_type",
+        description="Effective Status",
     )
-    def get_membership_type(self, obj):
-        return obj.application.get_membership_type_display()
+    def effective_status_display(self, obj):
+        return obj.effective_status_display
 
-def save_model(self, request, obj, form, change):
-    from django.utils import timezone
+    @admin.action(
+        description="Create login account for selected members"
+    )
+    def create_member_accounts(self, request, queryset):
 
-    if obj.status == "active" and not obj.activation_date:
-        obj.activation_date = timezone.localdate()
+        created_count = 0
+        skipped_count = 0
 
-    if obj.status != "active":
-        obj.activation_date = None
+        for member in queryset.select_related("application", "user"):
 
-    super().save_model(request, obj, form, change)
+            # Already has an account
+            if member.user:
+                skipped_count += 1
+                continue
 
+            # Only active members can receive accounts
+            if member.status != "active":
+                skipped_count += 1
+                continue
+
+            application = member.application
+
+            username = member.member_id.lower()
+
+            # Existing username protection
+            if User.objects.filter(username=username).exists():
+                skipped_count += 1
+                continue
+
+            # Create user account
+            user = User.objects.create_user(
+                username=username,
+                email=application.email,
+                first_name=application.full_name,
+                is_active=True,
+            )
+
+            # User cannot login until password is created
+            user.set_unusable_password()
+            user.save()
+
+            # Create secure activation token
+            member.activation_token = uuid.uuid4()
+            member.activation_token_created_at = timezone.now()
+
+            member.user = user
+
+            member.save(
+                update_fields=[
+                    "user",
+                    "activation_token",
+                    "activation_token_created_at",
+                    "updated_at",
+                ]
+            )
+
+            created_count += 1
+
+            activation_url = request.build_absolute_uri(
+                f"/join-us/set-password/{member.member_id}/"
+                f"?token={member.activation_token}"
+            )
+
+            self.message_user(
+                request,
+                (
+                    f"Account created for {member.member_id}. "
+                    f"Activation URL: {activation_url}"
+                ),
+                messages.SUCCESS,
+            )
+
+        if created_count == 0:
+            self.message_user(
+                request,
+                "No new member account was created.",
+                messages.WARNING,
+            )
 
 @admin.register(MemberPromotion)
 class MemberPromotionAdmin(admin.ModelAdmin):

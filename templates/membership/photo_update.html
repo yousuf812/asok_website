@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+
+{% block title %}Update Photo | ASOK{% endblock %}
+
+{% block content %}
+
+<section class="min-h-screen bg-slate-50 py-10">
+
+    <div class="mx-auto max-w-xl px-4 sm:px-6">
+
+        <div class="mb-6">
+            <a
+                href="{% url 'membership:dashboard' %}"
+                class="text-sm font-bold text-emerald-700 hover:text-emerald-900"
+            >
+                ← Back to Dashboard
+            </a>
+        </div>
+
+        <div class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
+
+            <div class="bg-emerald-700 px-6 py-7 text-white sm:px-8">
+
+                <p class="text-sm font-bold text-emerald-100">
+                    {{ member.member_id }}
+                </p>
+
+                <h1 class="mt-2 text-2xl font-black">
+                    Update Profile Photo
+                </h1>
+
+                <p class="mt-2 text-sm text-emerald-100">
+                    Upload a clear and recent profile photo.
+                </p>
+
+            </div>
+
+            <div class="p-6 sm:p-8">
+
+                {% if error %}
+                    <div class="mb-6 rounded-2xl border border-red-200 bg-red-50 p-4 text-sm font-semibold text-red-700">
+                        {{ error }}
+                    </div>
+                {% endif %}
+
+                {% if member.application.photo %}
+                    <div class="mb-8 text-center">
+
+                        <p class="mb-3 text-sm font-bold text-slate-600">
+                            Current Photo
+                        </p>
+
+                        <img
+                            src="{{ member.application.photo.url }}"
+                            alt="{{ member.application.full_name }}"
+                            class="mx-auto h-32 w-32 rounded-full border-4 border-emerald-100 object-cover shadow"
+                        >
+
+                    </div>
+                {% endif %}
+
+                <form
+                    method="post"
+                    enctype="multipart/form-data"
+                    class="space-y-6"
+                >
+
+                    {% csrf_token %}
+
+                    <div>
+
+                        <label
+                            for="photo"
+                            class="mb-2 block text-sm font-black text-slate-700"
+                        >
+                            New Profile Photo
+                        </label>
+
+                        <input
+                            type="file"
+                            name="photo"
+                            id="photo"
+                            accept="image/jpeg,image/png,image/webp"
+                            required
+                            class="block w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-700"
+                        >
+
+                        <p class="mt-2 text-xs text-slate-500">
+                            JPG, PNG or WEBP. Maximum size: 5 MB.
+                        </p>
+
+                    </div>
+
+                    <div class="rounded-2xl bg-slate-50 p-4 text-sm text-slate-600">
+                        <p class="font-bold text-slate-800">
+                            Photo Security
+                        </p>
+
+                        <p class="mt-2">
+                            Your profile photo is used for your member
+                            profile and ASOK ID card.
+                        </p>
+                    </div>
+
+                    <div class="flex flex-col gap-3 border-t border-slate-100 pt-6 sm:flex-row">
+
+                        <a
+                            href="{% url 'membership:dashboard' %}"
+                            class="inline-flex items-center justify-center rounded-xl border border-slate-300 px-6 py-3 font-bold text-slate-700 hover:bg-slate-50"
+                        >
+                            Cancel
+                        </a>
+
+                        <button
+                            type="submit"
+                            class="inline-flex flex-1 items-center justify-center rounded-xl bg-emerald-700 px-6 py-3 font-black text-white hover:bg-emerald-800"
+                        >
+                            Update Photo
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

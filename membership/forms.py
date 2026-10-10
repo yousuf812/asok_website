@@ -230,3 +230,105 @@ class MembershipApplicationForm(forms.ModelForm):
             )
 
         return document
+
+
+
+
+
+
+from .models import MembershipPayment
+
+
+class MemberMonthlyPaymentForm(forms.ModelForm):
+
+    class Meta:
+        model = MembershipPayment
+
+        fields = [
+            "amount",
+            "payment_method",
+            "payment_month",
+            "transaction_id",
+            "notes",
+        ]
+
+        widgets = {
+            "amount": forms.NumberInput(
+                attrs={
+                    "class": (
+                        "w-full rounded-xl border border-slate-300 "
+                        "px-4 py-3 outline-none "
+                        "focus:border-emerald-600 "
+                        "focus:ring-2 focus:ring-emerald-100"
+                    ),
+                    "step": "0.01",
+                    "min": "0",
+                }
+            ),
+
+            "payment_method": forms.Select(
+                attrs={
+                    "class": (
+                        "w-full rounded-xl border border-slate-300 "
+                        "px-4 py-3 outline-none "
+                        "focus:border-emerald-600 "
+                        "focus:ring-2 focus:ring-emerald-100"
+                    ),
+                }
+            ),
+
+            "payment_month": forms.DateInput(
+                attrs={
+                    "type": "month",
+                    "class": (
+                        "w-full rounded-xl border border-slate-300 "
+                        "px-4 py-3 outline-none "
+                        "focus:border-emerald-600 "
+                        "focus:ring-2 focus:ring-emerald-100"
+                    ),
+                }
+            ),
+
+            "transaction_id": forms.TextInput(
+                attrs={
+                    "class": (
+                        "w-full rounded-xl border border-slate-300 "
+                        "px-4 py-3 outline-none "
+                        "focus:border-emerald-600 "
+                        "focus:ring-2 focus:ring-emerald-100"
+                    ),
+                    "placeholder": "bKash / Nagad / Bank Transaction ID",
+                }
+            ),
+
+            "notes": forms.Textarea(
+                attrs={
+                    "class": (
+                        "w-full rounded-xl border border-slate-300 "
+                        "px-4 py-3 outline-none "
+                        "focus:border-emerald-600 "
+                        "focus:ring-2 focus:ring-emerald-100"
+                    ),
+                    "rows": 3,
+                    "placeholder": "Optional notes",
+                }
+            ),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.fields["payment_method"].choices = [
+            choice
+            for choice in self.fields["payment_method"].choices
+            if choice[0] != ""
+        ]
+
+    def clean_payment_month(self):
+        payment_month = self.cleaned_data["payment_month"]
+
+        if payment_month:
+            # Store the first day of the selected month.
+            return payment_month.replace(day=1)
+
+        return payment_month

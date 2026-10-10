@@ -1,0 +1,319 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Monthly Fee Payment | ASOK{% endblock %}
+
+{% block content %}
+
+<section class="min-h-screen bg-slate-50 py-10">
+    <div class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+
+        <!-- Header -->
+        <div class="mb-8">
+            <a
+                href="{% url 'membership:dashboard' %}"
+                class="mb-4 inline-flex items-center gap-2 text-sm font-bold text-emerald-700 hover:text-emerald-900"
+            >
+                ← Back to Dashboard
+            </a>
+
+            <h1 class="text-3xl font-black tracking-tight text-slate-900">
+                Monthly Membership Fee
+            </h1>
+
+            <p class="mt-2 text-slate-600">
+                Submit your monthly membership payment request.
+            </p>
+        </div>
+
+
+        {% if error %}
+
+            <!-- Error -->
+            <div class="mb-6 rounded-2xl border border-red-200 bg-red-50 p-5 text-red-800">
+                <p class="font-bold">
+                    {{ error }}
+                </p>
+            </div>
+
+        {% elif existing_payment %}
+
+            <!-- Existing Payment -->
+            <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
+
+                <div class="mb-6 flex items-center gap-4">
+                    <div class="flex h-12 w-12 items-center justify-center rounded-full bg-amber-100 text-2xl">
+                        ⏳
+                    </div>
+
+                    <div>
+                        <h2 class="text-xl font-black text-slate-900">
+                            Payment Already Submitted
+                        </h2>
+
+                        <p class="text-sm text-slate-500">
+                            You already have a payment record for this month.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="grid gap-4 sm:grid-cols-2">
+
+                    <div class="rounded-2xl bg-slate-50 p-4">
+                        <p class="text-xs font-bold uppercase tracking-wide text-slate-500">
+                            Member ID
+                        </p>
+
+                        <p class="mt-1 font-black text-slate-900">
+                            {{ member.member_id }}
+                        </p>
+                    </div>
+
+                    <div class="rounded-2xl bg-slate-50 p-4">
+                        <p class="text-xs font-bold uppercase tracking-wide text-slate-500">
+                            Payment Month
+                        </p>
+
+                        <p class="mt-1 font-black text-slate-900">
+                            {{ existing_payment.payment_month|date:"F Y" }}
+                        </p>
+                    </div>
+
+                    <div class="rounded-2xl bg-slate-50 p-4">
+                        <p class="text-xs font-bold uppercase tracking-wide text-slate-500">
+                            Amount
+                        </p>
+
+                        <p class="mt-1 text-xl font-black text-emerald-700">
+                            ৳{{ existing_payment.amount }}
+                        </p>
+                    </div>
+
+                    <div class="rounded-2xl bg-slate-50 p-4">
+                        <p class="text-xs font-bold uppercase tracking-wide text-slate-500">
+                            Status
+                        </p>
+
+                        {% if existing_payment.status == "paid" %}
+                            <span class="mt-2 inline-flex rounded-full bg-emerald-100 px-3 py-1 text-sm font-bold text-emerald-700">
+                                Paid
+                            </span>
+                        {% else %}
+                            <span class="mt-2 inline-flex rounded-full bg-amber-100 px-3 py-1 text-sm font-bold text-amber-700">
+                                Pending Verification
+                            </span>
+                        {% endif %}
+                    </div>
+
+                </div>
+
+                <div class="mt-8">
+                    <a
+                        href="{% url 'membership:dashboard' %}"
+                        class="inline-flex w-full items-center justify-center rounded-xl bg-emerald-700 px-6 py-3 font-black text-white transition hover:bg-emerald-800 sm:w-auto"
+                    >
+                        Back to Dashboard
+                    </a>
+                </div>
+
+            </div>
+
+        {% else %}
+
+            <!-- Payment Form -->
+            <div class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
+
+                <!-- Top -->
+                <div class="bg-emerald-700 px-6 py-7 text-white sm:px-8">
+                    <p class="text-sm font-bold uppercase tracking-wider text-emerald-100">
+                        {{ member.member_id }}
+                    </p>
+
+                    <h2 class="mt-2 text-2xl font-black">
+                        Monthly Fee Payment
+                    </h2>
+
+                    <p class="mt-2 text-sm text-emerald-100">
+                        Payment for {{ current_month|date:"F Y" }}
+                    </p>
+                </div>
+
+
+                <div class="p-6 sm:p-8">
+
+                    <!-- Fee Summary -->
+                    <div class="mb-8 rounded-2xl border border-emerald-100 bg-emerald-50 p-5">
+
+                        <div class="flex items-center justify-between gap-4">
+
+                            <div>
+                                <p class="text-sm font-bold text-slate-600">
+                                    Monthly Membership Fee
+                                </p>
+
+                                <p class="mt-1 text-xs text-slate-500">
+                                    Amount is fixed by ASOK administration.
+                                </p>
+                            </div>
+
+                            <div class="text-2xl font-black text-emerald-700">
+                                ৳{{ monthly_fee }}
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    {% if form.non_field_errors %}
+                        <div class="mb-6 rounded-xl bg-red-50 p-4 text-sm text-red-700">
+                            {{ form.non_field_errors }}
+                        </div>
+                    {% endif %}
+
+
+                    <form method="post" class="space-y-6">
+
+                        {% csrf_token %}
+
+
+                        <!-- Amount -->
+                        <div>
+                            <label
+                                for="{{ form.amount.id_for_label }}"
+                                class="mb-2 block text-sm font-black text-slate-700"
+                            >
+                                Amount
+                            </label>
+
+                            {{ form.amount }}
+
+                            <p class="mt-1 text-xs text-slate-500">
+                                The server will use the official monthly fee.
+                            </p>
+
+                            {% for error in form.amount.errors %}
+                                <p class="mt-1 text-sm font-semibold text-red-600">
+                                    {{ error }}
+                                </p>
+                            {% endfor %}
+                        </div>
+
+
+                        <!-- Payment Method -->
+                        <div>
+                            <label
+                                for="{{ form.payment_method.id_for_label }}"
+                                class="mb-2 block text-sm font-black text-slate-700"
+                            >
+                                Payment Method
+                            </label>
+
+                            {{ form.payment_method }}
+
+                            {% for error in form.payment_method.errors %}
+                                <p class="mt-1 text-sm font-semibold text-red-600">
+                                    {{ error }}
+                                </p>
+                            {% endfor %}
+                        </div>
+
+
+                        <!-- Payment Month -->
+                        <div>
+                            <label
+                                for="{{ form.payment_month.id_for_label }}"
+                                class="mb-2 block text-sm font-black text-slate-700"
+                            >
+                                Payment Month
+                            </label>
+
+                            {{ form.payment_month }}
+
+                            <p class="mt-1 text-xs text-slate-500">
+                                Your request will be recorded for the current month.
+                            </p>
+
+                            {% for error in form.payment_month.errors %}
+                                <p class="mt-1 text-sm font-semibold text-red-600">
+                                    {{ error }}
+                                </p>
+                            {% endfor %}
+                        </div>
+
+
+                        <!-- Transaction ID -->
+                        <div>
+                            <label
+                                for="{{ form.transaction_id.id_for_label }}"
+                                class="mb-2 block text-sm font-black text-slate-700"
+                            >
+                                Transaction ID
+                                <span class="font-normal text-slate-400">
+                                    (Optional)
+                                </span>
+                            </label>
+
+                            {{ form.transaction_id }}
+
+                            <p class="mt-1 text-xs text-slate-500">
+                                Required only when your payment method provides a transaction ID.
+                            </p>
+
+                            {% for error in form.transaction_id.errors %}
+                                <p class="mt-1 text-sm font-semibold text-red-600">
+                                    {{ error }}
+                                </p>
+                            {% endfor %}
+                        </div>
+
+
+                        <!-- Notes -->
+                        <div>
+                            <label
+                                for="{{ form.notes.id_for_label }}"
+                                class="mb-2 block text-sm font-black text-slate-700"
+                            >
+                                Notes
+                            </label>
+
+                            {{ form.notes }}
+
+                            {% for error in form.notes.errors %}
+                                <p class="mt-1 text-sm font-semibold text-red-600">
+                                    {{ error }}
+                                </p>
+                            {% endfor %}
+                        </div>
+
+
+                        <!-- Submit -->
+                        <div class="flex flex-col gap-3 border-t border-slate-100 pt-6 sm:flex-row">
+
+                            <a
+                                href="{% url 'membership:dashboard' %}"
+                                class="inline-flex items-center justify-center rounded-xl border border-slate-300 px-6 py-3 font-bold text-slate-700 transition hover:bg-slate-50"
+                            >
+                                Cancel
+                            </a>
+
+                            <button
+                                type="submit"
+                                class="inline-flex flex-1 items-center justify-center rounded-xl bg-emerald-700 px-6 py-3 font-black text-white shadow-lg transition hover:bg-emerald-800"
+                            >
+                                Submit Payment Request
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+
+        {% endif %}
+
+    </div>
+</section>
+
+{% endblock %}

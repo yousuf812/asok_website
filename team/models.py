@@ -119,6 +119,8 @@ class CommitteeMemberType(models.TextChoices):
     ADVISOR = "advisor", "Advisory Council"
 
 
+
+
 class CommitteeDesignation(models.TextChoices):
     PRESIDENT = "president", "সভাপতি"
     SENIOR_VICE_PRESIDENT = "senior_vice_president", "সিনিয়র সহ-সভাপতি"
