@@ -1,3 +1,4 @@
+
 from django.contrib import admin
 
 from .models import Project
@@ -8,6 +9,7 @@ class ProjectAdmin(admin.ModelAdmin):
 
     list_display = [
         "title",
+        "slug",
         "published_date",
         "is_active",
         "created_at",
@@ -22,6 +24,7 @@ class ProjectAdmin(admin.ModelAdmin):
 
     search_fields = [
         "title",
+        "slug",
         "description",
     ]
 
@@ -30,7 +33,6 @@ class ProjectAdmin(admin.ModelAdmin):
     ]
 
     readonly_fields = [
-        "slug",
         "created_at",
         "updated_at",
     ]
@@ -77,3 +79,4 @@ class ProjectAdmin(admin.ModelAdmin):
             },
         ),
     )
+

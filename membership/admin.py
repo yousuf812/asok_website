@@ -401,11 +401,15 @@ class MemberAdmin(admin.ModelAdmin):
     def member_name(self, obj):
         return obj.application.full_name
 
+   
     @admin.display(
         description="Effective Status",
+        ordering="status",
     )
     def effective_status_display(self, obj):
-        return obj.effective_status_display
+        return obj.get_status_display()
+
+
 
     @admin.action(
         description="Create login account for selected members"

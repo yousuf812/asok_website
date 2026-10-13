@@ -4,6 +4,9 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 from django.contrib.sitemaps.views import sitemap
+from django.urls import re_path
+from django.views.static import serve
+
 
 from core.sitemaps import (
     StaticViewSitemap,
@@ -35,6 +38,11 @@ urlpatterns = [
       path("newsletter/",include("newsletter.urls")),
       path( "projects/", include("projects.urls")),
       path("team/", include("team.urls")),
+      re_path(
+        r"^media/(?P<path>.*)$",
+        serve,
+        {"document_root": settings.MEDIA_ROOT},
+    ),
 
       path(
     "sitemap.xml",
