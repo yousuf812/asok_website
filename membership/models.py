@@ -231,22 +231,26 @@ class MembershipPayment(models.Model):
         auto_now=True,
     )
 
+    
     class Meta:
         ordering = ["-payment_month", "-created_at"]
 
-    constraints = [
-        models.UniqueConstraint(
-            fields=[
-                "application",
-                "payment_type",
-                "payment_month",
-            ],
-            condition=models.Q(
-                payment_type="monthly",
+        constraints = [
+            models.UniqueConstraint(
+                fields=[
+                    "application",
+                    "payment_type",
+                    "payment_month",
+                ],
+                condition=models.Q(
+                    payment_type="monthly",
+                    payment_month__isnull=False,
+                    status__in=["pending", "paid"],
+                ),
+                name="unique_monthly_payment_per_application",
             ),
-            name="unique_monthly_payment_per_application",
-        ),
-    ]
+        ]
+
 
     def __str__(self):
         return (

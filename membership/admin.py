@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.utils import timezone
 from django.contrib import messages
 from django.contrib.auth.models import User
+import uuid
 
 from .models import (
     MembershipApplication,
@@ -264,16 +265,23 @@ class MembershipPaymentAdmin(admin.ModelAdmin):
     def member_name(self, obj):
         return obj.application.full_name
 
+    
     def save_model(self, request, obj, form, change):
+        if obj.payment_type == "monthly" and not obj.payment_month:
+            from django.core.exceptions import ValidationError
+
+            raise ValidationError(
+                "Payment month is required for monthly membership fees."
+            )
 
         if obj.status == "paid":
             if not obj.paid_at:
                 obj.paid_at = timezone.now()
-
         else:
             obj.paid_at = None
 
         super().save_model(request, obj, form, change)
+
 
 @admin.register(MembershipFeeSettings)
 class MembershipFeeSettingsAdmin(admin.ModelAdmin):
@@ -304,19 +312,6 @@ class MembershipFeeSettingsAdmin(admin.ModelAdmin):
     def has_delete_permission(self, request, obj=None):
         return False
 
-
-
-def save_model(self, request, obj, form, change):
-    if obj.payment_type == "monthly" and not obj.payment_month:
-        raise ValueError(
-            "Payment month is required for monthly membership fees."
-        )
-
-    if obj.status == "paid" and not obj.paid_at:
-        from django.utils import timezone
-        obj.paid_at = timezone.now()
-
-    super().save_model(request, obj, form, change)
 
 
 @admin.register(Member)

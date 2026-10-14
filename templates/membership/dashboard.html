@@ -163,281 +163,194 @@
         </div>
 
 
-        <!-- Quick Actions -->
+              <!-- Quick Actions -->
         <div class="mb-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
 
+            <!-- My ID Card -->
             <a
                 href="{% url 'membership:card' member.member_id %}"
-                class="rounded-2xl bg-emerald-800 p-6 text-white shadow-lg transition hover:-translate-y-1 hover:bg-emerald-900"
+                class="group rounded-2xl bg-emerald-800 p-6 text-white shadow-sm transition hover:-translate-y-1 hover:bg-emerald-900"
             >
-                <div class="text-3xl">🪪</div>
-
-                <h3 class="mt-4 text-lg font-black">
-                    My ID Card
-                </h3>
-
-                <p class="mt-1 text-sm text-emerald-100">
-                    View and download your ID card.
+                <div class="text-sm font-black uppercase tracking-widest text-emerald-200">
+                    Member Portal
+                </div>
+                <h3 class="mt-4 text-lg font-black">My ID Card</h3>
+                <p class="mt-2 text-sm leading-6 text-emerald-100">
+                    View and download your membership ID card.
                 </p>
             </a>
 
-
+            <!-- Payment History -->
             <a
                 href="#payments"
-                class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200 transition hover:-translate-y-1"
+                class="group rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200 transition hover:-translate-y-1 hover:shadow-md"
             >
-                <div class="text-3xl">💳</div>
-
-                <h3 class="mt-4 text-lg font-black text-slate-900">
-                    Payments
-                </h3>
-
-                <p class="mt-1 text-sm text-slate-500">
-                    View your membership payments.
+                <div class="text-sm font-black uppercase tracking-widest text-emerald-700">
+                    Payment Records
+                </div>
+                <h3 class="mt-4 text-lg font-black text-slate-900">Payment History</h3>
+                <p class="mt-2 text-sm leading-6 text-slate-500">
+                    Review your monthly membership payments.
                 </p>
             </a>
 
-
+            <!-- Verify Membership -->
             <a
                 href="{% url 'membership:verify' member.member_id %}"
                 target="_blank"
-                class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200 transition hover:-translate-y-1"
+                rel="noopener noreferrer"
+                class="group rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200 transition hover:-translate-y-1 hover:shadow-md"
             >
-                <div class="text-3xl">🔳</div>
-
-                <h3 class="mt-4 text-lg font-black text-slate-900">
-                    Verify Membership
-                </h3>
-
-                <p class="mt-1 text-sm text-slate-500">
-                    Open your public verification page.
+                <div class="text-sm font-black uppercase tracking-widest text-blue-700">
+                    Verification
+                </div>
+                <h3 class="mt-4 text-lg font-black text-slate-900">Verify Membership</h3>
+                <p class="mt-2 text-sm leading-6 text-slate-500">
+                    Open your public membership verification page.
                 </p>
             </a>
 
-
-            <div class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
-
-                <div class="text-3xl">📅</div>
-
-                <h3 class="mt-4 text-lg font-black text-slate-900">
-                    Membership Status
-                </h3>
-
-                <p class="mt-1 text-sm text-slate-500">
-                    {{ effective_status_display }}
-                </p>
-
-            </div>
-
+            <!-- Change Password -->
             <a
                 href="{% url 'membership:change_password' %}"
-                class="inline-flex items-center justify-center rounded-xl border border-slate-300 px-5 py-3 text-sm font-black text-slate-700 transition hover:bg-slate-50"
+                class="group rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200 transition hover:-translate-y-1 hover:shadow-md"
             >
-                🔐 Change Password
-            </a>
-
-            <a
-                href="{% url 'membership:profile_edit' %}"
-                class="inline-flex items-center justify-center rounded-xl border border-slate-300 px-5 py-3 text-sm font-black text-slate-700 transition hover:bg-slate-50"
-            >
-                👤 Edit Profile
-            </a>
-
-            <a
-                href="{% url 'membership:photo_update' %}"
-                class="mt-3 inline-flex w-full items-center justify-center rounded-xl border border-slate-300 px-4 py-3 text-sm font-black text-slate-700 transition hover:bg-slate-50"
-            >
-                📷 Update Photo
-            </a>
-
-        </div>
-
-
-        <!-- Member Services -->
-<div class="mt-8">
-
-    <div class="mb-4">
-        <h2 class="text-xl font-black text-slate-900">
-            Member Services
-        </h2>
-
-        <p class="mt-1 text-sm text-slate-500">
-            Access your membership documents and verification tools.
-        </p>
-    </div>
-
-
-    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-
-
-        <!-- ID Card -->
-        <a
-            href="{% url 'membership:card' member.member_id %}"
-            class="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:border-emerald-300 hover:shadow-md"
-        >
-
-            <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-100 text-2xl transition group-hover:bg-emerald-200">
-                🪪
-            </div>
-
-            <h3 class="mt-4 font-black text-slate-900">
-                My ID Card
-            </h3>
-
-            <p class="mt-1 text-sm leading-6 text-slate-500">
-                View, print or download your official ASOK member ID card.
-            </p>
-
-            <span class="mt-4 inline-flex text-sm font-black text-emerald-700">
-                View ID Card →
-            </span>
-
-        </a>
-
-
-        <!-- Verification -->
-        <a
-            href="{% url 'membership:verify' member.member_id %}"
-            class="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:border-blue-300 hover:shadow-md"
-        >
-
-            <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-100 text-2xl transition group-hover:bg-blue-200">
-                🔍
-            </div>
-
-            <h3 class="mt-4 font-black text-slate-900">
-                Verify Membership
-            </h3>
-
-            <p class="mt-1 text-sm leading-6 text-slate-500">
-                Open your public membership verification page and QR code.
-            </p>
-
-            <span class="mt-4 inline-flex text-sm font-black text-blue-700">
-                Verify Member →
-            </span>
-
-        </a>
-
-
-        <!-- Monthly Payment -->
-        <a
-            href="{% url 'membership:monthly_payment' %}"
-            class="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:border-amber-300 hover:shadow-md"
-        >
-
-            <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-amber-100 text-2xl transition group-hover:bg-amber-200">
-                💳
-            </div>
-
-            <h3 class="mt-4 font-black text-slate-900">
-                Monthly Payment
-            </h3>
-
-            <p class="mt-1 text-sm leading-6 text-slate-500">
-                Submit and manage your current monthly membership payment.
-            </p>
-
-            <span class="mt-4 inline-flex text-sm font-black text-amber-700">
-                Manage Payment →
-            </span>
-
-        </a>
-
-
-    </div>
-
-</div>
-
-        <!-- Monthly Payment -->
-<div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-
-    <div class="flex items-start justify-between gap-4">
-
-        <div>
-            <p class="text-xs font-black uppercase tracking-wider text-slate-500">
-                Monthly Fee
-            </p>
-
-            {% if monthly_fee %}
-                <p class="mt-2 text-2xl font-black text-slate-900">
-                    ৳{{ monthly_fee }}
-                </p>
-            {% else %}
-                <p class="mt-2 font-bold text-red-600">
-                    Not configured
-                </p>
-            {% endif %}
-        </div>
-
-        <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-100 text-xl">
-            ৳
-        </div>
-
-    </div>
-
-
-    {% if current_month_payment %}
-
-        {% if current_month_payment.status == "paid" %}
-
-            <div class="mt-5 rounded-xl bg-emerald-50 p-4">
-
-                <div class="flex items-center gap-2">
-                    <span class="text-lg">✓</span>
-
-                    <span class="inline-flex rounded-full bg-emerald-100 px-3 py-1 text-xs font-black text-emerald-700">
-                        Paid
-                    </span>
+                <div class="text-sm font-black uppercase tracking-widest text-violet-700">
+                    Account Security
                 </div>
-
-                <p class="mt-1 text-xs text-emerald-700">
-                    {{ current_month|date:"F Y" }} payment has been completed.
+                <h3 class="mt-4 text-lg font-black text-slate-900">Change Password</h3>
+                <p class="mt-2 text-sm leading-6 text-slate-500">
+                    Update your account password securely.
                 </p>
+            </a>
 
-            </div>
-
-        {% elif current_month_payment.status == "pending" %}
-
-            <div class="mt-5 rounded-xl bg-amber-50 p-4">
-
-                <div class="flex items-center gap-2">
-                    <span class="text-lg">⏳</span>
-
-                    <span class="font-black text-amber-700">
-                        Pending Verification
-                    </span>
-                </div>
-
-                <p class="mt-1 text-xs text-amber-700">
-                    Your payment is waiting for admin verification.
-                </p>
-
-            </div>
-
-        {% else %}
-
+            <!-- Monthly Payment -->
             <a
                 href="{% url 'membership:monthly_payment' %}"
-                class="mt-5 inline-flex w-full items-center justify-center rounded-xl bg-emerald-700 px-4 py-3 text-sm font-black text-white transition hover:bg-emerald-800"
+                class="group rounded-2xl bg-amber-50 p-6 shadow-sm ring-1 ring-amber-200 transition hover:-translate-y-1 hover:shadow-md"
             >
-                Pay Monthly Fee
+                <div class="text-sm font-black uppercase tracking-widest text-amber-700">
+                    Monthly Fee
+                </div>
+                <h3 class="mt-4 text-lg font-black text-slate-900">Monthly Payment</h3>
+                <p class="mt-2 text-sm leading-6 text-slate-600">
+                    Submit your current monthly membership payment.
+                </p>
+                <span class="mt-4 inline-flex text-sm font-black text-amber-800">
+                    Manage Payment &rarr;
+                </span>
             </a>
 
-        {% endif %}
+        </div>
 
-    {% else %}
 
-        <a
-            href="{% url 'membership:monthly_payment' %}"
-            class="mt-5 inline-flex w-full items-center justify-center rounded-xl bg-emerald-700 px-4 py-3 text-sm font-black text-white transition hover:bg-emerald-800"
-        >
-            Pay Monthly Fee
-        </a>
+        <!-- Monthly Fee Summary -->
+        <div class="mb-8 rounded-3xl bg-white p-6 shadow-sm ring-1 ring-slate-200 sm:p-8">
 
-    {% endif %}
+            <div class="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
 
-</div>
+                <div>
+                    <p class="text-xs font-black uppercase tracking-widest text-slate-500">
+                        Current Month
+                    </p>
+
+                    <h2 class="mt-2 text-2xl font-black text-slate-900">
+                        {{ current_month|date:"F Y" }} Membership Fee
+                    </h2>
+
+                    <p class="mt-2 text-sm text-slate-500">
+                        Your monthly membership payment overview.
+                    </p>
+                </div>
+
+                <div class="rounded-2xl bg-emerald-50 px-5 py-4">
+                    <p class="text-xs font-bold uppercase tracking-wider text-emerald-700">
+                        Monthly Fee
+                    </p>
+
+                    {% if monthly_fee != None %}
+                        <p class="mt-1 text-2xl font-black text-emerald-900">
+                            &#2547;{{ monthly_fee|floatformat:2 }}
+                        </p>
+                    {% else %}
+                        <p class="mt-1 font-bold text-red-600">
+                            Not configured
+                        </p>
+                    {% endif %}
+                </div>
+
+            </div>
+
+            <div class="mt-6 border-t border-slate-100 pt-6">
+
+                {% if current_month_payment %}
+
+                    {% if current_month_payment.status == "paid" %}
+
+                        <div class="rounded-2xl border border-emerald-200 bg-emerald-50 p-5">
+                            <p class="font-black text-emerald-800">
+                                Payment completed
+                            </p>
+                            <p class="mt-1 text-sm text-emerald-700">
+                                Your {{ current_month|date:"F Y" }} payment has been recorded as paid.
+                            </p>
+                        </div>
+
+                    {% elif current_month_payment.status == "pending" %}
+
+                        <div class="rounded-2xl border border-amber-200 bg-amber-50 p-5">
+                            <p class="font-black text-amber-800">
+                                Payment awaiting verification
+                            </p>
+                            <p class="mt-1 text-sm text-amber-700">
+                                Your payment request is waiting for administration to verify it.
+                            </p>
+                        </div>
+
+                    {% else %}
+
+                        <div class="rounded-2xl border border-red-200 bg-red-50 p-5">
+                            <p class="font-black text-red-800">
+                                Previous request cancelled
+                            </p>
+                            <p class="mt-1 text-sm text-red-700">
+                                Your current-month payment request was cancelled. You can submit a new request.
+                            </p>
+                            <a
+                                href="{% url 'membership:monthly_payment' %}"
+                                class="mt-4 inline-flex items-center justify-center rounded-xl bg-emerald-700 px-5 py-3 text-sm font-black text-white transition hover:bg-emerald-800"
+                            >
+                                Submit Payment
+                            </a>
+                        </div>
+
+                    {% endif %}
+
+                {% else %}
+
+                    <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                        <p class="text-sm leading-6 text-slate-600">
+                            No payment request has been recorded for this month yet.
+                        </p>
+
+                        {% if monthly_fee != None %}
+                            <a
+                                href="{% url 'membership:monthly_payment' %}"
+                                class="inline-flex items-center justify-center rounded-xl bg-emerald-700 px-5 py-3 text-sm font-black text-white transition hover:bg-emerald-800"
+                            >
+                                Pay Monthly Fee
+                            </a>
+                        {% endif %}
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+
+
 
 
         <!-- Payments -->
@@ -453,7 +366,7 @@
                 </h2>
 
                 <p class="mt-1 text-sm text-slate-500">
-                    Your registration and monthly membership payments.
+                    Your monthly membership payment records and verification status.
                 </p>
 
             </div>
@@ -482,6 +395,9 @@
 
                                 <th class="px-6 py-4 font-black">
                                     Method
+                                </th>
+                                <th class="px-6 py-4 font-black">
+                                    Transaction ID
                                 </th>
 
                                 <th class="px-6 py-4 font-black">
@@ -521,6 +437,14 @@
 
                                     <td class="px-6 py-4 text-slate-600">
                                         {{ payment.get_payment_method_display }}
+                                    </td>
+
+                                    <td class="px-6 py-4 text-slate-600">
+                                        {% if payment.transaction_id %}
+                                            <span class="font-mono text-xs">{{ payment.transaction_id }}</span>
+                                        {% else %}
+                                            <span class="text-slate-400">—</span>
+                                        {% endif %}
                                     </td>
 
                                     <td class="px-6 py-4">

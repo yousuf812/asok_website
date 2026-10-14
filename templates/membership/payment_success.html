@@ -55,15 +55,45 @@
                         </span>
                     </div>
 
-                    <div class="flex justify-between gap-4 pt-3">
-                        <span class="text-sm text-slate-500">
-                            Status
-                        </span>
+                    
+                <div class="flex justify-between gap-4 border-b border-slate-200 py-3">
+                    <span class="text-sm text-slate-500">
+                        Payment Method
+                    </span>
+                    <span class="font-bold text-slate-900">
+                        {{ payment.get_payment_method_display }}
+                    </span>
+                </div>
 
+                <div class="flex justify-between gap-4 border-b border-slate-200 py-3">
+                    <span class="text-sm text-slate-500">
+                        Transaction ID
+                    </span>
+                    <span class="break-all text-right font-bold text-slate-900">
+                        {{ payment.transaction_id|default:"Not provided" }}
+                    </span>
+                </div>
+
+                <div class="flex justify-between gap-4 pt-3">
+                    <span class="text-sm text-slate-500">
+                        Status
+                    </span>
+
+                    {% if payment.status == "paid" %}
+                        <span class="rounded-full bg-emerald-100 px-3 py-1 text-xs font-black text-emerald-700">
+                            Paid
+                        </span>
+                    {% elif payment.status == "cancelled" %}
+                        <span class="rounded-full bg-red-100 px-3 py-1 text-xs font-black text-red-700">
+                            Cancelled
+                        </span>
+                    {% else %}
                         <span class="rounded-full bg-amber-100 px-3 py-1 text-xs font-black text-amber-700">
                             Pending Verification
                         </span>
-                    </div>
+                    {% endif %}
+                </div>
+
 
                 </div>
             {% endif %}

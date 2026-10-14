@@ -261,45 +261,20 @@ class MembershipApplicationForm(forms.ModelForm):
 # =========================================================
 #   MONTHLY PAYMENT FORM
 # =========================================================
-class MemberMonthlyPaymentForm(forms.ModelForm):
 
+class MemberMonthlyPaymentForm(forms.ModelForm):
     class Meta:
         model = MembershipPayment
 
         fields = [
-            "amount",
             "payment_method",
-            "payment_month",
             "transaction_id",
             "notes",
         ]
 
         widgets = {
-            "amount": forms.NumberInput(
-                attrs={
-                    "class": (
-                        "w-full rounded-xl border border-slate-300 "
-                        "px-4 py-3 outline-none "
-                        "focus:border-emerald-600 "
-                        "focus:ring-2 focus:ring-emerald-100"
-                    ),
-                    "step": "0.01",
-                    "min": "0",
-                }
-            ),
             "payment_method": forms.Select(
                 attrs={
-                    "class": (
-                        "w-full rounded-xl border border-slate-300 "
-                        "px-4 py-3 outline-none "
-                        "focus:border-emerald-600 "
-                        "focus:ring-2 focus:ring-emerald-100"
-                    ),
-                }
-            ),
-            "payment_month": forms.DateInput(
-                attrs={
-                    "type": "month",
                     "class": (
                         "w-full rounded-xl border border-slate-300 "
                         "px-4 py-3 outline-none "
@@ -316,7 +291,9 @@ class MemberMonthlyPaymentForm(forms.ModelForm):
                         "focus:border-emerald-600 "
                         "focus:ring-2 focus:ring-emerald-100"
                     ),
-                    "placeholder": "bKash / Nagad / Bank Transaction ID",
+                    "placeholder": (
+                        "bKash / Nagad / Bank Transaction ID"
+                    ),
                 }
             ),
             "notes": forms.Textarea(
@@ -339,13 +316,5 @@ class MemberMonthlyPaymentForm(forms.ModelForm):
         self.fields["payment_method"].choices = [
             choice
             for choice in self.fields["payment_method"].choices
-            if choice[0] != ""
+            if choice[0]
         ]
-
-    def clean_payment_month(self):
-        payment_month = self.cleaned_data["payment_month"]
-
-        if payment_month:
-            return payment_month.replace(day=1)
-
-        return payment_month

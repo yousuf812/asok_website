@@ -20,7 +20,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
-from django.db import transaction
+from django.db import IntegrityError, transaction
 
 
 
@@ -443,6 +443,7 @@ def member_dashboard(request):
 
     payments = (
         member.application.payments
+        .filter(payment_type="monthly")
         .order_by("-payment_month", "-created_at")
     )
 
@@ -495,6 +496,7 @@ def member_dashboard(request):
         },
     )
 
+
 @login_required
 def member_monthly_payment(request):
     member = get_object_or_404(
@@ -502,7 +504,6 @@ def member_monthly_payment(request):
         user=request.user,
     )
 
-    # Suspended/pending members cannot submit monthly payment requests.
     if member.status == "suspended":
         return render(
             request,
@@ -519,7 +520,7 @@ def member_monthly_payment(request):
     today = timezone.localdate()
     current_month = today.replace(day=1)
 
-    # Check whether current month's payment already exists.
+    # Only pending/paid payments block a new monthly request.
     existing_payment = (
         member.application.payments
         .filter(
@@ -542,7 +543,6 @@ def member_monthly_payment(request):
             },
         )
 
-    # Get active monthly fee settings.
     fee_settings = (
         MembershipFeeSettings.objects
         .filter(is_active=True)
@@ -556,7 +556,9 @@ def member_monthly_payment(request):
             "membership/payment.html",
             {
                 "member": member,
-                "error": "Monthly membership fee is not configured yet.",
+                "error": (
+                    "Monthly membership fee is not configured yet."
+                ),
             },
         )
 
@@ -566,23 +568,73 @@ def member_monthly_payment(request):
         if form.is_valid():
             payment = form.save(commit=False)
 
-            # NEVER trust member-submitted amount/month/application.
+            # Values are controlled by the server.
             payment.application = member.application
             payment.payment_type = "monthly"
             payment.amount = fee_settings.monthly_fee
             payment.payment_month = current_month
             payment.status = "pending"
-            payment.save()
+            payment.paid_at = None
 
+            try:
+                with transaction.atomic():
+                    payment.save()
+
+            except IntegrityError:
+                # Another request may have created the payment
+                # at nearly the same time.
+                existing_payment = (
+                    member.application.payments
+                    .filter(
+                        payment_type="monthly",
+                        payment_month=current_month,
+                        status__in=["pending", "paid"],
+                    )
+                    .order_by("-created_at")
+                    .first()
+                )
+
+                if existing_payment:
+                    return render(
+                        request,
+                        "membership/payment.html",
+                        {
+                            "member": member,
+                            "existing_payment": existing_payment,
+                            "current_month": current_month,
+                            "error": (
+                                "A payment request for this month "
+                                "already exists."
+                            ),
+                        },
+                    )
+
+                return render(
+                    request,
+                    "membership/payment.html",
+                    {
+                        "member": member,
+                        "form": form,
+                        "monthly_fee": fee_settings.monthly_fee,
+                        "current_month": current_month,
+                        "error": (
+                            "We could not create your payment request. "
+                            "Please refresh the page and try again."
+                        ),
+                    },
+                )
+            request.session["last_monthly_payment_id"] = payment.pk
             return redirect("membership:payment_success")
 
     else:
-        form = MemberMonthlyPaymentForm(
-            initial={
-                "amount": fee_settings.monthly_fee,
-                "payment_month": current_month,
-            }
-        )
+        # form = MemberMonthlyPaymentForm(
+        #     initial={
+        #         "amount": fee_settings.monthly_fee,
+        #         "payment_month": current_month,
+        #     }
+        # )
+
+        form = MemberMonthlyPaymentForm()
 
     return render(
         request,
@@ -596,6 +648,8 @@ def member_monthly_payment(request):
     )
 
 
+
+
 @login_required
 def member_payment_success(request):
     member = get_object_or_404(
@@ -603,14 +657,20 @@ def member_payment_success(request):
         user=request.user,
     )
 
-    payment = (
-        member.application.payments
-        .filter(
+    payment_id = request.session.pop(
+        "last_monthly_payment_id",
+        None,
+    )
+
+    payment = None
+
+    if payment_id:
+        payment = get_object_or_404(
+            MembershipPayment,
+            pk=payment_id,
+            application=member.application,
             payment_type="monthly",
         )
-        .order_by("-created_at")
-        .first()
-    )
 
     return render(
         request,
