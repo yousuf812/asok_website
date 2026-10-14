@@ -1,13 +1,44 @@
 from django import forms
 
-from .models import MembershipApplication
+from .models import MembershipApplication, MembershipPayment
 
 
+# =========================================================
+#   MEMBERSHIP APPLICATION FORM
+# =========================================================
 class MembershipApplicationForm(forms.ModelForm):
+
+    # -----------------------------------------------------
+    # Non-model fields (password is not a model field)
+    # -----------------------------------------------------
+    password = forms.CharField(
+        label="Create Password",
+        min_length=8,
+        widget=forms.PasswordInput(
+            attrs={
+                "class": "w-full rounded-lg border border-gray-300 px-4 py-3",
+                "placeholder": "Create a password (minimum 8 characters)",
+                "autocomplete": "new-password",
+            }
+        ),
+    )
+
+    confirm_password = forms.CharField(
+        label="Confirm Password",
+        min_length=8,
+        widget=forms.PasswordInput(
+            attrs={
+                "class": "w-full rounded-lg border border-gray-300 px-4 py-3",
+                "placeholder": "Enter password again",
+                "autocomplete": "new-password",
+            }
+        ),
+    )
 
     class Meta:
         model = MembershipApplication
 
+        # Only model fields — no password / confirm_password here
         fields = [
             "full_name",
             "father_name",
@@ -32,89 +63,76 @@ class MembershipApplicationForm(forms.ModelForm):
                     "placeholder": "Full Name",
                 }
             ),
-
             "father_name": forms.TextInput(
                 attrs={
                     "class": "w-full rounded-lg border border-gray-300 px-4 py-3",
                     "placeholder": "Father's Name",
                 }
             ),
-
             "mother_name": forms.TextInput(
                 attrs={
                     "class": "w-full rounded-lg border border-gray-300 px-4 py-3",
                     "placeholder": "Mother's Name",
                 }
             ),
-
             "email": forms.EmailInput(
                 attrs={
                     "class": "w-full rounded-lg border border-gray-300 px-4 py-3",
                     "placeholder": "Email Address",
                 }
             ),
-
             "phone": forms.TextInput(
                 attrs={
                     "class": "w-full rounded-lg border border-gray-300 px-4 py-3",
                     "placeholder": "Phone Number",
                 }
             ),
-
             "membership_type": forms.Select(
                 attrs={
                     "class": "w-full rounded-lg border border-gray-300 px-4 py-3"
                 }
             ),
-
             "profession": forms.TextInput(
                 attrs={
                     "class": "w-full rounded-lg border border-gray-300 px-4 py-3",
                     "placeholder": "Profession",
                 }
             ),
-
             "address": forms.TextInput(
                 attrs={
                     "class": "w-full rounded-lg border border-gray-300 px-4 py-3",
                     "placeholder": "Full Address",
                 }
             ),
-
             "nid_number": forms.TextInput(
                 attrs={
                     "class": "w-full rounded-lg border border-gray-300 px-4 py-3",
                     "placeholder": "NID Number",
                 }
             ),
-
             "birth_registration_number": forms.TextInput(
                 attrs={
                     "class": "w-full rounded-lg border border-gray-300 px-4 py-3",
                     "placeholder": "Birth Registration Number",
                 }
             ),
-
             "photo": forms.ClearableFileInput(
                 attrs={
                     "class": "w-full rounded-lg border border-gray-300 px-4 py-3",
                     "accept": "image/jpeg,image/png,image/webp",
                 }
             ),
-
             "identity_document": forms.ClearableFileInput(
                 attrs={
                     "class": "w-full rounded-lg border border-gray-300 px-4 py-3",
                     "accept": "image/jpeg,image/png,image/webp",
                 }
             ),
-
             "area_of_interest": forms.Select(
                 attrs={
                     "class": "w-full rounded-lg border border-gray-300 px-4 py-3"
                 }
             ),
-
             "motivation": forms.Textarea(
                 attrs={
                     "class": "w-full rounded-lg border border-gray-300 px-4 py-3",
@@ -124,6 +142,9 @@ class MembershipApplicationForm(forms.ModelForm):
             ),
         }
 
+    # -----------------------------------------------------
+    # Validation
+    # -----------------------------------------------------
     def clean(self):
         cleaned_data = super().clean()
 
@@ -132,66 +153,75 @@ class MembershipApplicationForm(forms.ModelForm):
             "birth_registration_number"
         )
 
+        password = cleaned_data.get("password")
+        confirm_password = cleaned_data.get("confirm_password")
+
         if not nid_number and not birth_registration_number:
             raise forms.ValidationError(
                 "Please provide either NID Number or Birth Registration Number."
+            )
+
+        if password and confirm_password and password != confirm_password:
+            self.add_error(
+                "confirm_password",
+                "Passwords do not match.",
             )
 
         return cleaned_data
 
     def clean_full_name(self):
         full_name = self.cleaned_data.get("full_name", "").strip()
-
         if not full_name:
-            raise forms.ValidationError(
-                "Full name is required."
-            )
-
+            raise forms.ValidationError("Full name is required.")
         return full_name
 
     def clean_father_name(self):
         father_name = self.cleaned_data.get("father_name", "").strip()
-
         if not father_name:
-            raise forms.ValidationError(
-                "Father's name is required."
-            )
-
+            raise forms.ValidationError("Father's name is required.")
         return father_name
 
     def clean_mother_name(self):
         mother_name = self.cleaned_data.get("mother_name", "").strip()
-
         if not mother_name:
+            raise forms.ValidationError("Mother's name is required.")
+        return mother_name
+
+    def clean_email(self):
+        email = self.cleaned_data.get("email", "").strip().lower()
+
+        if not email:
+            raise forms.ValidationError("Email address is required.")
+
+        if MembershipApplication.objects.filter(
+            email__iexact=email
+        ).exists():
             raise forms.ValidationError(
-                "Mother's name is required."
+                "This email has already been used for a membership application."
             )
 
-        return mother_name
+        from django.contrib.auth.models import User
+
+        if User.objects.filter(username__iexact=email).exists():
+            raise forms.ValidationError(
+                "An account with this email already exists."
+            )
+
+        return email
 
     def clean_phone(self):
         phone = self.cleaned_data.get("phone", "").strip()
-
         if not phone:
-            raise forms.ValidationError(
-                "Phone number is required."
-            )
-
+            raise forms.ValidationError("Phone number is required.")
         return phone
 
     def clean_photo(self):
         photo = self.cleaned_data.get("photo")
 
         if not photo:
-            raise forms.ValidationError(
-                "Member photo is required."
-            )
+            raise forms.ValidationError("Member photo is required.")
 
-        allowed_types = [
-            "image/jpeg",
-            "image/png",
-            "image/webp",
-        ]
+        allowed_types = ["image/jpeg", "image/png", "image/webp"]
 
         if photo.content_type not in allowed_types:
             raise forms.ValidationError(
@@ -213,11 +243,7 @@ class MembershipApplicationForm(forms.ModelForm):
                 "NID or Birth Registration document image is required."
             )
 
-        allowed_types = [
-            "image/jpeg",
-            "image/png",
-            "image/webp",
-        ]
+        allowed_types = ["image/jpeg", "image/png", "image/webp"]
 
         if document.content_type not in allowed_types:
             raise forms.ValidationError(
@@ -232,13 +258,9 @@ class MembershipApplicationForm(forms.ModelForm):
         return document
 
 
-
-
-
-
-from .models import MembershipPayment
-
-
+# =========================================================
+#   MONTHLY PAYMENT FORM
+# =========================================================
 class MemberMonthlyPaymentForm(forms.ModelForm):
 
     class Meta:
@@ -265,7 +287,6 @@ class MemberMonthlyPaymentForm(forms.ModelForm):
                     "min": "0",
                 }
             ),
-
             "payment_method": forms.Select(
                 attrs={
                     "class": (
@@ -276,7 +297,6 @@ class MemberMonthlyPaymentForm(forms.ModelForm):
                     ),
                 }
             ),
-
             "payment_month": forms.DateInput(
                 attrs={
                     "type": "month",
@@ -288,7 +308,6 @@ class MemberMonthlyPaymentForm(forms.ModelForm):
                     ),
                 }
             ),
-
             "transaction_id": forms.TextInput(
                 attrs={
                     "class": (
@@ -300,7 +319,6 @@ class MemberMonthlyPaymentForm(forms.ModelForm):
                     "placeholder": "bKash / Nagad / Bank Transaction ID",
                 }
             ),
-
             "notes": forms.Textarea(
                 attrs={
                     "class": (
@@ -328,7 +346,6 @@ class MemberMonthlyPaymentForm(forms.ModelForm):
         payment_month = self.cleaned_data["payment_month"]
 
         if payment_month:
-            # Store the first day of the selected month.
             return payment_month.replace(day=1)
 
         return payment_month

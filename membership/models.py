@@ -381,26 +381,15 @@ class Member(models.Model):
 
         super().save(*args, **kwargs)
 
-    def clean(self):
-        if self.status != "active":
-            return
+def clean(self):
+    if self.status != "active":
+        return
 
-        if self.application.status != "approved":
-            raise ValidationError(
-                "A member can only be activated after "
-                "the application is approved."
-            )
-
-        registration_paid = self.application.payments.filter(
-            payment_type="registration",
-            status="paid",
-        ).exists()
-
-        if not registration_paid:
-            raise ValidationError(
-                "Registration fee must be paid before "
-                "activating this member."
-            )
+    if self.application.status != "approved":
+        raise ValidationError(
+            "A member can only be activated after "
+            "the application is approved."
+        )
 
     def __str__(self):
         return f"{self.member_id} - {self.application.full_name}"

@@ -303,6 +303,49 @@
 
                     </div>
 
+                    <div class="grid gap-6 sm:grid-cols-2">
+                        <!-- Create Password -->
+<div>
+    <label
+        for="{{ form.password.id_for_label }}"
+        class="mb-2 block text-sm font-semibold text-gray-700"
+    >
+        Create Password
+    </label>
+
+    {{ form.password }}
+
+    {% if form.password.errors %}
+        <p class="mt-1 text-sm text-red-600">
+            {{ form.password.errors.0 }}
+        </p>
+    {% endif %}
+</div>
+
+<!-- Confirm Password -->
+<div>
+    <label
+        for="{{ form.confirm_password.id_for_label }}"
+        class="mb-2 block text-sm font-semibold text-gray-700"
+    >
+        Confirm Password
+    </label>
+
+    {{ form.confirm_password }}
+
+    {% if form.confirm_password.errors %}
+        <p class="mt-1 text-sm text-red-600">
+            {{ form.confirm_password.errors.0 }}
+        </p>
+    {% endif %}
+</div>
+
+                    </div>
+
+                    
+
+
+
 
                     <!-- Profession + Interest -->
                     <div class="grid gap-6 sm:grid-cols-2">

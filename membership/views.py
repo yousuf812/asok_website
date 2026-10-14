@@ -20,82 +20,87 @@ from django.core.mail import send_mail
 from django.conf import settings
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
-
-
-
+from django.db import transaction
 
 
 
 def membership_home(request):
-
     if request.method == "POST":
-
         form = MembershipApplicationForm(
             request.POST,
             request.FILES,
         )
 
         if form.is_valid():
+            email = form.cleaned_data["email"].strip().lower()
+            password = form.cleaned_data["password"]
 
-            application = form.save()
-            fee_settings = MembershipFeeSettings.objects.filter(
-             is_active=True
-            ).first()
+            try:
+                with transaction.atomic():
+                    # Save the membership application.
+                    application = form.save()
 
-            if fee_settings:
-                MembershipPayment.objects.create(
-                application=application,
-                 payment_type="registration",
-                amount=fee_settings.registration_fee,
-                payment_method="cash",
-                status="pending",
-            )
+                    # Create the member's login account.
+                    user = User.objects.create_user(
+                        username=email,
+                        email=email,
+                        password=password,
+                        first_name=application.full_name,
+                    )
 
-            send_admin_notification(
-                subject=(
-                    f"New Membership Application — "
-                    f"{application.full_name}"
-                ),
-                message=(
-                    f"Name: {application.full_name}\n"
-                    f"Father's Name: {application.father_name}\n"
-                    f"Mother's Name: {application.mother_name}\n"
-                    f"Email: {application.email}\n"
-                    f"Phone: {application.phone}\n"
-                    f"Membership Type: "
-                    f"{application.get_membership_type_display()}\n"
-                    f"NID: "
-                    f"{application.nid_number or 'Not provided'}\n"
-                    f"Birth Registration: "
-                    f"{application.birth_registration_number or 'Not provided'}\n\n"
-                    f"Membership Type: "
-                    f"{application.get_membership_type_display()}\n"
-                    f"Message:\n"
-                    f"{application.motivation}"
-                ),
-            )
+                    # Create the Member profile and generate Member ID.
+                    Member.objects.create(
+                        application=application,
+                        user=user,
+                    )
 
-            request.session["membership_reference"] = (
-                application.reference_number
-            )
+                # Keep the application reference for the success page.
+                request.session["membership_reference"] = (
+                    application.reference_number
+                )
 
-            messages.success(
-                request,
-                "Your membership application has been submitted successfully.",
-            )
+                # Notify the admin.
+                send_admin_notification(
+                    subject="New ASOK Membership Application",
+                    message=(
+                        f"A new membership application has been submitted.\n\n"
+                        f"Name: {application.full_name}\n"
+                        f"Email: {application.email}\n"
+                        f"Reference: {application.reference_number}\n"
+                        f"Member ID: {application.member.member_id}\n\n"
+                        "No registration fee payment was created."
+                    ),
+                )
 
-            return redirect("membership:success")
+                messages.success(
+                    request,
+                    "Registration successful! Your account has been created. "
+                    "You can now log in using your email and password.",
+                )
+
+                return redirect("membership:success")
+
+            except Exception:
+                # Log the actual exception in your server logs.
+                import logging
+
+                logging.getLogger(__name__).exception(
+                    "Membership registration failed."
+                )
+
+                messages.error(
+                    request,
+                    "Registration could not be completed. "
+                    "Please check the information and try again.",
+                )
 
     else:
-
         form = MembershipApplicationForm()
 
     return render(
         request,
         "membership/home.html",
-        {
-            "form": form,
-        },
+        {"form": form},
     )
 
 
@@ -375,6 +380,7 @@ def member_set_password(request, member_id):
     )
 
 
+
 def member_login(request):
     if request.user.is_authenticated:
         if hasattr(request.user, "member_profile"):
@@ -383,33 +389,43 @@ def member_login(request):
     error = ""
 
     if request.method == "POST":
-        member_id = request.POST.get("member_id", "").strip()
+        email = request.POST.get("email", "").strip().lower()
         password = request.POST.get("password", "")
 
-        username = member_id.lower()
-
-        user = authenticate(
-            request,
-            username=username,
-            password=password,
-        )
-
-        if user is not None:
-            if hasattr(user, "member_profile"):
-                login(request, user)
-                return redirect("membership:dashboard")
-
-            error = "This account is not connected to a member profile."
+        if not email or not password:
+            error = "Please enter your email address and password."
         else:
-            error = "Invalid Member ID or password."
+            # Find the member account by the registered email.
+            member = (
+                Member.objects
+                .select_related("user", "application")
+                .filter(
+                    application__email__iexact=email,
+                    user__isnull=False,
+                )
+                .first()
+            )
+
+            if member and member.user:
+                user = authenticate(
+                    request,
+                    username=member.user.username,
+                    password=password,
+                )
+
+                if user is not None and user.is_active:
+                    login(request, user)
+                    return redirect("membership:dashboard")
+
+            error = "Invalid email address or password."
 
     return render(
         request,
         "membership/login.html",
-        {
-            "error": error,
-        },
+        {"error": error},
     )
+
+
 
 
 @login_required
@@ -487,7 +503,7 @@ def member_monthly_payment(request):
     )
 
     # Suspended/pending members cannot submit monthly payment requests.
-    if member.status in ["suspended", "pending"]:
+    if member.status == "suspended":
         return render(
             request,
             "membership/payment.html",

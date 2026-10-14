@@ -1,3 +1,4 @@
+
 from django.core.management.base import BaseCommand
 from django.utils import timezone
 
@@ -5,12 +6,17 @@ from membership.models import Member
 
 
 class Command(BaseCommand):
-    help = "Sync member active/inactive status based on current month's membership payment."
+    help = (
+        "Sync member active/inactive status based on "
+        "current month's approved membership payment."
+    )
 
     def handle(self, *args, **options):
         today = timezone.localdate()
 
-        members = Member.objects.select_related("application").all()
+        members = Member.objects.select_related(
+            "application"
+        ).all()
 
         active_count = 0
         inactive_count = 0
@@ -18,7 +24,7 @@ class Command(BaseCommand):
 
         for member in members:
 
-            # Do not change suspended members.
+            # Never change suspended members automatically.
             if member.status == "suspended":
                 skipped_count += 1
                 continue
@@ -28,21 +34,19 @@ class Command(BaseCommand):
                 skipped_count += 1
                 continue
 
-            # Registration fee must be paid.
-            registration_paid = member.application.payments.filter(
-                payment_type="registration",
-                status="paid",
-            ).exists()
-
-            if not registration_paid:
+            # Application must be approved before activation.
+            if member.application.status != "approved":
                 if member.status != "inactive":
                     member.status = "inactive"
-                    member.save(update_fields=["status", "updated_at"])
+                    member.save(
+                        update_fields=["status", "updated_at"]
+                    )
 
                 inactive_count += 1
                 continue
 
-            # Check current month's monthly payment.
+            # Registration fee is no longer required.
+            # Check only the current month's paid monthly fee.
             monthly_paid = member.application.payments.filter(
                 payment_type="monthly",
                 status="paid",
@@ -70,13 +74,15 @@ class Command(BaseCommand):
             else:
                 if member.status != "inactive":
                     member.status = "inactive"
-                    member.save(update_fields=["status", "updated_at"])
+                    member.save(
+                        update_fields=["status", "updated_at"]
+                    )
 
                 inactive_count += 1
 
         self.stdout.write(
             self.style.SUCCESS(
-                f"Member status sync completed. "
+                "Member status sync completed. "
                 f"Active: {active_count}, "
                 f"Inactive: {inactive_count}, "
                 f"Skipped: {skipped_count}"
